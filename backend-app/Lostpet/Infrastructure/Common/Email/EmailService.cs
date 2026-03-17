@@ -1,0 +1,177 @@
+using System.Net;
+using System.Net.Mail;
+using Infrastructure.Common.Errors.Common;
+using Infrastructure.Common.ResultPattern;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+namespace Infrastructure.Common.Email;
+
+public class EmailService : IEmailService
+{
+    private readonly IConfiguration _config;
+
+    private readonly string _smtpEmail;
+
+    private readonly string _smtpPassword;
+
+    private readonly string _smtpHost;
+
+    private readonly int _smtpHostPort;
+
+    private readonly ILogger<IEmailService> _logger;
+
+    public EmailService(IConfiguration config, ILogger<IEmailService> logger)
+    {
+        _config = config;
+        _smtpEmail = config["SmtpSettings:Email"];
+        _smtpPassword = config["SmtpSettings:Password"];
+        _smtpHost = config["SmtpSettings:Host"];
+        _smtpHostPort = int.Parse(config["SmtpSettings:HostPort"]!);
+        _logger = logger;
+  ***REMOVED***
+
+    public async Task SendForgotPasswordLinkAsync(string email, string passwordToken)
+    {
+        var link = _config["ApplicationURLs:FrontEnd"] + _config["ClientEndpoints:EmailChangeFront"];
+        var queryParams = new Dictionary<string, string>
+        {
+            { "passwordToken", passwordToken },
+            { "email", email }
+      ***REMOVED***;
+        var callback = QueryHelpers.AddQueryString(link, queryParams);
+
+        var body = $"<p>Please proceed with changing your password by clicking <a href=\"{callback}\">here</a>.</p>";
+
+        var htmlMessage = BuildHtmlMessage("Password change", body,
+            "If you did not request this, you can ignore this email.");
+
+        await SendSmtpEmailAsync(email, "Lostpet password change for your account", htmlMessage);
+  ***REMOVED***
+
+    public async Task SendConfirmationLinkAsync(string email, string confirmationToken)
+    {
+        var link = _config["ApplicationURLs:BackEnd"] + _config["BackendEndpoints:ConfirmationEndpoint"];
+        var queryParams = new Dictionary<string, string>
+        {
+            { "token", confirmationToken },
+            { "email", email }
+      ***REMOVED***;
+        var callback = QueryHelpers.AddQueryString(link, queryParams);
+
+        var body = $"Please confirm your email address by clicking the button below:<br/>" +
+                   $"<a href=\"{callback}\" class=\"button\">Confirm Email</a>";
+
+        var htmlMessage = BuildHtmlMessage("Email Confirmation", body,
+            "If you did not request this, you can ignore this email.");
+
+        await SendSmtpEmailAsync(email, "Confirm your email", htmlMessage);
+  ***REMOVED***
+
+    public async Task SendSuccessfulEmailAsync(string email, string message, string subject)
+    {
+        var body = $"{message}<br/><br/>We're glad to have you with us!";
+        var htmlMessage = BuildHtmlMessage(subject, body, "Thank you for being part of our community.");
+
+        await SendSmtpEmailAsync(email, subject, htmlMessage);
+  ***REMOVED***
+
+    public async Task SendErrorEmailAsync(string email, string message, string subject)
+    {
+        var body =
+            $"We encountered an error while processing your request:<br/><br/><strong>{message}</strong><br/><br/>" +
+            $"Please try again or contact support if the issue persists.";
+
+        var htmlMessage = BuildHtmlMessage(subject, body,
+            "This is an automated email, please do not reply directly.");
+
+        await SendSmtpEmailAsync(email, subject, htmlMessage);
+  ***REMOVED***
+
+    private async Task<Result> SendSmtpEmailAsync(string recipientEmail, string subject, string htmlBody)
+    {
+        try
+        {
+            using var mailMessage = new MailMessage
+            {
+                From = new MailAddress(_smtpEmail, "Lostpet"),
+                Subject = subject,
+                Body = htmlBody,
+                IsBodyHtml = true
+          ***REMOVED***;
+
+            mailMessage.To.Add(recipientEmail);
+
+            using var client = new SmtpClient(_smtpHost, _smtpHostPort)
+            {
+                EnableSsl = true,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(_smtpEmail, _smtpPassword),
+                Timeout = 3000
+          ***REMOVED***;
+
+            await client.SendMailAsync(mailMessage);
+
+            return Result.Success();
+      ***REMOVED***
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error sending email to {recipientEmail} with subject: {subject}.");
+            return Result.Failure(EmailError.EmailNotSent());
+      ***REMOVED***
+  ***REMOVED***
+
+    private string BuildHtmlMessage(string title, string body, string footer = null)
+    {
+        return $@"
+        <html>
+          <head>
+            <style>
+              body {{
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                padding: 20px;
+                color: #333;
+            ***REMOVED***}
+              .container {{
+                max-width: 600px;
+                background-color: #ffffff;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                padding: 30px;
+            ***REMOVED***}
+              h1 {{
+                font-size: 20px;
+                margin-bottom: 20px;
+                color: #2c3e50;
+            ***REMOVED***}
+              p {{
+                line-height: 1.6;
+            ***REMOVED***}
+              a.button {{
+                display: inline-block;
+                padding: 10px 20px;
+                margin-top: 20px;
+                background-color: #3498db;
+                color: #fff !important;
+                text-decoration: none;
+                border-radius: 5px;
+            ***REMOVED***}
+              .footer {{
+                margin-top: 30px;
+                font-size: 12px;
+                color: #999;
+            ***REMOVED***}
+            </style>
+          </head>
+          <body>
+            <div class='container'>
+              <h1>{title}</h1>
+              <p>{body}</p>
+              {(footer != null ? $"<div class='footer'>{footer}</div>" : "")}
+            </div>
+          </body>
+        </html>";
+  ***REMOVED***
+}

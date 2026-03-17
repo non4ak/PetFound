@@ -1,0 +1,2 @@
+2026-03-17 14:44:50.064 -04:00 [ERR] An error occurred using the connection to database 'lostpet' on server 'tcp://localhost:5432'.
+2026-03-17 14:48:03.964 -04:00 [ERR] An error occurred using the connection to database 'lostpet' on server 'tcp://localhost:5432'.
