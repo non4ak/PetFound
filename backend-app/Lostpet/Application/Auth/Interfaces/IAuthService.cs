@@ -14,6 +14,12 @@ public interface IAuthService
 
     public Task<Result<LoginResponse>> LoginAsync(LoginModel loginModel);
 
+    public Task<Result<MobileLoginResponse>> LoginMobileAsync(LoginModel loginModel);
+
+    public Task<Result> RefreshToken();
+
+    public Task<Result<MobileLoginResponse>> RefreshTokenMobile(string refreshToken);
+
     public Task<Result> ConfirmEmailAsync(string email, string token);
 
     public Task<Result<bool>> LogoutAsync();

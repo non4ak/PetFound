@@ -34,6 +34,48 @@ public class AuthController : ControllerBase
   ***REMOVED***
 
     [AllowAnonymous]
+    [HttpPost("login/mobile")]
+    public async Task<IActionResult> LoginMobileAsync([FromBody] LoginModel model)
+    {
+        var result = await _authService.LoginMobileAsync(model);
+
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: true,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+  ***REMOVED***
+
+    [AllowAnonymous]
+    [HttpGet("refresh")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        var result = await _authService.RefreshToken();
+
+        if (!result.IsSuccess)
+        {
+            return ApiResults.ToProblemDetails(result);
+      ***REMOVED***
+
+        return new StatusCodeResult(StatusCodes.Status200OK);
+  ***REMOVED***
+
+    [AllowAnonymous]
+    [HttpPost("refresh/mobile")]
+    public async Task<IActionResult> RefreshTokenMobile([FromBody] MobileRefreshTokenModel model)
+    {
+        var result = await _authService.RefreshTokenMobile(model.RefreshToken);
+
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: true,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+  ***REMOVED***
+
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
     {
@@ -47,6 +89,7 @@ public class AuthController : ControllerBase
         );
   ***REMOVED***
 
+    [Authorize]
     [HttpGet("logout")]
     public async Task<IActionResult> LogoutAsync()
     {

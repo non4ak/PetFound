@@ -852,7 +852,10 @@
       ***REMOVED***,
         "runtime": {
           "bin/placeholder/Infrastructure.dll": {}
-      ***REMOVED***
+      ***REMOVED***,
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***,
