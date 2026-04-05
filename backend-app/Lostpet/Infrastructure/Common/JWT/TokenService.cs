@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Domain.Models.Auth;
 using Microsoft.Extensions.Configuration;
@@ -13,23 +14,31 @@ public class TokenService : ITokenService
 
     public TokenService(IConfiguration config)
     {
-        _jwtConfig = config.GetSection("JWTConfig").Get<JWTConfig>();
+        _jwtConfig = config.GetSection("JWTConfig").Get<JWTConfig>()
+                     ?? throw new InvalidOperationException("JWTConfig section is missing.");
     }
 
-    public string GenerateToken(ApplicationUser user)
+    public string GenerateAuthToken(ApplicationUser user, IEnumerable<string>? roles)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
 
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        var claims = new List<Claim>
+        {
+            new("id", user.Id.ToString()),
+            new("email", user.Email ?? string.Empty),
+            new("username", user.UserName ?? string.Empty)
+        };
+
+        if (roles is not null)
+        {
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+        }
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(
-            [
-                new Claim("id", user.Id.ToString()),
-                new Claim("email", user.Email),
-                new Claim("username", user.UserName)
-            ]),
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(_jwtConfig.ExpirationInMinutes),
             SigningCredentials = credentials,
             Issuer = _jwtConfig.Issuer,
@@ -38,8 +47,17 @@ public class TokenService : ITokenService
 
         var tokenHandler = new JsonWebTokenHandler();
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.CreateToken(tokenDescriptor);
+    }
 
-        return token;
+    public RefreshTokenDTO GenerateRefreshToken()
+    {
+        var raw = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+
+        return new RefreshTokenDTO
+        {
+            Bytes = Base64UrlEncoder.Encode(raw),
+            ExpirationTimeInDays = _jwtConfig.RefreshTokenExpirationInDays
+        };
     }
 }

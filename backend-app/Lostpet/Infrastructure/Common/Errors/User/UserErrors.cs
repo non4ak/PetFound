@@ -31,4 +31,14 @@ public static class UserErrors
     {
         return Error.Unauthorized("User.Credentials.Invalid", "Wrong credentials, try again");
     }
+
+    public static Error InvalidOrExpiredRefreshToken()
+    {
+        return Error.Validation("User.RefreshToken.Invalid", "Refresh token that you provided is invalid or expired");
+    }
+
+    public static Error Unauthorized()
+    {
+        return Error.Unauthorized("User.Unauthorized", "Unauthorized");
+    }
 }
