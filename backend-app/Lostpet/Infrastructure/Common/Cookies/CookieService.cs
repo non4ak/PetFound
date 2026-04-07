@@ -9,6 +9,7 @@ public class CookieService : ICookieService
     private readonly CookieOptions _refreshTokenOptions;
     private readonly HttpResponse _httpResponse;
     private readonly HttpRequest _httpRequest;
+    private readonly SameSiteMode _sameSite;
 
     public CookieService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
@@ -20,11 +21,13 @@ public class CookieService : ICookieService
         _httpResponse = httpContextAccessor.HttpContext?.Response
                          ?? throw new InvalidOperationException("HttpContext is not available.");
 
+        _sameSite = ParseSameSiteMode(cookieConfig.SameSiteMode);
+
         _accessTokenOptions = new CookieOptions
         {
             HttpOnly = true,
             Secure = cookieConfig.UseSecureCookies,
-            SameSite = SameSiteMode.Strict,
+            SameSite = _sameSite,
             Path = "/",
             Expires = DateTimeOffset.UtcNow.AddMinutes(cookieConfig.AccessTokenLifetimeInMinutes)
         };
@@ -33,7 +36,7 @@ public class CookieService : ICookieService
         {
             HttpOnly = true,
             Secure = cookieConfig.UseSecureCookies,
-            SameSite = SameSiteMode.Strict,
+            SameSite = _sameSite,
             Path = "/",
             Expires = DateTimeOffset.UtcNow.AddDays(cookieConfig.RefreshTokenLifeTimeInDays)
         };
@@ -52,7 +55,7 @@ public class CookieService : ICookieService
             Expires = DateTimeOffset.UtcNow.AddDays(-1),
             HttpOnly = true,
             Secure = _accessTokenOptions.Secure,
-            SameSite = SameSiteMode.Strict,
+            SameSite = _sameSite,
             Path = "/"
         };
 
@@ -65,4 +68,12 @@ public class CookieService : ICookieService
         _httpRequest.Cookies.TryGetValue(AppConstants.RefreshTokenCookie, out var token);
         return token;
     }
+
+    private static SameSiteMode ParseSameSiteMode(string mode) =>
+        mode?.ToLowerInvariant() switch
+        {
+            "none" => SameSiteMode.None,
+            "lax" => SameSiteMode.Lax,
+            _ => SameSiteMode.Strict,
+        };
 }

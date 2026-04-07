@@ -7,4 +7,6 @@ public class CookieConfig
     public int RefreshTokenLifeTimeInDays { get; set; }
 
     public bool UseSecureCookies { get; set; }
+
+    public string SameSiteMode { get; set; } = "Strict";
 }

@@ -10,3 +10,8 @@ System.Net.Mail.SmtpException: The SMTP server requires a secure connection or t
    at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
 --- End of stack trace from previous location ---
    at Infrastructure.Common.Email.EmailService.SendSmtpEmailAsync(String recipientEmail, String subject, String htmlBody) in C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Infrastructure\Common\Email\EmailService.cs:line 114
+2026-04-07 23:54:44.627 +03:00 [ERR] An error occurred using the connection to database 'lostpet' on server 'tcp://localhost:5432'.
+2026-04-07 23:55:46.633 +03:00 [ERR] Failed executing DbCommand (54ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
