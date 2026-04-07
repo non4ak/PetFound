@@ -18,7 +18,9 @@ obj/
 .dotnet/
 
 # Publish profiles
-Properties/PublishProfiles/
+**/Properties/PublishProfiles/
+*.pubxml
+*.pubxml.user
 
 # OS
 .DS_Store
