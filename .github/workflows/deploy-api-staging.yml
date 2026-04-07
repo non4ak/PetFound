@@ -70,7 +70,7 @@ jobs:
 
       - name: Apply database migrations
         env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.NEON_CONNECTION_STRING }}
+          ConnectionStrings__DataContext: ${{ secrets.NEON_CONNECTION_STRING }}
         run: dotnet ef database update --project ${{ env.MIGRATIONS_PROJECT }} --startup-project ${{ env.STARTUP_PROJECT }}
 
   deploy:
