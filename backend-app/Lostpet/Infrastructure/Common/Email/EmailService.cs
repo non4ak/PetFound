@@ -25,11 +25,16 @@ public class EmailService : IEmailService
     public EmailService(IConfiguration config, ILogger<IEmailService> logger)
     {
         _config = config;
-        _smtpEmail = config["SmtpSettings:Email"];
-        _smtpPassword = config["SmtpSettings:Password"];
-        _smtpHost = config["SmtpSettings:Host"];
-        _smtpHostPort = int.Parse(config["SmtpSettings:HostPort"]!);
+        _smtpEmail = config["SmtpSettings:Email"] ?? "";
+        _smtpPassword = config["SmtpSettings:Password"] ?? "";
+        _smtpHost = config["SmtpSettings:Host"] ?? "";
+        _smtpHostPort = int.TryParse(config["SmtpSettings:HostPort"], out var port) ? port : 587;
         _logger = logger;
+
+        if (string.IsNullOrEmpty(_smtpHost))
+        {
+            _logger.LogWarning("SmtpSettings are not configured. Email sending will fail at runtime.");
+      ***REMOVED***
   ***REMOVED***
 
     public async Task SendForgotPasswordLinkAsync(string email, string passwordToken)
