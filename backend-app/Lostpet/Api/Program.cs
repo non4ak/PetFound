@@ -1,4 +1,3 @@
-// Deploy workflow test
 using Api.Configurations;
 
 namespace Api;
