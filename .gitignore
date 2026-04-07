@@ -1,3 +1,25 @@
 mobile-app/dist
 web-app/dist
 .claude/settings.local.json
+
+# .NET
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider / JetBrains
+.idea/
+
+# .NET local tools
+.dotnet/
+
+# Publish profiles
+Properties/PublishProfiles/
+
+# OS
+.DS_Store
+Thumbs.db
