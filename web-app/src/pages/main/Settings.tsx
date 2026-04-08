@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/Button";
+
 export const Settings = () => {
     return (
         <div className="bg-white shadow rounded-lg p-6">
@@ -12,9 +14,9 @@ export const Settings = () => {
                         <h3 className="text-lg font-medium text-gray-900">Email Notifications</h3>
                         <p className="text-sm text-gray-500">Receive an email when your pets have updates.</p>
                     </div>
-                    <button className="bg-blue-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <span className="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
-                    </button>
+                    <Button isActive variant="toggle">
+                        Toggle email notifications
+                    </Button>
                 </div>
             </div>
         </div>
