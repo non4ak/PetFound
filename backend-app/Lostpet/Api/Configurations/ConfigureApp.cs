@@ -10,7 +10,7 @@ public static class ConfigureApp
 
         app.UseExceptionHandler();
 
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -28,11 +28,14 @@ public static class ConfigureApp
 
         app.UseCors(options =>
         {
+            var origins = config.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                          ?? new[] { "http://localhost:5173" };
+
             options
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
-                .WithOrigins(config.GetSection("ApplicationURLs")["FrontEnd"] ?? "http://localhost:3000");
+                .WithOrigins(origins);
       ***REMOVED***);
 
         app.UseAuthentication();

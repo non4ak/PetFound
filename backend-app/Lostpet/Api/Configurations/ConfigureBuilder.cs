@@ -1,9 +1,13 @@
 using System.Text;
+using Api.ApiResult;
 using Api.Exceptions;
 using Application.Auth.Interfaces;
 using Application.Auth.Services;
 using Domain.Models.Auth;
+using Infrastructure.Common;
+using Infrastructure.Common.Cookies;
 using Infrastructure.Common.Email;
+using Infrastructure.Common.Errors.User;
 using Infrastructure.Common.JWT;
 using Infrastructure.Common.Mappers.Auth;
 using Infrastructure.Data;
@@ -21,7 +25,8 @@ public static class ConfigureBuilder
     public static void Configure(this WebApplicationBuilder builder)
     {
         var services = builder.Services;
-        var jwtConfig = builder.Configuration.GetSection("JwtConfig").Get<JWTConfig>();
+        var jwtConfig = builder.Configuration.GetSection("JWTConfig").Get<JWTConfig>()
+                        ?? throw new InvalidOperationException("JWTConfig section is missing.");
 
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
@@ -73,13 +78,37 @@ public static class ConfigureBuilder
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key)),
                     ValidIssuer = jwtConfig.Issuer,
                     ValidAudience = jwtConfig.Audience,
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.Zero,
+                    RoleClaimType = System.Security.Claims.ClaimTypes.Role
+              ***REMOVED***;
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Cookies[AppConstants.AccessTokenCookie];
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Token = accessToken;
+                      ***REMOVED***
+
+                        return Task.CompletedTask;
+                  ***REMOVED***,
+                    OnChallenge = async context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        var payload = ApiResults.ToProblemDetailsObject(UserErrors.Unauthorized());
+                        await context.Response.WriteAsJsonAsync(payload);
+                  ***REMOVED***
               ***REMOVED***;
           ***REMOVED***);
 
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AuthMappingProfile>());
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IRoleService, RoleService>();
+        builder.Services.AddScoped<ICookieService, CookieService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IEmailService, EmailService>();
   ***REMOVED***

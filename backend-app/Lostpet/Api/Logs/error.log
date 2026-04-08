@@ -1,2 +1,17 @@
 2026-03-17 14:44:50.064 -04:00 [ERR] An error occurred using the connection to database 'lostpet' on server 'tcp://localhost:5432'.
 2026-03-17 14:48:03.964 -04:00 [ERR] An error occurred using the connection to database 'lostpet' on server 'tcp://localhost:5432'.
+2026-04-05 08:01:43.080 -04:00 [ERR] Error sending email to test@gmail.com with subject: Confirm your email.
+System.Net.Mail.SmtpException: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.0 Authentication Required. For more information, go to
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at Infrastructure.Common.Email.EmailService.SendSmtpEmailAsync(String recipientEmail, String subject, String htmlBody) in C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Infrastructure\Common\Email\EmailService.cs:line 114
+2026-04-07 23:54:44.627 +03:00 [ERR] An error occurred using the connection to database 'lostpet' on server 'tcp://localhost:5432'.
+2026-04-07 23:55:46.633 +03:00 [ERR] Failed executing DbCommand (54ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";

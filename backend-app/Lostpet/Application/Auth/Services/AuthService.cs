@@ -3,6 +3,7 @@ using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.Auth.Models;
 using Domain.Models.DTOS.Auth.Responses;
+using Infrastructure.Common.Cookies;
 using Infrastructure.Common.Email;
 using Infrastructure.Common.Errors.Auth;
 using Infrastructure.Common.Errors.Common;
@@ -19,16 +20,12 @@ namespace Application.Auth.Services;
 public class AuthService : IAuthService
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
-
     private readonly UserManager<ApplicationUser> _userManager;
-
     private readonly ITokenService _tokenService;
-
     private readonly IRoleService _roleService;
-
     private readonly ApplicationDbContext _context;
-
     private readonly IEmailService _emailService;
+    private readonly ICookieService _cookieService;
 
     public AuthService(
         SignInManager<ApplicationUser> signInManager,
@@ -36,7 +33,8 @@ public class AuthService : IAuthService
         ITokenService tokenService,
         IRoleService roleService,
         ApplicationDbContext context,
-        IEmailService emailService
+        IEmailService emailService,
+        ICookieService cookieService
     )
     {
         _signInManager = signInManager;
@@ -44,14 +42,8 @@ public class AuthService : IAuthService
         _tokenService = tokenService;
         _roleService = roleService;
         _emailService = emailService;
+        _cookieService = cookieService;
         _context = context;
-  ***REMOVED***
-
-    private string GenerateToken(ApplicationUser user)
-    {
-        var token = _tokenService.GenerateToken(user);
-
-        return token;
   ***REMOVED***
 
     public async Task<Result<int>> GetIdByEmail(string email)
@@ -96,7 +88,6 @@ public class AuthService : IAuthService
 
             var resRolesResult = await _roleService.AddToRolesAsync(appUser, UserRoles.User);
 
-
             if (resRolesResult == false)
             {
                 await _context.Database.RollbackTransactionAsync();
@@ -132,22 +123,223 @@ public class AuthService : IAuthService
       ***REMOVED***
 
         var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
-        if (result)
+        if (!result)
         {
-            return Result<LoginResponse>.Success(new LoginResponse
+            if (await _userManager.IsLockedOutAsync(user))
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                Token = GenerateToken(user)
+                return Result<LoginResponse>.Failure(UserErrors.UserLockedOut());
+          ***REMOVED***
+
+            return Result<LoginResponse>.Failure(UserErrors.UserInvalidCredentials());
+      ***REMOVED***
+
+        await using var tx = await _context.Database.BeginTransactionAsync();
+        RefreshToken refreshTokenEntity;
+        try
+        {
+            var existing = await _context.RefreshTokens.Where(r => r.UserId == user.Id).ToListAsync();
+            _context.RefreshTokens.RemoveRange(existing);
+
+            var refreshTokenDto = _tokenService.GenerateRefreshToken();
+            refreshTokenEntity = new RefreshToken
+            {
+                User = user,
+                Token = refreshTokenDto.Bytes,
+                ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
+          ***REMOVED***;
+            _context.RefreshTokens.Add(refreshTokenEntity);
+            await _context.SaveChangesAsync();
+            await tx.CommitAsync();
+      ***REMOVED***
+        catch (DbUpdateException)
+        {
+            await tx.RollbackAsync();
+            return Result<LoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
+      ***REMOVED***
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var accessToken = _tokenService.GenerateAuthToken(user, roles);
+        _cookieService.SetAuthCookies(accessToken, refreshTokenEntity.Token);
+
+        var role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User;
+
+        return Result<LoginResponse>.Success(new LoginResponse
+        {
+            UserName = user.UserName!,
+            Email = user.Email!,
+            Role = role
+      ***REMOVED***);
+  ***REMOVED***
+
+    public async Task<Result<MobileLoginResponse>> LoginMobileAsync(LoginModel loginModel)
+    {
+        var user = await _userManager.FindByEmailAsync(loginModel.Login) ??
+                   await _userManager.FindByNameAsync(loginModel.Login);
+
+        if (user is null)
+        {
+            return Result<MobileLoginResponse>.Failure(UserErrors.UserNotFoundError());
+      ***REMOVED***
+
+        if (!await _userManager.IsEmailConfirmedAsync(user))
+        {
+            return Result<MobileLoginResponse>.Failure(UserErrors.UserEmailNotConfirmed());
+      ***REMOVED***
+
+        var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
+        if (!result)
+        {
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                return Result<MobileLoginResponse>.Failure(UserErrors.UserLockedOut());
+          ***REMOVED***
+
+            return Result<MobileLoginResponse>.Failure(UserErrors.UserInvalidCredentials());
+      ***REMOVED***
+
+        await using var tx = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var existing = await _context.RefreshTokens.Where(r => r.UserId == user.Id).ToListAsync();
+            _context.RefreshTokens.RemoveRange(existing);
+
+            var refreshTokenDto = _tokenService.GenerateRefreshToken();
+            var refreshTokenEntity = new RefreshToken
+            {
+                User = user,
+                Token = refreshTokenDto.Bytes,
+                ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
+          ***REMOVED***;
+            _context.RefreshTokens.Add(refreshTokenEntity);
+            await _context.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var accessToken = _tokenService.GenerateAuthToken(user, roles);
+            var role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User;
+
+            return Result<MobileLoginResponse>.Success(new MobileLoginResponse
+            {
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                Role = role,
+                AccessToken = accessToken,
+                RefreshToken = refreshTokenEntity.Token
           ***REMOVED***);
       ***REMOVED***
-
-        if (await _userManager.IsLockedOutAsync(user))
+        catch (DbUpdateException)
         {
-            return Result<LoginResponse>.Failure(UserErrors.UserLockedOut());
+            await tx.RollbackAsync();
+            return Result<MobileLoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
+      ***REMOVED***
+  ***REMOVED***
+
+    public async Task<Result> RefreshToken()
+    {
+        var refreshToken = _cookieService.GetRefreshToken();
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            await _signInManager.SignOutAsync();
+            _cookieService.ClearAuthCookies();
+            return Result.Failure(UserErrors.InvalidOrExpiredRefreshToken());
       ***REMOVED***
 
-        return Result<LoginResponse>.Failure(UserErrors.UserInvalidCredentials());
+        var stored = await _context.RefreshTokens
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(r => r.Token == refreshToken);
+
+        if (stored is null || stored.ExpiresOnUtc < DateTime.UtcNow)
+        {
+            await _signInManager.SignOutAsync();
+            _cookieService.ClearAuthCookies();
+            return Result.Failure(UserErrors.InvalidOrExpiredRefreshToken());
+      ***REMOVED***
+
+        await using var tx = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var userId = stored.UserId;
+            var user = stored.User;
+
+            _context.RefreshTokens.RemoveRange(_context.RefreshTokens.Where(r => r.UserId == userId));
+
+            var refreshTokenDto = _tokenService.GenerateRefreshToken();
+            var newRefreshToken = new RefreshToken
+            {
+                User = user,
+                Token = refreshTokenDto.Bytes,
+                ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
+          ***REMOVED***;
+            _context.RefreshTokens.Add(newRefreshToken);
+            await _context.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var accessToken = _tokenService.GenerateAuthToken(user, roles);
+            _cookieService.SetAuthCookies(accessToken, newRefreshToken.Token);
+
+            return Result.Success();
+      ***REMOVED***
+        catch (DbUpdateException)
+        {
+            await tx.RollbackAsync();
+            return Result.Failure(RepositoryErrors<RefreshToken>.AddError);
+      ***REMOVED***
+  ***REMOVED***
+
+    public async Task<Result<MobileLoginResponse>> RefreshTokenMobile(string refreshToken)
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            return Result<MobileLoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
+      ***REMOVED***
+
+        var stored = await _context.RefreshTokens
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(r => r.Token == refreshToken);
+
+        if (stored is null || stored.ExpiresOnUtc < DateTime.UtcNow)
+        {
+            return Result<MobileLoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
+      ***REMOVED***
+
+        await using var tx = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var userId = stored.UserId;
+            var user = stored.User;
+
+            _context.RefreshTokens.RemoveRange(_context.RefreshTokens.Where(r => r.UserId == userId));
+
+            var refreshTokenDto = _tokenService.GenerateRefreshToken();
+            var newRefreshToken = new RefreshToken
+            {
+                User = user,
+                Token = refreshTokenDto.Bytes,
+                ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
+          ***REMOVED***;
+            _context.RefreshTokens.Add(newRefreshToken);
+            await _context.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var accessToken = _tokenService.GenerateAuthToken(user, roles);
+            var role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User;
+
+            return Result<MobileLoginResponse>.Success(new MobileLoginResponse
+            {
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                Role = role,
+                AccessToken = accessToken,
+                RefreshToken = newRefreshToken.Token
+          ***REMOVED***);
+      ***REMOVED***
+        catch (DbUpdateException)
+        {
+            await tx.RollbackAsync();
+            return Result<MobileLoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
+      ***REMOVED***
   ***REMOVED***
 
     public async Task<Result> ConfirmEmailAsync(string email, string token)
@@ -176,10 +368,9 @@ public class AuthService : IAuthService
     public async Task<Result<bool>> LogoutAsync()
     {
         await _signInManager.SignOutAsync();
-
+        _cookieService.ClearAuthCookies();
         return Result<bool>.Success(true);
   ***REMOVED***
-
 
     public async Task<Result<bool>> ForgotPassword(string email)
     {
