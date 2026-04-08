@@ -1,13 +1,16 @@
 import type { RouteObject } from "react-router-dom";
-import { ProtectedLoader } from "@/utils/Loaders";
 import { ROUTES } from "@/constants/routes";
 import { Home } from "@/pages/main/Home";
 import { Settings } from "@/pages/main/Settings";
 import { MainLayout } from "@/components/MainLayout";
+import { ProtectedGuard } from "@/components/Guards";
 
 export const MainRouter: RouteObject = {
-    loader: ProtectedLoader,
-    element: <MainLayout />,
+    element: (
+        <ProtectedGuard>
+            <MainLayout />
+        </ProtectedGuard>
+    ),
     children: [
         {
             path: ROUTES.HOME,

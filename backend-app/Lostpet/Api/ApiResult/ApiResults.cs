@@ -6,6 +6,21 @@ namespace Api.ApiResult;
 
 public static class ApiResults
 {
+    public static ProblemDetails ToProblemDetailsObject(Error error)
+    {
+        return new ProblemDetails
+        {
+            Status = GetStatusCode(error.Type),
+            Title = error.Code,
+            Type = GetType(error.Type),
+            Detail = error.Description,
+            Extensions = new Dictionary<string, object?>
+            {
+                { "errors", new[] { error } }
+            }
+        };
+    }
+
     public static IActionResult ToProblemDetails(Result result)
     {
         if (result.IsSuccess)
