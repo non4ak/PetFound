@@ -1,22 +1,64 @@
-import React, { useState } from 'react';
-import { View, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
+import React, { startTransition } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Typography } from '@/components/ui/Typography';
+
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { Typography } from '@/components/ui/Typography';
+import { useRegisterMutation } from '@/data/hooks/auth';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { signUpSchema, type SignUpFormValues } from '@/utils/validations/authSchema';
 
 export default function SignUpScreen() {
+  const registerMutation = useRegisterMutation();
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    setError,
+***REMOVED*** = useForm<SignUpFormValues>({
+    defaultValues: {
+      confirmPassword: '',
+      email: '',
+      password: '',
+      username: '',
+  ***REMOVED***,
+    resolver: zodResolver(signUpSchema),
+***REMOVED***);
 
-  const handleSignUp = () => {
-    // TODO: Implement sign up logic
-    console.log('Sign up', { name, email, password, confirmPassword });
+  const handleSignUp = async (values: SignUpFormValues): Promise<void> => {
+    try {
+      await registerMutation.mutateAsync({
+        email: values.email.trim(),
+        password: values.password,
+        userName: values.username.trim(),
+    ***REMOVED***);
+
+      Alert.alert(
+        'Account created',
+        'Check your email to confirm your account before logging in.',
+      );
+
+      startTransition(() => {
+        router.replace('/(auth)/login');
+    ***REMOVED***);
+  ***REMOVED*** catch (error) {
+      setError('root', {
+        message: getApiErrorMessage(error, 'Unable to create your account right now.'),
+    ***REMOVED***);
+  ***REMOVED***
 ***REMOVED***;
 
   return (
@@ -31,15 +73,13 @@ export default function SignUpScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Back Button */}
           <TouchableOpacity
             onPress={() => router.back()}
-            className="w-10 h-10 rounded-full bg-foreground-background items-center justify-center mb-6"
+            className="mb-6 h-10 w-10 items-center justify-center rounded-full bg-foreground-background"
           >
             <Ionicons name="arrow-back" size={22} color="#0F172A" />
           </TouchableOpacity>
 
-          {/* Header */}
           <View className="mb-8">
             <Typography variant="title-large">
               Create your{'\n'}account
@@ -49,92 +89,125 @@ export default function SignUpScreen() {
             </Typography>
           </View>
 
-          {/* Form */}
           <View className="flex-col gap-5">
-            <Input
-              label="Full Name"
-              placeholder="Enter your full name"
-              value={name}
-              onChangeText={setName}
-              autoCapitalize="words"
-              leadingIcon={<Ionicons name="person-outline" size={20} color="#9CA3AF" />}
+            <Controller
+              control={control}
+              name="username"
+              render={({ field: { onBlur, onChange, value } }) => (
+                <Input
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  errorText={errors.username?.message}
+                  label="Username"
+                  leadingIcon={<Ionicons name="person-outline" size={20} color="#9CA3AF" />}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  placeholder="Choose a username"
+                  value={value}
+                />
+              )}
             />
 
-            <Input
-              label="Email"
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              leadingIcon={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onBlur, onChange, value } }) => (
+                <Input
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  errorText={errors.email?.message}
+                  keyboardType="email-address"
+                  label="Email"
+                  leadingIcon={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  placeholder="Enter your email"
+                  value={value}
+                />
+              )}
             />
 
-            <Input
-              label="Password"
-              placeholder="Create a password"
-              value={password}
-              onChangeText={setPassword}
-              isPassword
-              leadingIcon={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
-              helperText="Must be at least 8 characters"
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onBlur, onChange, value } }) => (
+                <Input
+                  errorText={errors.password?.message}
+                  helperText="Use 6+ chars with uppercase, lowercase, and a number"
+                  isPassword
+                  label="Password"
+                  leadingIcon={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  placeholder="Create a password"
+                  value={value}
+                />
+              )}
             />
 
-            <Input
-              label="Confirm Password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              isPassword
-              leadingIcon={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
+            <Controller
+              control={control}
+              name="confirmPassword"
+              render={({ field: { onBlur, onChange, value } }) => (
+                <Input
+                  errorText={errors.confirmPassword?.message}
+                  isPassword
+                  label="Confirm Password"
+                  leadingIcon={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  placeholder="Confirm your password"
+                  value={value}
+                />
+              )}
             />
           </View>
 
-          {/* Sign Up Button */}
           <View className="mt-8">
             <Button
-              label="Create Account"
-              variant="primary"
-              size="lg"
+              disabled={registerMutation.isPending}
+              errorText={errors.root?.message}
               fullWidth
-              onPress={handleSignUp}
+              label={registerMutation.isPending ? 'Creating Account...' : 'Create Account'}
+              onPress={handleSubmit(handleSignUp)}
+              size="lg"
+              variant="primary"
             />
           </View>
 
-          {/* Divider */}
-          <View className="flex-row items-center my-6">
-            <View className="flex-1 h-px bg-light-gray" />
+          <View className="my-6 flex-row items-center">
+            <View className="h-px flex-1 bg-light-gray" />
             <Typography variant="body-small" className="mx-4 text-neutral-400">
               or
             </Typography>
-            <View className="flex-1 h-px bg-light-gray" />
+            <View className="h-px flex-1 bg-light-gray" />
           </View>
 
-          {/* Social Buttons */}
           <View className="flex-col gap-3">
             <Button
-              label="Continue with Google"
-              variant="outline"
-              size="md"
+              disabled
               fullWidth
+              label="Continue with Google"
               leadingIcon={<Ionicons name="logo-google" size={20} color="#0F172A" />}
+              size="md"
+              variant="outline"
             />
             <Button
-              label="Continue with Apple"
-              variant="outline"
-              size="md"
+              disabled
               fullWidth
+              label="Continue with Apple"
               leadingIcon={<Ionicons name="logo-apple" size={20} color="#0F172A" />}
+              size="md"
+              variant="outline"
             />
           </View>
 
-          {/* Footer */}
-          <View className="flex-row items-center justify-center mt-8">
+          <View className="mt-8 flex-row items-center justify-center">
             <Typography variant="body-small" className="text-neutral-400">
               Already have an account?{' '}
             </Typography>
             <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
-              <Typography variant="body-small" className="text-primary font-bold">
+              <Typography variant="body-small" className="font-bold text-primary">
                 Log In
               </Typography>
             </TouchableOpacity>
