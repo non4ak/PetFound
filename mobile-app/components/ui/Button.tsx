@@ -76,11 +76,16 @@ export function Button({
   ...props
 }: ButtonProps) {
   const isIconOnly = size === 'icon-only';
+  const isDisabled = props.disabled === true;
 
   return (
     <View>
       <TouchableOpacity
-        className={cn(buttonVariants({ variant, size, fullWidth }), className)}
+        className={cn(
+          buttonVariants({ variant, size, fullWidth }),
+          isDisabled && 'opacity-60',
+          className
+        )}
         activeOpacity={0.7}
         {...props}
       >
