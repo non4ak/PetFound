@@ -1,8 +1,15 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/Button";
 
 export const MainLayout = () => {
     const location = useLocation();
+    const { logout } = useAuth();
+
+    const handleLogout = async (): Promise<void> => {
+        await logout();
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col w-full">
@@ -26,12 +33,16 @@ export const MainLayout = () => {
                             >
                                 Settings
                             </Link>
-                            <Link
-                                to={ROUTES.LOGIN}
-                                className="text-sm font-medium text-gray-500 hover:text-red-500 ml-4 border border-gray-300 rounded-md px-3 py-1.5"
+                            <Button
+                                className="ml-4"
+                                onClick={() => {
+                                    void handleLogout();
+                                }}
+                                size="sm"
+                                variant="danger"
                             >
-                                Logout (Mock)
-                            </Link>
+                                Logout
+                            </Button>
                         </nav>
                     </div>
                 </div>
