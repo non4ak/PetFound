@@ -3,6 +3,9 @@ using Application.Auth.Interfaces;
 using Domain.Models.DTOS.Auth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Infrastructure.Common.Errors.User;
+using Infrastructure.Common.ResultPattern;
 
 namespace Api.Controllers;
 
@@ -93,11 +96,32 @@ public class AuthController : ControllerBase
     [HttpGet("logout")]
     public async Task<IActionResult> LogoutAsync()
     {
-        var result = await _authService.LogoutAsync();
+        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(id, out var userId))
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+      ***REMOVED***
+
+        var result = await _authService.LogoutAsync(userId);
 
         return result.Match(
             successStatusCode: 200,
             includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+  ***REMOVED***
+
+    [Authorize]
+    [HttpGet("profile")]
+    public async Task<IActionResult> ProfileAsync()
+    {
+        var email = User.FindFirst("email")?.Value ?? User.FindFirst(ClaimTypes.Email)?.Value;
+        var result = await _authService.GetUserProfile(email);
+
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: true,
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
