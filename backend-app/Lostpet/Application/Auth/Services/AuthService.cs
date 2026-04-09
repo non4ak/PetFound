@@ -14,7 +14,6 @@ using Infrastructure.Common.ResultPattern;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 namespace Application.Auth.Services;
 
 public class AuthService : IAuthService
@@ -76,6 +75,7 @@ public class AuthService : IAuthService
             {
                 UserName = registerModel.UserName,
                 Email = registerModel.Email,
+                EmailConfirmed = true,
             };
 
             var userResult = await _userManager.CreateAsync(appUser, registerModel.Password);
@@ -93,9 +93,6 @@ public class AuthService : IAuthService
                 await _context.Database.RollbackTransactionAsync();
                 return Result<bool>.Failure(UserErrors.UserNotAssignedToRole());
             }
-
-            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-            await _emailService.SendConfirmationLinkAsync(appUser.Email, emailToken);
 
             await _context.Database.CommitTransactionAsync();
             return Result<bool>.Success(true);
@@ -115,11 +112,6 @@ public class AuthService : IAuthService
         if (user is null)
         {
             return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
-        }
-
-        if (!await _userManager.IsEmailConfirmedAsync(user))
-        {
-            return Result<LoginResponse>.Failure(UserErrors.UserEmailNotConfirmed());
         }
 
         var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
@@ -181,11 +173,6 @@ public class AuthService : IAuthService
             return Result<MobileLoginResponse>.Failure(UserErrors.UserNotFoundError());
         }
 
-        if (!await _userManager.IsEmailConfirmedAsync(user))
-        {
-            return Result<MobileLoginResponse>.Failure(UserErrors.UserEmailNotConfirmed());
-        }
-
         var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
         if (!result)
         {
@@ -232,6 +219,30 @@ public class AuthService : IAuthService
             await tx.RollbackAsync();
             return Result<MobileLoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
         }
+    }
+
+    public async Task<Result<LoginResponse>> GetUserProfile(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return Result<LoginResponse>.Failure(UserErrors.Unauthorized());
+        }
+
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User;
+
+        return Result<LoginResponse>.Success(new LoginResponse
+        {
+            UserName = user.UserName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
+            Role = role
+        });
     }
 
     public async Task<Result> RefreshToken()
@@ -365,9 +376,19 @@ public class AuthService : IAuthService
         return Result.Success();
     }
 
-    public async Task<Result<bool>> LogoutAsync()
+    public async Task<Result<bool>> LogoutAsync(int userId)
     {
         await _signInManager.SignOutAsync();
+        try
+        {
+            var existing = await _context.RefreshTokens.Where(r => r.UserId == userId).ToListAsync();
+            _context.RefreshTokens.RemoveRange(existing);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return Result<bool>.Failure(RepositoryErrors<RefreshToken>.DeleteError);
+        }
         _cookieService.ClearAuthCookies();
         return Result<bool>.Success(true);
     }
