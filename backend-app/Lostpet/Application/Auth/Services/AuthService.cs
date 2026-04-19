@@ -76,6 +76,7 @@ public class AuthService : IAuthService
                 UserName = registerModel.UserName,
                 Email = registerModel.Email,
                 EmailConfirmed = true,
+                RegisteredAt = DateTimeOffset.UtcNow,
             };
 
             var userResult = await _userManager.CreateAsync(appUser, registerModel.Password);

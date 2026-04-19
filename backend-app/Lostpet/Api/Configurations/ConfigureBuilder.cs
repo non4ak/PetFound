@@ -1,6 +1,8 @@
 using System.Text;
 using Api.ApiResult;
 using Api.Exceptions;
+using Application.AdminUsers.Interfaces;
+using Application.AdminUsers.Services;
 using Application.Auth.Interfaces;
 using Application.Auth.Services;
 using Domain.Models.Auth;
@@ -111,6 +113,7 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<ICookieService, CookieService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IEmailService, EmailService>();
+        builder.Services.AddScoped<IAdminUserService, AdminUserService>();
     }
 
     private static void AddSwagger(this WebApplicationBuilder builder)
