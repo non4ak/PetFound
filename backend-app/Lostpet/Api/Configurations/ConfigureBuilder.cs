@@ -1,10 +1,13 @@
 using System.Text;
 using Api.ApiResult;
 using Api.Exceptions;
+using Api.Swagger;
 using Application.AdminUsers.Interfaces;
 using Application.AdminUsers.Services;
 using Application.Auth.Interfaces;
 using Application.Auth.Services;
+using Application.Onboarding.Interfaces;
+using Application.Onboarding.Services;
 using Domain.Models.Auth;
 using Infrastructure.Common;
 using Infrastructure.Common.Cookies;
@@ -114,6 +117,7 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<IAdminUserService, AdminUserService>();
+        builder.Services.AddScoped<IOnboardingService, OnboardingService>();
   ***REMOVED***
 
     private static void AddSwagger(this WebApplicationBuilder builder)
@@ -122,6 +126,7 @@ public static class ConfigureBuilder
         services.AddSwaggerGen(option =>
         {
             option.SwaggerDoc("v1", new OpenApiInfo { Title = "Lostpet API", Version = "v1" });
+            option.OperationFilter<OnboardingRequestExampleOperationFilter>();
             option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,

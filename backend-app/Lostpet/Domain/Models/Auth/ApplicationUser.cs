@@ -8,6 +8,8 @@ public class ApplicationUser : IdentityUser<int>
 {
     public DateTimeOffset RegisteredAt { get; set; }
 
+    public bool IsOnboardingCompleted { get; set; }
+
     public string? Country { get; set; }
 
     public string? City { get; set; }
