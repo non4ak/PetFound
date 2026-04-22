@@ -41,4 +41,14 @@ public static class UserErrors
     {
         return Error.Unauthorized("User.Unauthorized", "Unauthorized");
     }
+
+    public static Error RequiredField(string fieldName)
+    {
+        return Error.Validation("User.Validation.RequiredField", $"{fieldName} is required");
+    }
+
+    public static Error UserAlreadyAdmin()
+    {
+        return Error.Conflict("User.Role.Admin.Exists", "User already has admin role");
+    }
 }

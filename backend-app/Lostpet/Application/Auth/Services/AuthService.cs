@@ -14,7 +14,6 @@ using Infrastructure.Common.ResultPattern;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 namespace Application.Auth.Services;
 
 public class AuthService : IAuthService
@@ -76,6 +75,9 @@ public class AuthService : IAuthService
             {
                 UserName = registerModel.UserName,
                 Email = registerModel.Email,
+                EmailConfirmed = true,
+                RegisteredAt = DateTimeOffset.UtcNow,
+                IsOnboardingCompleted = false,
             };
 
             var userResult = await _userManager.CreateAsync(appUser, registerModel.Password);
@@ -93,9 +95,6 @@ public class AuthService : IAuthService
                 await _context.Database.RollbackTransactionAsync();
                 return Result<bool>.Failure(UserErrors.UserNotAssignedToRole());
             }
-
-            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-            await _emailService.SendConfirmationLinkAsync(appUser.Email, emailToken);
 
             await _context.Database.CommitTransactionAsync();
             return Result<bool>.Success(true);
@@ -115,11 +114,6 @@ public class AuthService : IAuthService
         if (user is null)
         {
             return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
-        }
-
-        if (!await _userManager.IsEmailConfirmedAsync(user))
-        {
-            return Result<LoginResponse>.Failure(UserErrors.UserEmailNotConfirmed());
         }
 
         var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
@@ -181,11 +175,6 @@ public class AuthService : IAuthService
             return Result<MobileLoginResponse>.Failure(UserErrors.UserNotFoundError());
         }
 
-        if (!await _userManager.IsEmailConfirmedAsync(user))
-        {
-            return Result<MobileLoginResponse>.Failure(UserErrors.UserEmailNotConfirmed());
-        }
-
         var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
         if (!result)
         {
@@ -232,6 +221,110 @@ public class AuthService : IAuthService
             await tx.RollbackAsync();
             return Result<MobileLoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
         }
+    }
+
+    public async Task<Result<UserProfileResponse>> GetUserProfile(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return Result<UserProfileResponse>.Failure(UserErrors.Unauthorized());
+        }
+
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return Result<UserProfileResponse>.Failure(UserErrors.UserNotFoundError());
+        }
+
+        var pets = await _context.Pets
+            .AsNoTracking()
+            .Where(p => p.UserId == user.Id)
+            .OrderByDescending(p => p.CreatedOn)
+            .Select(p => new UserProfilePetResponse
+            {
+                Id = p.Id,
+                PetName = p.PetName,
+                PetType = p.PetType,
+                PetSex = p.PetSex,
+                PetSize = p.PetSize,
+                PetAgeCategory = p.PetAgeCategory,
+                Breed = p.Breed,
+                PetPhotoUrl = p.PetPhotoUrl
+            })
+            .ToListAsync();
+
+        return Result<UserProfileResponse>.Success(new UserProfileResponse
+        {
+            UserName = user.UserName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber,
+            SocialNetwork = user.SocialNetwork,
+            Country = user.Country,
+            City = user.City,
+            NotificationChannelPreference = user.NotificationChannelPreference,
+            Pets = pets
+        });
+    }
+
+    public async Task<Result<bool>> UpdateUserProfile(int userId, UpdateProfileModel model)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+        {
+            return Result<bool>.Failure(UserErrors.UserNotFoundError());
+        }
+
+        if (model.PhoneNumber is not null)
+        {
+            if (string.IsNullOrWhiteSpace(model.PhoneNumber))
+            {
+                return Result<bool>.Failure(UserErrors.RequiredField("phoneNumber"));
+            }
+
+            var phoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber.Trim());
+            if (!phoneResult.Succeeded)
+            {
+                return Result<bool>.Failure(UserErrors.UserNotCreatedError(phoneResult.Errors.First().Description));
+            }
+        }
+
+        if (model.SocialNetwork is not null)
+        {
+            user.SocialNetwork = string.IsNullOrWhiteSpace(model.SocialNetwork) ? null : model.SocialNetwork.Trim();
+        }
+
+        if (model.Country is not null)
+        {
+            if (string.IsNullOrWhiteSpace(model.Country))
+            {
+                return Result<bool>.Failure(UserErrors.RequiredField("country"));
+            }
+
+            user.Country = model.Country.Trim();
+        }
+
+        if (model.City is not null)
+        {
+            if (string.IsNullOrWhiteSpace(model.City))
+            {
+                return Result<bool>.Failure(UserErrors.RequiredField("city"));
+            }
+
+            user.City = model.City.Trim();
+        }
+
+        if (model.NotificationChannelPreference.HasValue)
+        {
+            user.NotificationChannelPreference = model.NotificationChannelPreference.Value;
+        }
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            return Result<bool>.Failure(UserErrors.UserNotCreatedError(result.Errors.First().Description));
+        }
+
+        return Result<bool>.Success(true);
     }
 
     public async Task<Result> RefreshToken()
@@ -365,9 +458,19 @@ public class AuthService : IAuthService
         return Result.Success();
     }
 
-    public async Task<Result<bool>> LogoutAsync()
+    public async Task<Result<bool>> LogoutAsync(int userId)
     {
         await _signInManager.SignOutAsync();
+        try
+        {
+            var existing = await _context.RefreshTokens.Where(r => r.UserId == userId).ToListAsync();
+            _context.RefreshTokens.RemoveRange(existing);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return Result<bool>.Failure(RepositoryErrors<RefreshToken>.DeleteError);
+        }
         _cookieService.ClearAuthCookies();
         return Result<bool>.Success(true);
     }
