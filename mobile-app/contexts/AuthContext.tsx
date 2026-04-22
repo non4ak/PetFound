@@ -9,13 +9,24 @@ import {
   persistAuthSession,
   refreshAuthSession,
 } from '@/services/auth-session-service';
-import type { AuthSession, AuthUser } from '@/types/auth';
+import {
+  clearStoredOnboardingActive,
+  readStoredOnboardingActive,
+  writeStoredOnboardingActive,
+} from '@/storage/auth-storage';
+import type { AuthSession, AuthUser, PendingEmailConfirmation } from '@/types/auth';
 
 interface AuthContextValue {
   completeSignIn: (session: AuthSession) => Promise<void>;
+  clearPendingEmailConfirmation: () => void;
+  finishOnboarding: () => Promise<void>;
   isAuthenticated: boolean;
   isInitializing: boolean;
+  isOnboardingActive: boolean;
   logout: () => Promise<void>;
+  pendingEmailConfirmation: PendingEmailConfirmation | null;
+  prepareEmailConfirmation: (confirmation: PendingEmailConfirmation) => void;
+  startOnboarding: () => Promise<void>;
   user: AuthUser | null;
 }
 
@@ -23,6 +34,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
+  const [isOnboardingActive, setIsOnboardingActive] = useState<boolean>(false);
+  const [pendingEmailConfirmation, setPendingEmailConfirmation] =
+    useState<PendingEmailConfirmation | null>(null);
   const [session, setSession] = useState<AuthSession | null>(getAuthSession());
 
   useEffect(() => {
@@ -32,6 +46,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const initializeAuthSession = async (): Promise<void> => {
       try {
         await bootstrapAuthSession();
+
+        let nextIsOnboardingActive: boolean = false;
+
+        try {
+          nextIsOnboardingActive = await readStoredOnboardingActive();
+      ***REMOVED*** catch {
+          await clearStoredOnboardingActive();
+      ***REMOVED***
+
+        if (isMounted) {
+          setIsOnboardingActive(nextIsOnboardingActive);
+      ***REMOVED***
     ***REMOVED*** finally {
         if (isMounted) {
           setIsInitializing(false);
@@ -57,17 +83,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const completeSignIn = async (nextSession: AuthSession): Promise<void> => {
     await persistAuthSession(nextSession);
+    setPendingEmailConfirmation(null);
+***REMOVED***;
+
+  const clearPendingEmailConfirmation = (): void => {
+    setPendingEmailConfirmation(null);
+***REMOVED***;
+
+  const finishOnboarding = async (): Promise<void> => {
+    await clearStoredOnboardingActive();
+    setIsOnboardingActive(false);
 ***REMOVED***;
 
   const logout = async (): Promise<void> => {
     await clearAuthSession();
 ***REMOVED***;
 
+  const prepareEmailConfirmation = (confirmation: PendingEmailConfirmation): void => {
+    setPendingEmailConfirmation(confirmation);
+***REMOVED***;
+
+  const startOnboarding = async (): Promise<void> => {
+    await writeStoredOnboardingActive(true);
+    setIsOnboardingActive(true);
+***REMOVED***;
+
   const value: AuthContextValue = {
     completeSignIn,
+    clearPendingEmailConfirmation,
+    finishOnboarding,
     isAuthenticated: session !== null,
     isInitializing,
+    isOnboardingActive,
     logout,
+    pendingEmailConfirmation,
+    prepareEmailConfirmation,
+    startOnboarding,
     user: session?.user ?? null,
 ***REMOVED***;
 

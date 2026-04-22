@@ -11,6 +11,8 @@ module.exports = {
         'alt-bg': '#FDFDFD',
         'foreground-background': '#F8F8FA',
         'light-gray': '#C7C7CC',
+        'secondary-highlight': '#F0F7FF',
+        'secondary-text': '#8D8D8D',
     ***REMOVED***,
   ***REMOVED***,
 ***REMOVED***,
