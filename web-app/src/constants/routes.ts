@@ -5,6 +5,7 @@ export const ROUTES = {
 
     HOME: "/",
     SETTINGS: "/settings",
+    USERS: "/users",
 }
 
 export type RouteKey = keyof typeof ROUTES;
