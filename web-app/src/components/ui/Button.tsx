@@ -2,7 +2,7 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
 import { cn } from "@/utils/cn";
 
-type ButtonVariant = "primary" | "secondary" | "success" | "danger" | "toggle";
+type ButtonVariant = "primary" | "secondary" | "success" | "danger" | "toggle" | "dangerExtra";
 type ButtonSize = "sm" | "md";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -28,6 +28,7 @@ const variantClassNames: Record<ButtonVariant, string> = {
     secondary: "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-400",
     success: "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500",
     toggle: "relative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent focus:ring-blue-500",
+    dangerExtra: "border border-red-200 bg-red-500 text-gray-100 hover:text-gray-100 hover:border-red-300 focus:ring-red-500",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(props, ref) {
