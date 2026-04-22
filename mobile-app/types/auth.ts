@@ -25,6 +25,11 @@ export interface RegisterRequest {
   userName: string;
 }
 
+export interface PendingEmailConfirmation {
+  email: string;
+  password: string;
+}
+
 export interface ApiResponse<TData> {
   data: TData;
   message: string;
