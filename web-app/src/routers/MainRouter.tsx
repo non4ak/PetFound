@@ -4,6 +4,7 @@ import { Home } from "@/pages/main/Home";
 import { Settings } from "@/pages/main/Settings";
 import { MainLayout } from "@/components/MainLayout";
 import { ProtectedGuard } from "@/components/Guards";
+import { Users } from "@/pages/main/Users";
 
 export const MainRouter: RouteObject = {
     element: (
@@ -19,6 +20,10 @@ export const MainRouter: RouteObject = {
         {
             path: ROUTES.SETTINGS,
             element: <Settings />,
+      ***REMOVED***,
+        {
+            path: ROUTES.USERS,
+            element: <Users />,
       ***REMOVED***,
     ],
 };
