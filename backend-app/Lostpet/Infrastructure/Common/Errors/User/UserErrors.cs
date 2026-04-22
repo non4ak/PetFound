@@ -46,4 +46,9 @@ public static class UserErrors
     {
         return Error.Validation("User.Validation.RequiredField", $"{fieldName} is required");
     }
+
+    public static Error UserAlreadyAdmin()
+    {
+        return Error.Conflict("User.Role.Admin.Exists", "User already has admin role");
+    }
 }

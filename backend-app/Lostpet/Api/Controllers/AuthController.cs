@@ -127,6 +127,25 @@ public class AuthController : ControllerBase
         );
     }
 
+    [Authorize]
+    [HttpPut("profile")]
+    public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileModel model)
+    {
+        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(id, out var userId))
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+        }
+
+        var result = await _authService.UpdateUserProfile(userId, model);
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
     [AllowAnonymous]
     [HttpGet("email-confirmation")]
     public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string email, string token)

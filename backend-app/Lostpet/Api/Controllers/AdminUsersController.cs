@@ -84,6 +84,21 @@ public class AdminUsersController : ControllerBase
         );
     }
 
+    // Development helper to bootstrap an admin account quickly.
+    [AllowAnonymous]
+    [HttpPost("{id:int}/make-admin")]
+    public async Task<IActionResult> MakeAdminAsync([FromRoute] int id)
+    {
+        var result = await _adminUserService.MakeAdminAsync(id);
+
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id)
     {

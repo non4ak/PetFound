@@ -223,28 +223,108 @@ public class AuthService : IAuthService
         }
     }
 
-    public async Task<Result<LoginResponse>> GetUserProfile(string? email)
+    public async Task<Result<UserProfileResponse>> GetUserProfile(string? email)
     {
         if (string.IsNullOrWhiteSpace(email))
         {
-            return Result<LoginResponse>.Failure(UserErrors.Unauthorized());
+            return Result<UserProfileResponse>.Failure(UserErrors.Unauthorized());
         }
 
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
         {
-            return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
+            return Result<UserProfileResponse>.Failure(UserErrors.UserNotFoundError());
         }
 
-        var roles = await _userManager.GetRolesAsync(user);
-        var role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User;
+        var pets = await _context.Pets
+            .AsNoTracking()
+            .Where(p => p.UserId == user.Id)
+            .OrderByDescending(p => p.CreatedOn)
+            .Select(p => new UserProfilePetResponse
+            {
+                Id = p.Id,
+                PetName = p.PetName,
+                PetType = p.PetType,
+                PetSex = p.PetSex,
+                PetSize = p.PetSize,
+                PetAgeCategory = p.PetAgeCategory,
+                Breed = p.Breed,
+                PetPhotoUrl = p.PetPhotoUrl
+            })
+            .ToListAsync();
 
-        return Result<LoginResponse>.Success(new LoginResponse
+        return Result<UserProfileResponse>.Success(new UserProfileResponse
         {
             UserName = user.UserName ?? string.Empty,
             Email = user.Email ?? string.Empty,
-            Role = role
+            PhoneNumber = user.PhoneNumber,
+            SocialNetwork = user.SocialNetwork,
+            Country = user.Country,
+            City = user.City,
+            NotificationChannelPreference = user.NotificationChannelPreference,
+            Pets = pets
         });
+    }
+
+    public async Task<Result<bool>> UpdateUserProfile(int userId, UpdateProfileModel model)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+        {
+            return Result<bool>.Failure(UserErrors.UserNotFoundError());
+        }
+
+        if (model.PhoneNumber is not null)
+        {
+            if (string.IsNullOrWhiteSpace(model.PhoneNumber))
+            {
+                return Result<bool>.Failure(UserErrors.RequiredField("phoneNumber"));
+            }
+
+            var phoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber.Trim());
+            if (!phoneResult.Succeeded)
+            {
+                return Result<bool>.Failure(UserErrors.UserNotCreatedError(phoneResult.Errors.First().Description));
+            }
+        }
+
+        if (model.SocialNetwork is not null)
+        {
+            user.SocialNetwork = string.IsNullOrWhiteSpace(model.SocialNetwork) ? null : model.SocialNetwork.Trim();
+        }
+
+        if (model.Country is not null)
+        {
+            if (string.IsNullOrWhiteSpace(model.Country))
+            {
+                return Result<bool>.Failure(UserErrors.RequiredField("country"));
+            }
+
+            user.Country = model.Country.Trim();
+        }
+
+        if (model.City is not null)
+        {
+            if (string.IsNullOrWhiteSpace(model.City))
+            {
+                return Result<bool>.Failure(UserErrors.RequiredField("city"));
+            }
+
+            user.City = model.City.Trim();
+        }
+
+        if (model.NotificationChannelPreference.HasValue)
+        {
+            user.NotificationChannelPreference = model.NotificationChannelPreference.Value;
+        }
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            return Result<bool>.Failure(UserErrors.UserNotCreatedError(result.Errors.First().Description));
+        }
+
+        return Result<bool>.Success(true);
     }
 
     public async Task<Result> RefreshToken()

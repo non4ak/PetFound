@@ -2,12 +2,16 @@ using System.Text;
 using Api.ApiResult;
 using Api.Exceptions;
 using Api.Swagger;
+using Application.Announcements.Interfaces;
+using Application.Announcements.Services;
 using Application.AdminUsers.Interfaces;
 using Application.AdminUsers.Services;
 using Application.Auth.Interfaces;
 using Application.Auth.Services;
 using Application.Onboarding.Interfaces;
 using Application.Onboarding.Services;
+using Application.Pets.Interfaces;
+using Application.Pets.Services;
 using Domain.Models.Auth;
 using Infrastructure.Common;
 using Infrastructure.Common.Cookies;
@@ -118,6 +122,8 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<IAdminUserService, AdminUserService>();
         builder.Services.AddScoped<IOnboardingService, OnboardingService>();
+        builder.Services.AddScoped<IPetService, PetService>();
+        builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
     }
 
     private static void AddSwagger(this WebApplicationBuilder builder)
