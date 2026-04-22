@@ -1,4 +1,4 @@
-import axiosClient from '@/api/axios-client';
+import { axiosClient } from '@/api/axios-client';
 import type {
   ApiResponse,
   AuthSession,
@@ -51,4 +51,8 @@ export async function registerQuery(request: RegisterRequest): Promise<void> {
   await axiosClient.post('/Auth/register', request, {
     skipAuthRefresh: true,
   });
+}
+
+export async function logoutQuery(): Promise<void> {
+  await axiosClient.get('/Auth/logout');
 }
