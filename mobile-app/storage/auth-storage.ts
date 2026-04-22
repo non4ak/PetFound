@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { AuthSession } from '@/types/auth';
 
 const AUTH_SESSION_STORAGE_KEY = 'auth.session';
+const ONBOARDING_ACTIVE_STORAGE_KEY = 'auth.onboarding-active';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -54,4 +55,28 @@ export async function writeStoredAuthSession(session: AuthSession): Promise<void
   const serializedSession: string = JSON.stringify(session);
 
   await AsyncStorage.setItem(AUTH_SESSION_STORAGE_KEY, serializedSession);
+}
+
+export async function clearStoredOnboardingActive(): Promise<void> {
+  await AsyncStorage.removeItem(ONBOARDING_ACTIVE_STORAGE_KEY);
+}
+
+export async function readStoredOnboardingActive(): Promise<boolean> {
+  const storedValue: string | null = await AsyncStorage.getItem(ONBOARDING_ACTIVE_STORAGE_KEY);
+
+  if (storedValue === null) {
+    return false;
+***REMOVED***
+
+  if (storedValue !== 'true' && storedValue !== 'false') {
+    throw new Error('Stored onboarding state has an invalid shape.');
+***REMOVED***
+
+  return storedValue === 'true';
+}
+
+export async function writeStoredOnboardingActive(isOnboardingActive: boolean): Promise<void> {
+  const serializedValue: string = isOnboardingActive ? 'true' : 'false';
+
+  await AsyncStorage.setItem(ONBOARDING_ACTIVE_STORAGE_KEY, serializedValue);
 }
