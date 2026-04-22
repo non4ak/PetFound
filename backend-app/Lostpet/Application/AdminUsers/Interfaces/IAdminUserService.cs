@@ -17,6 +17,8 @@ public interface IAdminUserService
 
     Task<Result<bool>> ActivateUserAsync(int id);
 
+    Task<Result<bool>> MakeAdminAsync(int id);
+
     Task<Result<bool>> DeleteUserAsync(int id);
 }
 

@@ -1,4 +1,5 @@
 using Application.AdminUsers.Interfaces;
+using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.AdminUsers.Models;
 using Domain.Models.DTOS.AdminUsers.Responses;
@@ -167,6 +168,28 @@ public class AdminUserService : IAdminUserService
         if (!res.Succeeded)
         {
             return Result<bool>.Failure(UserErrors.UserNotCreatedError(res.Errors.First().Description));
+      ***REMOVED***
+
+        return Result<bool>.Success(true);
+  ***REMOVED***
+
+    public async Task<Result<bool>> MakeAdminAsync(int id)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        if (user is null)
+        {
+            return Result<bool>.Failure(UserErrors.UserNotFoundError());
+      ***REMOVED***
+
+        if (await _userManager.IsInRoleAsync(user, UserRoles.Admin))
+        {
+            return Result<bool>.Failure(UserErrors.UserAlreadyAdmin());
+      ***REMOVED***
+
+        var result = await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+        if (!result.Succeeded)
+        {
+            return Result<bool>.Failure(UserErrors.UserNotCreatedError(result.Errors.First().Description));
       ***REMOVED***
 
         return Result<bool>.Success(true);
