@@ -4,14 +4,14 @@ import { FullscreenLoader } from '@/components/ui/FullscreenLoader';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function AuthLayout() {
-  const { isAuthenticated, isInitializing } = useAuth();
+  const { isAuthenticated, isInitializing, isOnboardingActive } = useAuth();
 
   if (isInitializing) {
     return <FullscreenLoader />;
 ***REMOVED***
 
   if (isAuthenticated) {
-    return <Redirect href="/(tabs)" />;
+    return <Redirect href={isOnboardingActive ? '/(onboarding)/profile' : '/(tabs)'} />;
 ***REMOVED***
 
   return (

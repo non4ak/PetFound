@@ -1,14 +1,7 @@
 import React, { startTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,11 +9,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Typography } from '@/components/ui/Typography';
+import { useAuth } from '@/contexts/AuthContext';
+import { useOnboarding } from '@/contexts/OnboardingContext';
 import { useRegisterMutation } from '@/data/hooks/auth';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { signUpSchema, type SignUpFormValues } from '@/utils/validations/authSchema';
 
 export default function SignUpScreen() {
+  const auth = useAuth();
+  const { clearOnboardingDraft } = useOnboarding();
   const registerMutation = useRegisterMutation();
   const router = useRouter();
   const {
@@ -45,14 +42,15 @@ export default function SignUpScreen() {
         password: values.password,
         userName: values.username.trim(),
     ***REMOVED***);
-
-      Alert.alert(
-        'Account created',
-        'Check your email to confirm your account before logging in.',
-      );
+      clearOnboardingDraft();
+      await auth.startOnboarding();
+      auth.prepareEmailConfirmation({
+        email: values.email.trim(),
+        password: values.password,
+    ***REMOVED***);
 
       startTransition(() => {
-        router.replace('/(auth)/login');
+        router.replace('/(onboarding)/confirm-email');
     ***REMOVED***);
   ***REMOVED*** catch (error) {
       setError('root', {

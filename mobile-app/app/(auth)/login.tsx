@@ -41,7 +41,7 @@ export default function LoginScreen() {
       await auth.completeSignIn(session);
 
       startTransition(() => {
-        router.replace('/(tabs)');
+        router.replace(auth.isOnboardingActive ? '/(onboarding)/profile' : '/(tabs)');
     ***REMOVED***);
   ***REMOVED*** catch (error) {
       setError('root', {
