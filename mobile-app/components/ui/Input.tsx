@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-import { View, TextInput as RNTextInput, type TextInputProps as RNTextInputProps, TouchableOpacity } from 'react-native';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/utils';
-import { Typography } from './Typography';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  View,
+  TextInput as RNTextInput,
+  type TextInputProps as RNTextInputProps,
+  TouchableOpacity,
+} from "react-native";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/utils";
+import { Typography } from "./Typography";
+import { Ionicons } from "@expo/vector-icons";
 
 const inputVariants = cva(
-  'w-full rounded-[12px] text-[16px] font-normal text-heading-text px-4',
+  "w-full rounded-[12px] text-[16px] font-normal text-heading-text px-4",
   {
     variants: {
       variant: {
-        default: 'bg-foreground-background border border-light-gray',
-        error: 'bg-foreground-background border border-red-500',
+        default: "bg-white border border-light-gray",
+        error: "bg-white border border-red-500",
       },
       size: {
-        sm: 'py-3',
-        md: 'py-4',
-        lg: 'py-5',
+        sm: "py-3",
+        md: "py-4",
+        lg: "py-5",
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'md',
+      variant: "default",
+      size: "md",
     },
-  }
+  },
 );
 
 export interface InputProps
-  extends Omit<RNTextInputProps, 'className'>,
-  VariantProps<typeof inputVariants> {
+  extends
+    Omit<RNTextInputProps, "className">,
+    VariantProps<typeof inputVariants> {
   label?: string;
   helperText?: string;
   errorText?: string;
@@ -36,6 +42,7 @@ export interface InputProps
   className?: string;
   containerClassName?: string;
   isPassword?: boolean;
+  isOptional?: boolean;
 }
 
 export function Input({
@@ -43,6 +50,7 @@ export function Input({
   helperText,
   errorText,
   leadingIcon,
+  isOptional,
   variant,
   size,
   className,
@@ -51,14 +59,24 @@ export function Input({
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const currentVariant = errorText ? 'error' : variant;
+  const currentVariant = errorText ? "error" : variant;
 
   return (
-    <View className={cn('w-full', containerClassName)}>
+    <View className={cn("w-full", containerClassName)}>
       {label && (
-        <Typography variant="body-small" className="mb-2 text-heading-text font-medium">
-          {label}
-        </Typography>
+        <View className="mb-2 flex-row items-center gap-2">
+          <Typography
+            variant="body-regular"
+            className="text-heading-text font-medium"
+          >
+            {label}
+          </Typography>
+          {isOptional && (
+            <Typography variant="body-small" className="text-secondary-text">
+              optional
+            </Typography>
+          )}
+        </View>
       )}
 
       <View className="relative">
@@ -71,9 +89,9 @@ export function Input({
         <RNTextInput
           className={cn(
             inputVariants({ variant: currentVariant, size }),
-            leadingIcon && 'pl-12',
-            isPassword && 'pr-12',
-            className
+            leadingIcon && "pl-12",
+            isPassword && "pr-12",
+            className,
           )}
           placeholderTextColor="#9CA3AF"
           secureTextEntry={isPassword && !showPassword}
@@ -86,7 +104,7 @@ export function Input({
             onPress={() => setShowPassword(!showPassword)}
           >
             <Ionicons
-              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+              name={showPassword ? "eye-off-outline" : "eye-outline"}
               size={22}
               color="#9CA3AF"
             />
@@ -95,7 +113,10 @@ export function Input({
       </View>
 
       {helperText && !errorText && (
-        <Typography variant="body-small" className="mt-1.5 ml-1 text-neutral-400">
+        <Typography
+          variant="body-small"
+          className="mt-1.5 ml-1 text-neutral-400"
+        >
           {helperText}
         </Typography>
       )}
