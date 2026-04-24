@@ -88,27 +88,52 @@ public class PetService : IPetService
             .OrderByDescending(p => p.CreatedOn)
             .ToListAsync();
 
-        var pets = petEntities.Select(p => new PetResponse
-            {
-                Id = p.Id,
-                PetName = p.PetName,
-                PetType = p.PetType,
-                PetTypeLabel = p.PetType.GetDisplayName(),
-                PetSex = p.PetSex,
-                PetSexLabel = p.PetSex.GetDisplayName(),
-                PetSize = p.PetSize,
-                PetSizeLabel = p.PetSize.GetDisplayName(),
-                PetAgeCategory = p.PetAgeCategory,
-                PetAgeCategoryLabel = p.PetAgeCategory.GetDisplayName(),
-                Breed = p.Breed,
-                ChipNumber = p.ChipNumber,
-                Description = p.Description,
-                PetPhotoUrl = p.PetPhotoUrl,
-                CreatedOn = p.CreatedOn
-          ***REMOVED***)
+        var pets = petEntities.Select(MapPetResponse)
             .ToList();
 
         return Result<IEnumerable<PetResponse>>.Success(pets);
+  ***REMOVED***
+
+    public async Task<Result<PetResponse>> GetByIdAsync(int userId, int petId)
+    {
+        var userExists = await _userManager.Users.AnyAsync(u => u.Id == userId);
+        if (!userExists)
+        {
+            return Result<PetResponse>.Failure(UserErrors.UserNotFoundError());
+      ***REMOVED***
+
+        var pet = await _context.Pets
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == petId && p.UserId == userId);
+
+        if (pet is null)
+        {
+            return Result<PetResponse>.Failure(Error.NotFound("Pet.NotFound", "Pet not found"));
+      ***REMOVED***
+
+        return Result<PetResponse>.Success(MapPetResponse(pet));
+  ***REMOVED***
+
+    private static PetResponse MapPetResponse(Pet p)
+    {
+        return new PetResponse
+        {
+            Id = p.Id,
+            PetName = p.PetName,
+            PetType = p.PetType,
+            PetTypeLabel = p.PetType.GetDisplayName(),
+            PetSex = p.PetSex,
+            PetSexLabel = p.PetSex.GetDisplayName(),
+            PetSize = p.PetSize,
+            PetSizeLabel = p.PetSize.GetDisplayName(),
+            PetAgeCategory = p.PetAgeCategory,
+            PetAgeCategoryLabel = p.PetAgeCategory.GetDisplayName(),
+            Breed = p.Breed,
+            ChipNumber = p.ChipNumber,
+            Description = p.Description,
+            PetPhotoUrl = p.PetPhotoUrl,
+            CreatedOn = p.CreatedOn
+      ***REMOVED***;
   ***REMOVED***
 }
 

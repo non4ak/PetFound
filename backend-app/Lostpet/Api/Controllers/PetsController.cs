@@ -21,16 +21,34 @@ public class PetsController : ControllerBase
         _petService = petService;
   ***REMOVED***
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllAsync()
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
     {
-        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (!int.TryParse(id, out var userId))
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
       ***REMOVED***
 
-        var result = await _petService.GetAllByUserAsync(userId);
+        var result = await _petService.GetByIdAsync(userIdResult.Value, id);
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: true,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+  ***REMOVED***
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync()
+    {
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+      ***REMOVED***
+
+        var result = await _petService.GetAllByUserAsync(userIdResult.Value);
         return result.Match(
             successStatusCode: 200,
             includeBody: true,
@@ -42,19 +60,25 @@ public class PetsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreatePetModel model)
     {
-        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (!int.TryParse(id, out var userId))
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
       ***REMOVED***
 
-        var result = await _petService.CreateAsync(userId, model);
+        var result = await _petService.CreateAsync(userIdResult.Value, model);
         return result.Match(
             successStatusCode: 201,
             includeBody: true,
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
+  ***REMOVED***
+
+    private int? TryGetCurrentUserId()
+    {
+        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(id, out var userId) ? userId : null;
   ***REMOVED***
 }
 
