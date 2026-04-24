@@ -1,3 +1,4 @@
+using Domain.Models.Auth;
 using Domain.Models.Enums;
 
 namespace Domain.Models;
@@ -27,6 +28,10 @@ public class Announcement : BaseEntity
     public bool IsTelegramActive { get; set; }
 
     public bool IsActive { get; set; } = true;
+
+    public int ReporterUserId { get; set; }
+
+    public ApplicationUser ReporterUser { get; set; } = null!;
 
     public int PetId { get; set; }
 

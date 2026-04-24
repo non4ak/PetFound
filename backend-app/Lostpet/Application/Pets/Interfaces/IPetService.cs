@@ -9,5 +9,7 @@ public interface IPetService
     Task<Result<PetResponse>> CreateAsync(int userId, CreatePetModel model);
 
     Task<Result<IEnumerable<PetResponse>>> GetAllByUserAsync(int userId);
+
+    Task<Result<PetResponse>> GetByIdAsync(int userId, int petId);
 }
 

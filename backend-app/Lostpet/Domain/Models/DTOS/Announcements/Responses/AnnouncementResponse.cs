@@ -10,6 +10,8 @@ public class AnnouncementResponse
 
     public AnnouncementPetStatus PetStatus { get; set; }
 
+    public string PetStatusLabel { get; set; } = string.Empty;
+
     public string? Country { get; set; }
 
     public string? City { get; set; }

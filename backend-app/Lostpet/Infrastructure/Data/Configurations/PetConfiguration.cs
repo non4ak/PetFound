@@ -22,6 +22,6 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.HasOne(p => p.User)
             .WithMany(u => u.Pets)
             .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.SetNull);
   ***REMOVED***
 }

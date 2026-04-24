@@ -20,6 +20,8 @@ public class AdminUserDetailsDto
 
     public NotificationChannelPreference NotificationChannelPreference { get; set; }
 
+    public string NotificationChannelPreferenceLabel { get; set; } = string.Empty;
+
     public DateTimeOffset RegisteredAt { get; set; }
 
     public bool EmailConfirmed { get; set; }
