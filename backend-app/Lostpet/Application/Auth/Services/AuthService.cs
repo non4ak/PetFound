@@ -1,4 +1,5 @@
 using Application.Auth.Interfaces;
+using Domain.Extensions;
 using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.Auth.Models;
@@ -236,22 +237,28 @@ public class AuthService : IAuthService
             return Result<UserProfileResponse>.Failure(UserErrors.UserNotFoundError());
         }
 
-        var pets = await _context.Pets
+        var petEntities = await _context.Pets
             .AsNoTracking()
             .Where(p => p.UserId == user.Id)
             .OrderByDescending(p => p.CreatedOn)
-            .Select(p => new UserProfilePetResponse
+            .ToListAsync();
+
+        var pets = petEntities.Select(p => new UserProfilePetResponse
             {
                 Id = p.Id,
                 PetName = p.PetName,
                 PetType = p.PetType,
+                PetTypeLabel = p.PetType.GetDisplayName(),
                 PetSex = p.PetSex,
+                PetSexLabel = p.PetSex.GetDisplayName(),
                 PetSize = p.PetSize,
+                PetSizeLabel = p.PetSize.GetDisplayName(),
                 PetAgeCategory = p.PetAgeCategory,
+                PetAgeCategoryLabel = p.PetAgeCategory.GetDisplayName(),
                 Breed = p.Breed,
                 PetPhotoUrl = p.PetPhotoUrl
             })
-            .ToListAsync();
+            .ToList();
 
         return Result<UserProfileResponse>.Success(new UserProfileResponse
         {
@@ -262,6 +269,7 @@ public class AuthService : IAuthService
             Country = user.Country,
             City = user.City,
             NotificationChannelPreference = user.NotificationChannelPreference,
+            NotificationChannelPreferenceLabel = user.NotificationChannelPreference.GetDisplayName(),
             Pets = pets
         });
     }

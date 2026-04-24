@@ -24,5 +24,12 @@ public class AnnouncementConfiguration : IEntityTypeConfiguration<Announcement>
             .WithMany(p => p.Announcements)
             .HasForeignKey(a => a.PetId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(a => a.ReporterUser)
+            .WithMany()
+            .HasForeignKey(a => a.ReporterUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(a => a.ReporterUserId);
     }
 }

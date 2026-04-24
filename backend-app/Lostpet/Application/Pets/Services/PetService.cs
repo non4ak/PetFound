@@ -1,4 +1,5 @@
 using Application.Pets.Interfaces;
+using Domain.Extensions;
 using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.Pets.Models;
@@ -58,9 +59,13 @@ public class PetService : IPetService
             Id = pet.Id,
             PetName = pet.PetName,
             PetType = pet.PetType,
+            PetTypeLabel = pet.PetType.GetDisplayName(),
             PetSex = pet.PetSex,
+            PetSexLabel = pet.PetSex.GetDisplayName(),
             PetSize = pet.PetSize,
+            PetSizeLabel = pet.PetSize.GetDisplayName(),
             PetAgeCategory = pet.PetAgeCategory,
+            PetAgeCategoryLabel = pet.PetAgeCategory.GetDisplayName(),
             Breed = pet.Breed,
             ChipNumber = pet.ChipNumber,
             Description = pet.Description,
@@ -77,25 +82,31 @@ public class PetService : IPetService
             return Result<IEnumerable<PetResponse>>.Failure(UserErrors.UserNotFoundError());
         }
 
-        var pets = await _context.Pets
+        var petEntities = await _context.Pets
             .AsNoTracking()
             .Where(p => p.UserId == userId)
             .OrderByDescending(p => p.CreatedOn)
-            .Select(p => new PetResponse
+            .ToListAsync();
+
+        var pets = petEntities.Select(p => new PetResponse
             {
                 Id = p.Id,
                 PetName = p.PetName,
                 PetType = p.PetType,
+                PetTypeLabel = p.PetType.GetDisplayName(),
                 PetSex = p.PetSex,
+                PetSexLabel = p.PetSex.GetDisplayName(),
                 PetSize = p.PetSize,
+                PetSizeLabel = p.PetSize.GetDisplayName(),
                 PetAgeCategory = p.PetAgeCategory,
+                PetAgeCategoryLabel = p.PetAgeCategory.GetDisplayName(),
                 Breed = p.Breed,
                 ChipNumber = p.ChipNumber,
                 Description = p.Description,
                 PetPhotoUrl = p.PetPhotoUrl,
                 CreatedOn = p.CreatedOn
             })
-            .ToListAsync();
+            .ToList();
 
         return Result<IEnumerable<PetResponse>>.Success(pets);
     }

@@ -25,9 +25,9 @@ public class Pet : BaseEntity
 
     public string? ChipNumber { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
-    public ApplicationUser User { get; set; } = null!;
+    public ApplicationUser? User { get; set; }
 
     public ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
 }

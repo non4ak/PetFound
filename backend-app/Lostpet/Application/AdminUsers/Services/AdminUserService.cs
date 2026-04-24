@@ -1,4 +1,5 @@
 using Application.AdminUsers.Interfaces;
+using Domain.Extensions;
 using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.AdminUsers.Models;
@@ -52,6 +53,7 @@ public class AdminUserService : IAdminUserService
                 PhoneNumber = u.PhoneNumber,
                 SocialNetwork = u.SocialNetwork,
                 NotificationChannelPreference = u.NotificationChannelPreference,
+                NotificationChannelPreferenceLabel = u.NotificationChannelPreference.GetDisplayName(),
                 RegisteredAt = u.RegisteredAt,
                 LockoutEnd = u.LockoutEnd,
                 IsDeactivated = u.LockoutEnabled && u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow,
@@ -92,6 +94,7 @@ public class AdminUserService : IAdminUserService
             PhoneNumber = user.PhoneNumber,
             SocialNetwork = user.SocialNetwork,
             NotificationChannelPreference = user.NotificationChannelPreference,
+            NotificationChannelPreferenceLabel = user.NotificationChannelPreference.GetDisplayName(),
             RegisteredAt = user.RegisteredAt,
             EmailConfirmed = user.EmailConfirmed,
             PhoneNumberConfirmed = user.PhoneNumberConfirmed,

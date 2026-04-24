@@ -2324,3 +2324,387 @@ ORDER BY p."CreatedOn" DESC
 2026-04-22 15:02:01.400 -04:00 [INF] Executed action Api.Controllers.PetsController.GetAllAsync (Api) in 66.51ms
 2026-04-22 15:02:01.416 -04:00 [INF] Executed endpoint 'Api.Controllers.PetsController.GetAllAsync (Api)'
 2026-04-22 15:02:01.424 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/pets - 200 null application/json; charset=utf-8 161.4778ms
+2026-04-22 15:04:49.503 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/pets - null null
+2026-04-22 15:04:49.553 -04:00 [INF] Executing endpoint 'Api.Controllers.PetsController.GetAllAsync (Api)'
+2026-04-22 15:04:49.560 -04:00 [INF] Route matched with {action = "GetAll", controller = "Pets"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllAsync() on controller Api.Controllers.PetsController (Api).
+2026-04-22 15:04:49.576 -04:00 [INF] Executing action method Api.Controllers.PetsController.GetAllAsync (Api) - Validation state: "Valid"
+2026-04-22 15:04:49.666 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "AspNetUsers" AS a
+    WHERE a."Id" = @__userId_0)
+2026-04-22 15:04:49.688 -04:00 [INF] Executed DbCommand (8ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."PetName", p."PetType", p."PetSex", p."PetSize", p."PetAgeCategory", p."Breed", p."ChipNumber", p."Description", p."PetPhotoUrl", p."CreatedOn"
+FROM "Pets" AS p
+WHERE p."UserId" = @__userId_0
+ORDER BY p."CreatedOn" DESC
+2026-04-22 15:04:49.704 -04:00 [INF] Executed action method Api.Controllers.PetsController.GetAllAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 117.6962ms.
+2026-04-22 15:04:49.718 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[Domain.Models.DTOS.Pets.Responses.PetResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-22 15:04:49.728 -04:00 [INF] Executed action Api.Controllers.PetsController.GetAllAsync (Api) in 152.3637ms
+2026-04-22 15:04:49.736 -04:00 [INF] Executed endpoint 'Api.Controllers.PetsController.GetAllAsync (Api)'
+2026-04-22 15:04:49.744 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/pets - 200 null application/json; charset=utf-8 240.4195ms
+2026-04-22 15:04:50.886 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/favicon.ico - null null
+2026-04-22 15:04:50.926 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/favicon.ico - 404 0 null 40.074ms
+2026-04-22 15:04:50.955 -04:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5148/favicon.ico, Response status code: 404
+2026-04-22 15:04:55.913 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - null null
+2026-04-22 15:04:56.056 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 143.9054ms
+2026-04-23 04:30:51.075 -04:00 [INF] Application is shutting down...
+2026-04-24 11:36:00.875 -04:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-04-24 11:36:01.130 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2026-04-24 11:36:01.140 -04:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-04-24 11:36:01.144 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-04-24 11:36:01.175 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-04-24 11:36:01.202 -04:00 [INF] Applying migration '20260424153535_AddedUserToAnnouncement'.
+2026-04-24 11:36:01.264 -04:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Pets" DROP CONSTRAINT "FK_Pets_AspNetUsers_UserId";
+2026-04-24 11:36:01.274 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Pets" ALTER COLUMN "UserId" DROP NOT NULL;
+2026-04-24 11:36:01.309 -04:00 [INF] Executed DbCommand (32ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Announcements" ADD "ReporterUserId" integer NOT NULL DEFAULT 0;
+2026-04-24 11:36:01.337 -04:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Announcements_ReporterUserId" ON "Announcements" ("ReporterUserId");
+2026-04-24 11:36:01.381 -04:00 [ERR] Failed executing DbCommand (42ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Announcements" ADD CONSTRAINT "FK_Announcements_AspNetUsers_ReporterUserId" FOREIGN KEY ("ReporterUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE RESTRICT;
+2026-04-24 11:37:07.815 -04:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-04-24 11:37:08.154 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2026-04-24 11:37:08.169 -04:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-04-24 11:37:08.171 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-04-24 11:37:08.179 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-04-24 11:37:08.201 -04:00 [INF] Applying migration '20260424153535_AddedUserToAnnouncement'.
+2026-04-24 11:37:08.248 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Pets" DROP CONSTRAINT "FK_Pets_AspNetUsers_UserId";
+2026-04-24 11:37:08.256 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Pets" ALTER COLUMN "UserId" DROP NOT NULL;
+2026-04-24 11:37:08.258 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Announcements" ADD "ReporterUserId" integer;
+2026-04-24 11:37:08.272 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Announcements" AS a
+SET "ReporterUserId" = p."UserId"
+FROM "Pets" AS p
+WHERE a."PetId" = p."Id";
+2026-04-24 11:37:08.287 -04:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Announcements"
+SET "ReporterUserId" = (
+    SELECT MIN(u."Id")
+    FROM "AspNetUsers" AS u
+)
+WHERE "ReporterUserId" IS NULL;
+2026-04-24 11:37:08.301 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Announcements" ALTER COLUMN "ReporterUserId" SET NOT NULL;
+2026-04-24 11:37:08.311 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Announcements_ReporterUserId" ON "Announcements" ("ReporterUserId");
+2026-04-24 11:37:08.325 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Announcements" ADD CONSTRAINT "FK_Announcements_AspNetUsers_ReporterUserId" FOREIGN KEY ("ReporterUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE RESTRICT;
+2026-04-24 11:37:08.334 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Pets" ADD CONSTRAINT "FK_Pets_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE SET NULL;
+2026-04-24 11:37:08.336 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260424153535_AddedUserToAnnouncement', '9.0.0');
+2026-04-24 11:37:26.453 -04:00 [INF] Executed DbCommand (131ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-04-24 11:37:26.744 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-04-24 11:37:26.942 -04:00 [INF] User profile is available. Using 'C:\Users\Ivan\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-24 11:37:27.121 -04:00 [INF] Now listening on: http://localhost:5148
+2026-04-24 11:37:27.128 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-24 11:37:27.130 -04:00 [INF] Hosting environment: Development
+2026-04-24 11:37:27.133 -04:00 [INF] Content root path: C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Api
+2026-04-24 11:37:37.250 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/ - null null
+2026-04-24 11:37:37.303 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-04-24 11:37:37.406 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/ - 404 0 null 162.6295ms
+2026-04-24 11:37:37.424 -04:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5148/, Response status code: 404
+2026-04-24 11:43:01.636 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger - null null
+2026-04-24 11:43:01.669 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger - 301 0 null 33.1303ms
+2026-04-24 11:43:01.704 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.html - null null
+2026-04-24 11:43:02.357 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.html - 200 null text/html;charset=utf-8 653.7729ms
+2026-04-24 11:43:02.429 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui.css - null null
+2026-04-24 11:43:02.431 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.css - null null
+2026-04-24 11:43:02.434 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-bundle.js - null null
+2026-04-24 11:43:02.574 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.js - null null
+2026-04-24 11:43:02.574 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-standalone-preset.js - null null
+2026-04-24 11:43:02.675 -04:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2026-04-24 11:43:03.284 -04:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2026-04-24 11:43:03.614 -04:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2026-04-24 11:43:03.636 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.js - 200 null application/javascript;charset=utf-8 1061.8905ms
+2026-04-24 11:43:03.666 -04:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2026-04-24 11:43:03.686 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui.css - 200 154949 text/css 1256.6521ms
+2026-04-24 11:43:03.689 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.css - 200 202 text/css 1258.2715ms
+2026-04-24 11:43:03.700 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-bundle.js - 200 1485241 text/javascript 1266.6762ms
+2026-04-24 11:43:03.872 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-standalone-preset.js - 200 229223 text/javascript 1297.7293ms
+2026-04-24 11:43:03.883 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/favicon-32x32.png - null null
+2026-04-24 11:43:03.997 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - null null
+2026-04-24 11:43:04.334 -04:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2026-04-24 11:43:04.577 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/favicon-32x32.png - 200 628 image/png 693.5677ms
+2026-04-24 11:43:08.908 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 4911.3308ms
+2026-04-24 11:43:22.239 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/Auth/login - application/json 61
+2026-04-24 11:43:22.270 -04:00 [INF] CORS policy execution failed.
+2026-04-24 11:43:22.328 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-04-24 11:43:22.368 -04:00 [INF] Executing endpoint 'Api.Controllers.AuthController.LoginAsync (Api)'
+2026-04-24 11:43:22.434 -04:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] LoginAsync(Domain.Models.DTOS.Auth.Models.LoginModel) on controller Api.Controllers.AuthController (Api).
+2026-04-24 11:43:22.631 -04:00 [INF] Executing action method Api.Controllers.AuthController.LoginAsync (Api) - Validation state: "Valid"
+2026-04-24 11:43:23.220 -04:00 [INF] Executed DbCommand (13ms) [Parameters=[@__normalizedEmail_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AccessFailedCount", a."City", a."ConcurrencyStamp", a."Country", a."Email", a."EmailConfirmed", a."IsOnboardingCompleted", a."LockoutEnabled", a."LockoutEnd", a."NormalizedEmail", a."NormalizedUserName", a."NotificationChannelPreference", a."PasswordHash", a."PhoneNumber", a."PhoneNumberConfirmed", a."RegisteredAt", a."SecurityStamp", a."SocialNetwork", a."TwoFactorEnabled", a."UserName"
+FROM "AspNetUsers" AS a
+WHERE a."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2026-04-24 11:43:24.051 -04:00 [INF] Executed DbCommand (11ms) [Parameters=[@__user_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."ExpiresOnUtc", r."Token", r."UserId"
+FROM "RefreshTokens" AS r
+WHERE r."UserId" = @__user_Id_0
+2026-04-24 11:43:25.061 -04:00 [INF] Executed DbCommand (16ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RefreshTokens"
+WHERE "Id" = @p0;
+INSERT INTO "RefreshTokens" ("ExpiresOnUtc", "Token", "UserId")
+VALUES (@p1, @p2, @p3)
+RETURNING "Id";
+2026-04-24 11:43:25.483 -04:00 [INF] Executed DbCommand (8ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a0."Name"
+FROM "AspNetUserRoles" AS a
+INNER JOIN "AspNetRoles" AS a0 ON a."RoleId" = a0."Id"
+WHERE a."UserId" = @__userId_0
+2026-04-24 11:43:25.964 -04:00 [INF] Executed action method Api.Controllers.AuthController.LoginAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 3259.0006ms.
+2026-04-24 11:43:26.415 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Auth.Responses.LoginResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-24 11:43:26.550 -04:00 [INF] Executed action Api.Controllers.AuthController.LoginAsync (Api) in 4064.2498ms
+2026-04-24 11:43:26.585 -04:00 [INF] Executed endpoint 'Api.Controllers.AuthController.LoginAsync (Api)'
+2026-04-24 11:43:26.648 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/Auth/login - 200 null application/json; charset=utf-8 4408.9014ms
+2026-04-24 11:43:36.522 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/Auth/profile - null null
+2026-04-24 11:43:36.960 -04:00 [INF] Executing endpoint 'Api.Controllers.AuthController.ProfileAsync (Api)'
+2026-04-24 11:43:37.095 -04:00 [INF] Route matched with {action = "Profile", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProfileAsync() on controller Api.Controllers.AuthController (Api).
+2026-04-24 11:43:37.298 -04:00 [INF] Executing action method Api.Controllers.AuthController.ProfileAsync (Api) - Validation state: "Valid"
+2026-04-24 11:43:37.424 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedEmail_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AccessFailedCount", a."City", a."ConcurrencyStamp", a."Country", a."Email", a."EmailConfirmed", a."IsOnboardingCompleted", a."LockoutEnabled", a."LockoutEnd", a."NormalizedEmail", a."NormalizedUserName", a."NotificationChannelPreference", a."PasswordHash", a."PhoneNumber", a."PhoneNumberConfirmed", a."RegisteredAt", a."SecurityStamp", a."SocialNetwork", a."TwoFactorEnabled", a."UserName"
+FROM "AspNetUsers" AS a
+WHERE a."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2026-04-24 11:43:37.667 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[@__user_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."PetName", p."PetType", p."PetSex", p."PetSize", p."PetAgeCategory", p."Breed", p."PetPhotoUrl"
+FROM "Pets" AS p
+WHERE p."UserId" = @__user_Id_0
+ORDER BY p."CreatedOn" DESC
+2026-04-24 11:43:38.091 -04:00 [INF] Executed action method Api.Controllers.AuthController.ProfileAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 724.1141ms.
+2026-04-24 11:43:38.355 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Auth.Responses.UserProfileResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-24 11:43:38.637 -04:00 [INF] Executed action Api.Controllers.AuthController.ProfileAsync (Api) in 1372.5583ms
+2026-04-24 11:43:38.992 -04:00 [INF] Executed endpoint 'Api.Controllers.AuthController.ProfileAsync (Api)'
+2026-04-24 11:43:39.101 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/Auth/profile - 200 null application/json; charset=utf-8 2578.3181ms
+2026-04-24 11:44:02.496 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/users/me/announcements - application/json 482
+2026-04-24 11:44:02.567 -04:00 [INF] CORS policy execution failed.
+2026-04-24 11:44:02.577 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-04-24 11:44:02.624 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:02.641 -04:00 [INF] Route matched with {action = "Create", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAsync(Domain.Models.DTOS.Announcements.Models.CreateAnnouncementModel) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 11:44:02.878 -04:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2026-04-24 11:44:02.940 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.CreateAsync (Api) in 275.594ms
+2026-04-24 11:44:02.952 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:02.967 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/users/me/announcements - 400 null application/problem+json; charset=utf-8 470.9816ms
+2026-04-24 11:44:18.462 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/users/me/announcements - application/json 483
+2026-04-24 11:44:18.853 -04:00 [INF] CORS policy execution failed.
+2026-04-24 11:44:18.875 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-04-24 11:44:18.893 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:18.924 -04:00 [INF] Route matched with {action = "Create", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAsync(Domain.Models.DTOS.Announcements.Models.CreateAnnouncementModel) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 11:44:19.055 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.CreateAsync (Api) - Validation state: "Valid"
+2026-04-24 11:44:19.113 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[@__petId_Value_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM "Pets" AS p
+WHERE p."Id" = @__petId_Value_0
+LIMIT 1
+2026-04-24 11:44:19.166 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.CreateAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 93.075ms.
+2026-04-24 11:44:19.181 -04:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2026-04-24 11:44:19.328 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.CreateAsync (Api) in 386.2525ms
+2026-04-24 11:44:19.369 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:19.397 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/users/me/announcements - 404 null application/problem+json; charset=utf-8 934.4721ms
+2026-04-24 11:44:25.263 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/users/me/announcements - application/json 484
+2026-04-24 11:44:25.347 -04:00 [INF] CORS policy execution failed.
+2026-04-24 11:44:25.371 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-04-24 11:44:25.387 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:25.414 -04:00 [INF] Route matched with {action = "Create", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAsync(Domain.Models.DTOS.Announcements.Models.CreateAnnouncementModel) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 11:44:25.438 -04:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2026-04-24 11:44:25.453 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.CreateAsync (Api) in 29.7795ms
+2026-04-24 11:44:25.464 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:25.470 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/users/me/announcements - 400 null application/problem+json; charset=utf-8 206.7539ms
+2026-04-24 11:44:35.704 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/users/me/announcements - application/json 469
+2026-04-24 11:44:36.158 -04:00 [INF] CORS policy execution failed.
+2026-04-24 11:44:36.214 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-04-24 11:44:36.223 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:36.328 -04:00 [INF] Route matched with {action = "Create", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAsync(Domain.Models.DTOS.Announcements.Models.CreateAnnouncementModel) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 11:44:36.342 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.CreateAsync (Api) - Validation state: "Valid"
+2026-04-24 11:44:37.448 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?' (DbType = DateTime), @p4='?', @p5='?' (DbType = DateTime), @p6='?' (DbType = Int32), @p7='?', @p8='?', @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Pets" ("Breed", "ChipNumber", "Color", "CreatedOn", "Description", "LastModifiedOn", "PetAgeCategory", "PetName", "PetPhotoUrl", "PetSex", "PetSize", "PetType", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12)
+RETURNING "Id";
+2026-04-24 11:44:38.353 -04:00 [INF] Executed DbCommand (34ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?' (DbType = DateTime), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTime), @p8='?' (DbType = DateTime), @p9='?' (DbType = Decimal), @p10='?' (DbType = Decimal), @p11='?', @p12='?', @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Announcements" ("ApproximateTime", "City", "Country", "CreatedOn", "IsActive", "IsPhonePublic", "IsTelegramActive", "LastDateWhenSeen", "LastModifiedOn", "LastSeenLatitude", "LastSeenLongitude", "NearLandmark", "PetDetails", "PetId", "PetStatus", "ReporterUserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15)
+RETURNING "Id";
+2026-04-24 11:44:38.394 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.CreateAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 1943.0991ms.
+2026-04-24 11:44:38.409 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-24 11:44:38.490 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.CreateAsync (Api) in 2148.9524ms
+2026-04-24 11:44:38.497 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 11:44:38.521 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/users/me/announcements - 201 null application/json; charset=utf-8 2816.9273ms
+2026-04-24 12:06:08.129 -04:00 [INF] Application is shutting down...
+2026-04-24 12:07:45.952 -04:00 [INF] Executed DbCommand (146ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-04-24 12:07:46.128 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-04-24 12:07:46.255 -04:00 [INF] User profile is available. Using 'C:\Users\Ivan\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-24 12:07:46.368 -04:00 [INF] Now listening on: http://localhost:5148
+2026-04-24 12:07:46.374 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-24 12:07:46.376 -04:00 [INF] Hosting environment: Development
+2026-04-24 12:07:46.378 -04:00 [INF] Content root path: C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Api
+2026-04-24 12:08:20.942 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.html - null null
+2026-04-24 12:08:21.441 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.html - 200 null text/html;charset=utf-8 517.6447ms
+2026-04-24 12:08:21.791 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - null null
+2026-04-24 12:08:22.697 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 904.8176ms
+2026-04-24 12:08:29.504 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/Auth/refresh - null null
+2026-04-24 12:08:29.713 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-04-24 12:08:30.383 -04:00 [INF] Executing endpoint 'Api.Controllers.AuthController.RefreshToken (Api)'
+2026-04-24 12:08:30.607 -04:00 [INF] Route matched with {action = "RefreshToken", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RefreshToken() on controller Api.Controllers.AuthController (Api).
+2026-04-24 12:08:30.739 -04:00 [INF] Executing action method Api.Controllers.AuthController.RefreshToken (Api) - Validation state: "Valid"
+2026-04-24 12:08:31.631 -04:00 [INF] Executed DbCommand (25ms) [Parameters=[@__refreshToken_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."ExpiresOnUtc", r."Token", r."UserId", a."Id", a."AccessFailedCount", a."City", a."ConcurrencyStamp", a."Country", a."Email", a."EmailConfirmed", a."IsOnboardingCompleted", a."LockoutEnabled", a."LockoutEnd", a."NormalizedEmail", a."NormalizedUserName", a."NotificationChannelPreference", a."PasswordHash", a."PhoneNumber", a."PhoneNumberConfirmed", a."RegisteredAt", a."SecurityStamp", a."SocialNetwork", a."TwoFactorEnabled", a."UserName"
+FROM "RefreshTokens" AS r
+INNER JOIN "AspNetUsers" AS a ON r."UserId" = a."Id"
+WHERE r."Token" = @__refreshToken_0
+LIMIT 1
+2026-04-24 12:08:32.261 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."ExpiresOnUtc", r."Token", r."UserId"
+FROM "RefreshTokens" AS r
+WHERE r."UserId" = @__userId_0
+2026-04-24 12:08:33.442 -04:00 [INF] Executed DbCommand (38ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RefreshTokens"
+WHERE "Id" = @p0;
+INSERT INTO "RefreshTokens" ("ExpiresOnUtc", "Token", "UserId")
+VALUES (@p1, @p2, @p3)
+RETURNING "Id";
+2026-04-24 12:08:33.758 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a0."Name"
+FROM "AspNetUserRoles" AS a
+INNER JOIN "AspNetRoles" AS a0 ON a."RoleId" = a0."Id"
+WHERE a."UserId" = @__userId_0
+2026-04-24 12:08:33.957 -04:00 [INF] Executed action method Api.Controllers.AuthController.RefreshToken (Api), returned result Microsoft.AspNetCore.Mvc.StatusCodeResult in 2951.5119ms.
+2026-04-24 12:08:34.018 -04:00 [INF] Executing StatusCodeResult, setting HTTP status code 200
+2026-04-24 12:08:34.046 -04:00 [INF] Executed action Api.Controllers.AuthController.RefreshToken (Api) in 3348.2121ms
+2026-04-24 12:08:34.078 -04:00 [INF] Executed endpoint 'Api.Controllers.AuthController.RefreshToken (Api)'
+2026-04-24 12:08:34.208 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/Auth/refresh - 200 0 null 4703.6604ms
+2026-04-24 12:08:43.081 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements?pageNumber=0&pageSize=20 - null null
+2026-04-24 12:08:43.277 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-04-24 12:08:43.608 -04:00 [INF] Route matched with {action = "GetPaged", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPagedAsync(Int32, Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 12:08:43.979 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api) - Validation state: "Valid"
+2026-04-24 12:08:44.252 -04:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Announcements" AS a
+2026-04-24 12:08:44.474 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId"
+FROM "Announcements" AS a
+ORDER BY a."CreatedOn" DESC, a."Id" DESC
+LIMIT @__p_1 OFFSET @__p_0
+2026-04-24 12:08:44.543 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 530.046ms.
+2026-04-24 12:08:44.573 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-24 12:08:44.831 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetPagedAsync (Api) in 917.4569ms
+2026-04-24 12:08:44.875 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-04-24 12:08:44.885 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements?pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 1804.3032ms
+2026-04-24 12:12:11.491 -04:00 [INF] Application is shutting down...
+2026-04-24 12:12:25.759 -04:00 [INF] Executed DbCommand (108ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-04-24 12:12:25.994 -04:00 [INF] Executed DbCommand (10ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-04-24 12:12:26.137 -04:00 [INF] User profile is available. Using 'C:\Users\Ivan\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-24 12:12:26.251 -04:00 [INF] Now listening on: http://localhost:5148
+2026-04-24 12:12:26.257 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-24 12:12:26.260 -04:00 [INF] Hosting environment: Development
+2026-04-24 12:12:26.263 -04:00 [INF] Content root path: C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Api
+2026-04-24 12:18:21.288 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.html - null null
+2026-04-24 12:18:22.606 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.html - 200 null text/html;charset=utf-8 1441.4814ms
+2026-04-24 12:18:26.805 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - null null
+2026-04-24 12:18:27.554 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 755.0549ms
+2026-04-24 12:18:47.181 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements/2 - null null
+2026-04-24 12:18:49.131 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-04-24 12:18:49.838 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetByIdAsync (Api)'
+2026-04-24 12:18:49.938 -04:00 [INF] Route matched with {action = "GetById", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByIdAsync(Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 12:18:50.020 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetByIdAsync (Api) - Validation state: "Valid"
+2026-04-24 12:18:50.985 -04:00 [INF] Executed DbCommand (20ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."Id" = @__id_0
+LIMIT 1
+2026-04-24 12:18:51.263 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetByIdAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 1171.3049ms.
+2026-04-24 12:18:51.306 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementDetailsResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-24 12:18:51.777 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetByIdAsync (Api) in 1757.8444ms
+2026-04-24 12:18:52.042 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetByIdAsync (Api)'
+2026-04-24 12:18:52.140 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements/2 - 200 null application/json; charset=utf-8 4959.0498ms
+2026-04-24 12:29:55.681 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/users/me/announcements - application/json 469
+2026-04-24 12:29:55.725 -04:00 [INF] CORS policy execution failed.
+2026-04-24 12:29:55.745 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-04-24 12:29:55.871 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 12:29:55.926 -04:00 [INF] Route matched with {action = "Create", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAsync(Domain.Models.DTOS.Announcements.Models.CreateAnnouncementModel) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 12:29:56.206 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.CreateAsync (Api) - Validation state: "Valid"
+2026-04-24 12:29:57.213 -04:00 [INF] Executed DbCommand (42ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?' (DbType = DateTime), @p4='?', @p5='?' (DbType = DateTime), @p6='?' (DbType = Int32), @p7='?', @p8='?', @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Pets" ("Breed", "ChipNumber", "Color", "CreatedOn", "Description", "LastModifiedOn", "PetAgeCategory", "PetName", "PetPhotoUrl", "PetSex", "PetSize", "PetType", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12)
+RETURNING "Id";
+2026-04-24 12:29:58.179 -04:00 [INF] Executed DbCommand (36ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?' (DbType = DateTime), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTime), @p8='?' (DbType = DateTime), @p9='?' (DbType = Decimal), @p10='?' (DbType = Decimal), @p11='?', @p12='?', @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Announcements" ("ApproximateTime", "City", "Country", "CreatedOn", "IsActive", "IsPhonePublic", "IsTelegramActive", "LastDateWhenSeen", "LastModifiedOn", "LastSeenLatitude", "LastSeenLongitude", "NearLandmark", "PetDetails", "PetId", "PetStatus", "ReporterUserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15)
+RETURNING "Id";
+2026-04-24 12:29:58.258 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.CreateAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 2032.9723ms.
+2026-04-24 12:29:58.355 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-24 12:29:58.654 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.CreateAsync (Api) in 2678.4905ms
+2026-04-24 12:29:58.684 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.CreateAsync (Api)'
+2026-04-24 12:29:58.813 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/users/me/announcements - 201 null application/json; charset=utf-8 3131.7337ms
+2026-04-24 12:30:15.769 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements/3 - null null
+2026-04-24 12:30:16.206 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetByIdAsync (Api)'
+2026-04-24 12:30:16.310 -04:00 [INF] Route matched with {action = "GetById", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByIdAsync(Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-04-24 12:30:16.341 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetByIdAsync (Api) - Validation state: "Valid"
+2026-04-24 12:30:16.382 -04:00 [INF] Executed DbCommand (7ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."Id" = @__id_0
+LIMIT 1
+2026-04-24 12:30:16.396 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetByIdAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 24.7111ms.
+2026-04-24 12:30:16.403 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementDetailsResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-24 12:30:16.655 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetByIdAsync (Api) in 321.5897ms
+2026-04-24 12:30:17.234 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetByIdAsync (Api)'
+2026-04-24 12:30:17.613 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements/3 - 200 null application/json; charset=utf-8 1844.2768ms
+2026-04-24 12:33:34.383 -04:00 [INF] Application is shutting down...

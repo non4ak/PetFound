@@ -20,6 +20,8 @@ public class AdminUserListItemDto
 
     public NotificationChannelPreference NotificationChannelPreference { get; set; }
 
+    public string NotificationChannelPreferenceLabel { get; set; } = string.Empty;
+
     public DateTimeOffset RegisteredAt { get; set; }
 
     public bool IsDeactivated { get; set; }
