@@ -117,7 +117,11 @@ public static class ConfigureBuilder
           ***REMOVED***);
 
         builder.Services.AddHttpContextAccessor();
-        builder.Services.Configure<AzureBlobStorageConfig>(builder.Configuration.GetSection("AzureBlobStorage"));
+        builder.Services.Configure<AzureBlobStorageConfig>(options =>
+        {
+            builder.Configuration.GetSection("AzureBlobStorage").Bind(options);
+            ApplyAzureStorageEnvironmentOverrides(builder.Configuration, options);
+      ***REMOVED***);
         builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AuthMappingProfile>());
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IRoleService, RoleService>();
@@ -129,6 +133,66 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IPetService, PetService>();
         builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
         builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
+  ***REMOVED***
+
+    private static void ApplyAzureStorageEnvironmentOverrides(
+        IConfiguration configuration,
+        AzureBlobStorageConfig options)
+    {
+        string? connectionString = configuration["AZURE_STORAGE_CONNECTION_STRING"];
+        if (!string.IsNullOrWhiteSpace(connectionString))
+        {
+            options.ConnectionString = connectionString;
+      ***REMOVED***
+
+        string? containerName = configuration["AZURE_STORAGE_CONTAINER"];
+        if (!string.IsNullOrWhiteSpace(containerName))
+        {
+            options.ContainerName = containerName;
+      ***REMOVED***
+
+        string? sasLifetimeInMinutes = configuration["AZURE_STORAGE_SAS_LIFETIME_IN_MINUTES"];
+        if (!string.IsNullOrWhiteSpace(sasLifetimeInMinutes))
+        {
+            options.SasLifetimeInMinutes = ParsePositiveInt(
+                settingName: "AZURE_STORAGE_SAS_LIFETIME_IN_MINUTES",
+                value: sasLifetimeInMinutes);
+      ***REMOVED***
+
+        string? maxFileSizeInBytes = configuration["AZURE_STORAGE_MAX_FILE_SIZE_IN_BYTES"];
+        if (!string.IsNullOrWhiteSpace(maxFileSizeInBytes))
+        {
+            options.MaxFileSizeInBytes = ParsePositiveLong(
+                settingName: "AZURE_STORAGE_MAX_FILE_SIZE_IN_BYTES",
+                value: maxFileSizeInBytes);
+      ***REMOVED***
+
+        string? allowedContentTypes = configuration["AZURE_STORAGE_ALLOWED_CONTENT_TYPES"];
+        if (!string.IsNullOrWhiteSpace(allowedContentTypes))
+        {
+            options.AllowedContentTypes = allowedContentTypes
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+      ***REMOVED***
+  ***REMOVED***
+
+    private static int ParsePositiveInt(string settingName, string value)
+    {
+        if (int.TryParse(value, out int parsedValue) && parsedValue > 0)
+        {
+            return parsedValue;
+      ***REMOVED***
+
+        throw new InvalidOperationException($"{settingName} must be a positive integer. Value: {value}");
+  ***REMOVED***
+
+    private static long ParsePositiveLong(string settingName, string value)
+    {
+        if (long.TryParse(value, out long parsedValue) && parsedValue > 0)
+        {
+            return parsedValue;
+      ***REMOVED***
+
+        throw new InvalidOperationException($"{settingName} must be a positive integer. Value: {value}");
   ***REMOVED***
 
     private static void AddSwagger(this WebApplicationBuilder builder)
