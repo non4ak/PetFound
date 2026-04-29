@@ -21,9 +21,9 @@ export function AppScreenScaffold({
 }: AppScreenScaffoldProps) {
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className={cn("flex-1 px-4 py-4", contentClassName)}>
-        {header}
+      <View className="px-4">{header}</View>
 
+      <View className={cn("flex-1 px-4 py-4", contentClassName)}>
         <ScrollView
           className="mt-6 flex-1"
           contentContainerClassName={cn("pb-6", scrollContentClassName)}

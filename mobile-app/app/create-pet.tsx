@@ -57,16 +57,24 @@ export default function CreatePetScreen() {
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
-            className="h-11 w-11 items-center justify-center rounded-full bg-white"
+            className="h-11 w-11 items-center justify-center rounded-full bg-secondary-highlight"
             onPress={() => router.back()}
           >
             <Ionicons name="arrow-back" size={22} color="#1E1E1E" />
           </TouchableOpacity>
-          <Typography variant="title-medium">Add pet</Typography>
-          <View className="w-11" />
         </View>
       }
+      contentClassName="py-0"
     >
+      <View className="gap-2 mb-8 px-6">
+        <Typography variant="title-large" className="text-heading-text">
+          Your pet
+        </Typography>
+        <Typography variant="body-small" className="text-[#9CA3AF]">
+          If your pet goes missing, we&apos;ll use this to find matches
+          instantly.
+        </Typography>
+      </View>
       <View className="p-5">
         <PetAdding control={control} hasMicrochip={hasMicrochip} />
       </View>

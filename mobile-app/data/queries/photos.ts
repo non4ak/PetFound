@@ -1,4 +1,5 @@
 import { axiosClient } from "@/api/axios-client";
+import * as FileSystem from "expo-file-system/legacy";
 import type { ApiResponse } from "@/types/auth";
 import type {
   CreatePhotoUploadSasRequest,
@@ -17,30 +18,29 @@ async function createPhotoUploadSasQuery(
   return response.data.data;
 }
 
-async function createPhotoBlob(uri: string): Promise<Blob> {
-  const response = await fetch(uri);
+async function getFileSizeInBytes(uri: string, fallbackFileSizeInBytes: number): Promise<number> {
+  const fileInfo = await FileSystem.getInfoAsync(uri);
 
-  if (!response.ok) {
-    throw new Error(`Cannot read selected image. Status: ${response.status}`);
+  if (fileInfo.exists && typeof fileInfo.size === "number" && fileInfo.size > 0) {
+    return fileInfo.size;
   }
 
-  return response.blob();
+  return fallbackFileSizeInBytes;
 }
 
 async function uploadPhotoToBlobStorage(
   sasResponse: PhotoUploadSasResponse,
-  photoBlob: Blob,
+  uri: string,
 ): Promise<void> {
-  const response = await fetch(sasResponse.uploadUrl, {
-    body: photoBlob,
+  const uploadResult = await FileSystem.uploadAsync(sasResponse.uploadUrl, uri, {
     headers: sasResponse.requiredHeaders,
-    method: "PUT",
+    httpMethod: "PUT",
+    uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
   });
 
-  if (!response.ok) {
-    const responseBody: string = await response.text();
+  if (uploadResult.status < 200 || uploadResult.status >= 300) {
     throw new Error(
-      `Azure Blob upload failed. Status: ${response.status}. Body: ${responseBody}`,
+      `Azure Blob upload failed. Status: ${uploadResult.status}. Body: ${uploadResult.body}`,
     );
   }
 }
@@ -48,14 +48,17 @@ async function uploadPhotoToBlobStorage(
 export async function uploadPhotoFromUriQuery(
   request: UploadPhotoFromUriRequest,
 ): Promise<string> {
+  const fileSizeInBytes: number = await getFileSizeInBytes(
+    request.uri,
+    request.fileSizeInBytes,
+  );
   const sasResponse: PhotoUploadSasResponse = await createPhotoUploadSasQuery({
     contentType: request.contentType,
     fileName: request.fileName,
-    fileSizeInBytes: request.fileSizeInBytes,
+    fileSizeInBytes,
   });
-  const photoBlob: Blob = await createPhotoBlob(request.uri);
 
-  await uploadPhotoToBlobStorage(sasResponse, photoBlob);
+  await uploadPhotoToBlobStorage(sasResponse, request.uri);
 
   return sasResponse.blobUrl;
 }
