@@ -12,6 +12,8 @@ using Application.Onboarding.Interfaces;
 using Application.Onboarding.Services;
 using Application.Pets.Interfaces;
 using Application.Pets.Services;
+using Application.Photos.Interfaces;
+using Application.Photos.Services;
 using Domain.Models.Auth;
 using Infrastructure.Common;
 using Infrastructure.Common.Cookies;
@@ -19,6 +21,7 @@ using Infrastructure.Common.Email;
 using Infrastructure.Common.Errors.User;
 using Infrastructure.Common.JWT;
 using Infrastructure.Common.Mappers.Auth;
+using Infrastructure.Common.Storage;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -114,6 +117,7 @@ public static class ConfigureBuilder
             });
 
         builder.Services.AddHttpContextAccessor();
+        builder.Services.Configure<AzureBlobStorageConfig>(builder.Configuration.GetSection("AzureBlobStorage"));
         builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AuthMappingProfile>());
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IRoleService, RoleService>();
@@ -124,6 +128,7 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IOnboardingService, OnboardingService>();
         builder.Services.AddScoped<IPetService, PetService>();
         builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+        builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
     }
 
     private static void AddSwagger(this WebApplicationBuilder builder)

@@ -16,6 +16,8 @@ obj/
 
 # .NET local tools
 .dotnet/
+.nuget/
+.tmp/
 
 # Publish profiles
 **/Properties/PublishProfiles/
