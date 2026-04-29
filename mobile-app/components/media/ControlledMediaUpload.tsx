@@ -15,6 +15,7 @@ export type MediaUploadSourceMode = "camera" | "library" | "both";
 export interface ControlledMediaUploadState {
   errorText?: string;
   isUploading: boolean;
+  previewUri: string;
   remove: () => void;
   select: () => Promise<void>;
   value: string;
@@ -33,6 +34,7 @@ export interface ControlledMediaUploadProps<T extends FieldValues> {
   libraryPermissionDeniedMessage: string;
   libraryPermissionDeniedTitle: string;
   pickerQuality: number;
+  onUploaded?: (url: string) => void;
   sourceMode: MediaUploadSourceMode;
   uploadFailedFallbackMessage: string;
   uploadFailedTitle: string;
@@ -175,11 +177,13 @@ export function ControlledMediaUpload<T extends FieldValues>({
   libraryPermissionDeniedMessage,
   libraryPermissionDeniedTitle,
   pickerQuality,
+  onUploaded,
   sourceMode,
   uploadFailedFallbackMessage,
   uploadFailedTitle,
 }: ControlledMediaUploadProps<T>) {
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [localPreviewUri, setLocalPreviewUri] = useState<string>("");
 
   return (
     <Controller
@@ -231,6 +235,7 @@ export function ControlledMediaUpload<T extends FieldValues>({
         ***REMOVED***
 
           setIsUploading(true);
+          setLocalPreviewUri(selectedAsset.uri);
 
           try {
             const uploadedMediaUrl: string = await uploadPhotoFromUriQuery({
@@ -241,6 +246,7 @@ export function ControlledMediaUpload<T extends FieldValues>({
           ***REMOVED***);
 
             onChange(uploadedMediaUrl);
+            onUploaded?.(uploadedMediaUrl);
         ***REMOVED*** catch (uploadError: unknown) {
             Alert.alert(
               uploadFailedTitle,
@@ -252,12 +258,14 @@ export function ControlledMediaUpload<T extends FieldValues>({
       ***REMOVED***;
 
         const handleRemovePress = (): void => {
+          setLocalPreviewUri("");
           onChange("");
       ***REMOVED***;
 
         return children({
           errorText: displayedErrorText,
           isUploading,
+          previewUri: localPreviewUri.length > 0 ? localPreviewUri : uploadedUrl,
           remove: handleRemovePress,
           select: handleSelectPress,
           value: uploadedUrl,

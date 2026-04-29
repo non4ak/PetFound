@@ -13,6 +13,7 @@ import {
   OnboardingPetSex,
   OnboardingPetSize,
   OnboardingPetType,
+  type OnboardingPetStepData,
 } from "@/types/onboarding";
 import {
   onboardingPetSchema,
@@ -34,6 +35,13 @@ function createPetDefaultValues(): OnboardingPetFormValues {
 ***REMOVED***;
 }
 
+function createPetStepData(values: OnboardingPetFormValues): OnboardingPetStepData {
+  return {
+    ...values,
+    description: values.description ?? "",
+***REMOVED***;
+}
+
 export default function PetOnboardingScreen() {
   const { clearPetStep, onboardingDraft, savePetStep } = useOnboarding();
   const router = useRouter();
@@ -52,7 +60,7 @@ export default function PetOnboardingScreen() {
   const handleContinuePress = async (
     values: OnboardingPetFormValues,
   ): Promise<void> => {
-    savePetStep(values);
+    savePetStep(createPetStepData(values));
 
     startTransition(() => {
       router.push("./stay-in-loop");
@@ -60,7 +68,7 @@ export default function PetOnboardingScreen() {
 ***REMOVED***;
 
   const handleBackPress = (): void => {
-    savePetStep(getValues());
+    savePetStep(createPetStepData(getValues()));
     router.back();
 ***REMOVED***;
 

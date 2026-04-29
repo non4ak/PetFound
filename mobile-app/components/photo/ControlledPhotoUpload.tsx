@@ -42,7 +42,7 @@ export function ControlledPhotoUpload<T extends FieldValues>({
       uploadFailedFallbackMessage="Please try again."
       uploadFailedTitle="Photo upload failed"
     >
-      {({ errorText: displayedErrorText, isUploading, remove, select, value }) => {
+      {({ errorText: displayedErrorText, isUploading, previewUri, remove, select, value }) => {
         return (
           <View className="items-start">
             <View className="items-center">
@@ -55,9 +55,9 @@ export function ControlledPhotoUpload<T extends FieldValues>({
                 disabled={isUploading}
                 onPress={select}
               >
-                {value.length > 0 ? (
+                {previewUri.length > 0 ? (
                   <Image
-                    source={{ uri: value }}
+                    source={{ uri: previewUri }}
                     style={{ height: 72, width: 72 }}
                     contentFit="cover"
                   />
@@ -68,7 +68,7 @@ export function ControlledPhotoUpload<T extends FieldValues>({
                 )}
               </TouchableOpacity>
 
-              {value.length > 0 ? (
+              {value.length > 0 || previewUri.length > 0 ? (
                 <TouchableOpacity
                   activeOpacity={0.75}
                   className="absolute -right-2 -top-2 h-7 w-7 items-center justify-center rounded-full bg-heading-text"

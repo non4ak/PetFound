@@ -13,6 +13,7 @@ module.exports = {
         'light-gray': '#C7C7CC',
         'secondary-highlight': '#F0F7FF',
         'secondary-text': '#8D8D8D',
+        'background': '#FFF5E2',
     ***REMOVED***,
   ***REMOVED***,
 ***REMOVED***,
