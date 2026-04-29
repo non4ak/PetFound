@@ -4,6 +4,7 @@ using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.Pets.Models;
 using Domain.Models.DTOS.Pets.Responses;
+using Infrastructure.Common.Errors;
 using Infrastructure.Common.Errors.User;
 using Infrastructure.Common.ResultPattern;
 using Infrastructure.Data;
