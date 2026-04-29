@@ -20,7 +20,7 @@ export function AppScreenScaffold({
   scrollContentClassName,
 }: AppScreenScaffoldProps) {
   return (
-    <SafeAreaView className="flex-1 ">
+    <SafeAreaView className="flex-1 bg-white">
       <View className={cn("flex-1 px-4 py-4", contentClassName)}>
         {header}
 
