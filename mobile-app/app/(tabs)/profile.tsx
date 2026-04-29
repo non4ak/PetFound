@@ -79,9 +79,9 @@ export default function ProfileScreen() {
 
   return (
     <AppScreenScaffold
-      contentClassName="px-4"
+      contentClassName="bg-background"
       header={
-        <View className="flex-row items-center justify-between px-4">
+        <View className="flex-row items-center justify-between py-6 px-4">
           <Typography variant="title-large">Profile</Typography>
           <TouchableOpacity
             className="rounded-[10px] border border-[#BDBDBD] bg-white px-4 py-2"
@@ -99,7 +99,7 @@ export default function ProfileScreen() {
         <View className="flex-row items-center gap-5">
           <View className="flex-1 items-center justify-center">
             <View className="h-[80px] w-[80px] items-center justify-center rounded-full border-2 border-primary">
-              <Ionicons name="paw-outline" size={22} color="#D89F35" />
+              <Ionicons name="person-outline" size={22} color="#D89F35" />
             </View>
           </View>
 
