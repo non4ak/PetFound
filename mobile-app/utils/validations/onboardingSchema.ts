@@ -55,7 +55,7 @@ export const onboardingPetSchema = z
         (value: string) => value.length === 0 || chipNumberPattern.test(value),
         'Chip number must contain 10 to 20 digits',
       ),
-    description: z.string().trim().min(10, 'Description must be at least 10 characters long'),
+    description: z.string().trim().min(10, 'Description must be at least 10 characters long').optional(),
     hasMicrochip: z.boolean(),
     petAgeCategory: z.nativeEnum(OnboardingPetAgeCategory),
     petName: z.string().trim().min(2, 'Pet name is required'),

@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { OnboardingProgress } from "@/components/onboarding/OnboardingProgress";
 import { OnboardingScaffold } from "@/components/onboarding/OnboardingScaffold";
+import { ControlledProfilePhotoUpload } from "@/components/profile/ControlledProfilePhotoUpload";
 import { ControlledInput } from "@/components/ui/ControlledInput";
 import { ControlledSwitch } from "@/components/ui/ControlledSwitch";
 import { Stepper } from "@/components/ui/Stepper";
@@ -68,6 +69,14 @@ export default function ProfileOnboardingScreen() {
         subtitle="How should the community know you?"
       />
       <View className="gap-5">
+        <View className="items-center">
+          <ControlledProfilePhotoUpload
+            control={control}
+            label="Add profile photo"
+            name="userName"
+          />
+        </View>
+
         <ControlledInput
           autoCapitalize="none"
           autoCorrect={false}

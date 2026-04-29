@@ -5,6 +5,7 @@ import { TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
+import { ControlledProfilePhotoUpload } from "@/components/profile/ControlledProfilePhotoUpload";
 import { ProfileSectionCard } from "@/components/profile/ProfileSectionCard";
 import { VisibilityToggle } from "@/components/profile/VisibilityToggle";
 import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
@@ -101,8 +102,9 @@ export default function EditProfileScreen() {
 
   return (
     <AppScreenScaffold
+      contentClassName="bg-background"
       header={
-        <View className="flex-row items-center justify-between">
+        <View className="flex-row items-center justify-between py-4">
           <TouchableOpacity
             className="h-10 w-10 items-center justify-center rounded-full bg-white"
             onPress={() => router.back()}
@@ -125,15 +127,12 @@ export default function EditProfileScreen() {
     ***REMOVED***
       scrollContentClassName="pb-10"
     >
-      <View className="mt-4 items-center">
-        <TouchableOpacity className="items-center">
-          <View className="h-[80px] w-[80px] items-center justify-center rounded-full border-2 border-primary bg-[#FFF7EA]">
-            <Ionicons name="paw-outline" size={28} color="#D89F35" />
-          </View>
-          <Typography variant="body-small" className="mt-2 text-secondary-text">
-            Tap to change photo
-          </Typography>
-        </TouchableOpacity>
+      <View className=" items-center">
+        <ControlledProfilePhotoUpload
+          control={control}
+          label="Tap to change photo"
+          name="userName"
+        />
       </View>
 
       <View className="mt-6">
