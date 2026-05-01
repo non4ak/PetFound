@@ -24,5 +24,15 @@ public class Comment : BaseEntity
 
     public ApplicationUser Author { get; set; } = null!;
 
+    public int? ParentCommentId { get; set; }
+
+    public Comment? ParentComment { get; set; }
+
+    public ICollection<Comment> Replies { get; set; } = new List<Comment>();
+
+    public bool IsDeleted { get; set; }
+
+    public DateTimeOffset? DeletedAt { get; set; }
+
     public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

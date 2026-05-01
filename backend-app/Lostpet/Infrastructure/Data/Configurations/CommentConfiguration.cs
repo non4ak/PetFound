@@ -27,5 +27,13 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
             .WithMany(u => u.Comments)
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(c => c.ParentComment)
+            .WithMany(c => c.Replies)
+            .HasForeignKey(c => c.ParentCommentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(c => new { c.AnnouncementId, c.CommentedAt });
+        builder.HasIndex(c => c.ParentCommentId);
   ***REMOVED***
 }
