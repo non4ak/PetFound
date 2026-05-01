@@ -39,6 +39,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     plugins: [
         "expo-router",
         [
+            "expo-image-picker",
+            {
+                cameraPermission: "Allow LostPet to take pet photos with your camera.",
+                photosPermission: "Allow LostPet to choose pet photos from your gallery.",
+            },
+        ],
+        [
             "expo-splash-screen",
             {
                 image: "./assets/images/splash-icon.png",
