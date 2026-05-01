@@ -2708,3 +2708,241 @@ LIMIT 1
 2026-04-24 12:30:17.234 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetByIdAsync (Api)'
 2026-04-24 12:30:17.613 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements/3 - 200 null application/json; charset=utf-8 1844.2768ms
 2026-04-24 12:33:34.383 -04:00 [INF] Application is shutting down...
+2026-05-01 14:48:31.460 -04:00 [INF] Executed DbCommand (129ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-05-01 14:48:31.691 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-05-01 14:48:31.856 -04:00 [INF] User profile is available. Using 'C:\Users\Ivan\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-01 14:48:32.073 -04:00 [INF] Now listening on: http://localhost:5148
+2026-05-01 14:48:32.081 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-01 14:48:32.088 -04:00 [INF] Hosting environment: Development
+2026-05-01 14:48:32.095 -04:00 [INF] Content root path: C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Api
+2026-05-01 14:48:35.220 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/ - null null
+2026-05-01 14:48:37.632 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-05-01 14:48:39.381 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger - null null
+2026-05-01 14:48:39.638 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/ - 404 0 null 4551.2913ms
+2026-05-01 14:48:40.932 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger - 499 null null 1548.3343ms
+2026-05-01 14:48:42.500 -04:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5148/, Response status code: 404
+2026-05-01 14:48:42.689 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger - null null
+2026-05-01 14:48:44.682 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger - 301 0 null 1992.7527ms
+2026-05-01 14:48:44.712 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.html - null null
+2026-05-01 14:48:45.018 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.html - 200 null text/html;charset=utf-8 305.4205ms
+2026-05-01 14:48:45.128 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.css - null null
+2026-05-01 14:48:45.134 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-bundle.js - null null
+2026-05-01 14:48:45.129 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui.css - null null
+2026-05-01 14:48:45.212 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-01 14:48:45.228 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.js - null null
+2026-05-01 14:48:45.839 -04:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2026-05-01 14:48:45.914 -04:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2026-05-01 14:48:46.468 -04:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2026-05-01 14:48:47.144 -04:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2026-05-01 14:48:47.621 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.js - 200 null application/javascript;charset=utf-8 2393.0135ms
+2026-05-01 14:48:47.733 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.css - 200 202 text/css 2604.9858ms
+2026-05-01 14:48:47.835 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-bundle.js - 200 1485241 text/javascript 2701.3478ms
+2026-05-01 14:48:47.846 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui.css - 200 154949 text/css 2716.7746ms
+2026-05-01 14:48:47.861 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-standalone-preset.js - 200 229223 text/javascript 2649.9005ms
+2026-05-01 14:48:50.208 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - null null
+2026-05-01 14:48:50.669 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/favicon-32x32.png - null null
+2026-05-01 14:48:50.681 -04:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2026-05-01 14:48:50.689 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/favicon-32x32.png - 200 628 image/png 20.3169ms
+2026-05-01 14:48:50.916 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 708.2752ms
+2026-05-01 14:49:05.006 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/meta/enums - null null
+2026-05-01 14:49:05.094 -04:00 [INF] Executing endpoint 'Api.Controllers.MetaController.GetEnumsAsync (Api)'
+2026-05-01 14:49:05.154 -04:00 [INF] Route matched with {action = "GetEnums", controller = "Meta"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEnumsAsync() on controller Api.Controllers.MetaController (Api).
+2026-05-01 14:49:05.194 -04:00 [INF] Executing action method Api.Controllers.MetaController.GetEnumsAsync (Api) - Validation state: "Valid"
+2026-05-01 14:49:05.317 -04:00 [INF] Executed action method Api.Controllers.MetaController.GetEnumsAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 95.0868ms.
+2026-05-01 14:49:05.361 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Meta.Responses.EnumsResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:49:05.427 -04:00 [INF] Executed action Api.Controllers.MetaController.GetEnumsAsync (Api) in 236.2142ms
+2026-05-01 14:49:05.447 -04:00 [INF] Executed endpoint 'Api.Controllers.MetaController.GetEnumsAsync (Api)'
+2026-05-01 14:49:05.457 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/meta/enums - 200 null application/json; charset=utf-8 451.1653ms
+2026-05-01 14:49:29.377 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/Auth/login - application/json 61
+2026-05-01 14:49:29.490 -04:00 [INF] CORS policy execution failed.
+2026-05-01 14:49:29.506 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-05-01 14:49:29.521 -04:00 [INF] Executing endpoint 'Api.Controllers.AuthController.LoginAsync (Api)'
+2026-05-01 14:49:29.582 -04:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] LoginAsync(Domain.Models.DTOS.Auth.Models.LoginModel) on controller Api.Controllers.AuthController (Api).
+2026-05-01 14:49:29.694 -04:00 [INF] Executing action method Api.Controllers.AuthController.LoginAsync (Api) - Validation state: "Valid"
+2026-05-01 14:49:29.918 -04:00 [INF] Executed DbCommand (21ms) [Parameters=[@__normalizedEmail_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AccessFailedCount", a."City", a."ConcurrencyStamp", a."Country", a."Email", a."EmailConfirmed", a."IsOnboardingCompleted", a."LockoutEnabled", a."LockoutEnd", a."NormalizedEmail", a."NormalizedUserName", a."NotificationChannelPreference", a."PasswordHash", a."PhoneNumber", a."PhoneNumberConfirmed", a."RegisteredAt", a."SecurityStamp", a."SocialNetwork", a."TwoFactorEnabled", a."UserName"
+FROM "AspNetUsers" AS a
+WHERE a."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2026-05-01 14:49:30.675 -04:00 [INF] Executed DbCommand (22ms) [Parameters=[@__user_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."ExpiresOnUtc", r."Token", r."UserId"
+FROM "RefreshTokens" AS r
+WHERE r."UserId" = @__user_Id_0
+2026-05-01 14:49:31.549 -04:00 [INF] Executed DbCommand (40ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RefreshTokens"
+WHERE "Id" = @p0;
+INSERT INTO "RefreshTokens" ("ExpiresOnUtc", "Token", "UserId")
+VALUES (@p1, @p2, @p3)
+RETURNING "Id";
+2026-05-01 14:49:31.919 -04:00 [INF] Executed DbCommand (11ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a0."Name"
+FROM "AspNetUserRoles" AS a
+INNER JOIN "AspNetRoles" AS a0 ON a."RoleId" = a0."Id"
+WHERE a."UserId" = @__userId_0
+2026-05-01 14:49:32.080 -04:00 [INF] Executed action method Api.Controllers.AuthController.LoginAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 2377.5063ms.
+2026-05-01 14:49:32.130 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Auth.Responses.LoginResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:49:32.178 -04:00 [INF] Executed action Api.Controllers.AuthController.LoginAsync (Api) in 2583.6485ms
+2026-05-01 14:49:32.219 -04:00 [INF] Executed endpoint 'Api.Controllers.AuthController.LoginAsync (Api)'
+2026-05-01 14:49:32.243 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/Auth/login - 200 null application/json; charset=utf-8 2865.2808ms
+2026-05-01 14:49:51.983 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetStatus=0&pageNumber=0&pageSize=20 - null null
+2026-05-01 14:49:52.407 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:49:52.507 -04:00 [INF] Route matched with {action = "GetPaged", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPagedAsync(Domain.Models.DTOS.Announcements.Models.AnnouncementListQueryModel, Int32, Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-05-01 14:49:52.554 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api) - Validation state: "Valid"
+2026-05-01 14:49:52.771 -04:00 [INF] Executed DbCommand (21ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetStatus_Value_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Announcements" AS a
+WHERE a."ReporterUserId" = @__userId_0 AND a."PetStatus" = @__queryModel_PetStatus_Value_1
+2026-05-01 14:49:52.985 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetStatus_Value_1='?' (DbType = Int32), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a0."Id", a0."ApproximateTime", a0."City", a0."Country", a0."CreatedOn", a0."IsActive", a0."IsPhonePublic", a0."IsTelegramActive", a0."LastDateWhenSeen", a0."LastModifiedOn", a0."LastSeenLatitude", a0."LastSeenLongitude", a0."NearLandmark", a0."PetDetails", a0."PetId", a0."PetStatus", a0."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM (
+    SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId"
+    FROM "Announcements" AS a
+    WHERE a."ReporterUserId" = @__userId_0 AND a."PetStatus" = @__queryModel_PetStatus_Value_1
+    ORDER BY a."CreatedOn" DESC, a."Id" DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS a0
+INNER JOIN "Pets" AS p ON a0."PetId" = p."Id"
+ORDER BY a0."CreatedOn" DESC, a0."Id" DESC
+2026-05-01 14:49:53.047 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 488.4468ms.
+2026-05-01 14:49:53.055 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:49:53.181 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetPagedAsync (Api) in 657.228ms
+2026-05-01 14:49:53.192 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:49:53.208 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetStatus=0&pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 1228.6102ms
+2026-05-01 14:50:02.735 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements?pageNumber=0&pageSize=20 - null null
+2026-05-01 14:50:02.844 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:50:02.906 -04:00 [INF] Route matched with {action = "GetPaged", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPagedAsync(Domain.Models.DTOS.Announcements.Models.AnnouncementListQueryModel, Int32, Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-05-01 14:50:02.932 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api) - Validation state: "Valid"
+2026-05-01 14:50:02.951 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Announcements" AS a
+WHERE a."ReporterUserId" = @__userId_0
+2026-05-01 14:50:02.983 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a0."Id", a0."ApproximateTime", a0."City", a0."Country", a0."CreatedOn", a0."IsActive", a0."IsPhonePublic", a0."IsTelegramActive", a0."LastDateWhenSeen", a0."LastModifiedOn", a0."LastSeenLatitude", a0."LastSeenLongitude", a0."NearLandmark", a0."PetDetails", a0."PetId", a0."PetStatus", a0."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM (
+    SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId"
+    FROM "Announcements" AS a
+    WHERE a."ReporterUserId" = @__userId_0
+    ORDER BY a."CreatedOn" DESC, a."Id" DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS a0
+INNER JOIN "Pets" AS p ON a0."PetId" = p."Id"
+ORDER BY a0."CreatedOn" DESC, a0."Id" DESC
+2026-05-01 14:50:02.995 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 57.2494ms.
+2026-05-01 14:50:03.001 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:50:03.017 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetPagedAsync (Api) in 87.8367ms
+2026-05-01 14:50:03.043 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:50:03.046 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements?pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 311.2212ms
+2026-05-01 14:50:11.603 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetStatus=1&pageNumber=0&pageSize=20 - null null
+2026-05-01 14:50:11.637 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:50:11.651 -04:00 [INF] Route matched with {action = "GetPaged", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPagedAsync(Domain.Models.DTOS.Announcements.Models.AnnouncementListQueryModel, Int32, Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-05-01 14:50:11.680 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api) - Validation state: "Valid"
+2026-05-01 14:50:11.695 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetStatus_Value_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Announcements" AS a
+WHERE a."ReporterUserId" = @__userId_0 AND a."PetStatus" = @__queryModel_PetStatus_Value_1
+2026-05-01 14:50:11.733 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetStatus_Value_1='?' (DbType = Int32), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a0."Id", a0."ApproximateTime", a0."City", a0."Country", a0."CreatedOn", a0."IsActive", a0."IsPhonePublic", a0."IsTelegramActive", a0."LastDateWhenSeen", a0."LastModifiedOn", a0."LastSeenLatitude", a0."LastSeenLongitude", a0."NearLandmark", a0."PetDetails", a0."PetId", a0."PetStatus", a0."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM (
+    SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId"
+    FROM "Announcements" AS a
+    WHERE a."ReporterUserId" = @__userId_0 AND a."PetStatus" = @__queryModel_PetStatus_Value_1
+    ORDER BY a."CreatedOn" DESC, a."Id" DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS a0
+INNER JOIN "Pets" AS p ON a0."PetId" = p."Id"
+ORDER BY a0."CreatedOn" DESC, a0."Id" DESC
+2026-05-01 14:50:11.793 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 105.326ms.
+2026-05-01 14:50:11.808 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:50:11.835 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetPagedAsync (Api) in 166.3952ms
+2026-05-01 14:50:11.875 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:50:11.894 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetStatus=1&pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 290.6302ms
+2026-05-01 14:50:22.351 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetType=0&pageNumber=0&pageSize=20 - null null
+2026-05-01 14:50:22.475 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:50:22.493 -04:00 [INF] Route matched with {action = "GetPaged", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPagedAsync(Domain.Models.DTOS.Announcements.Models.AnnouncementListQueryModel, Int32, Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-05-01 14:50:22.521 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api) - Validation state: "Valid"
+2026-05-01 14:50:22.544 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetType_Value_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."ReporterUserId" = @__userId_0 AND p."PetType" = @__queryModel_PetType_Value_1
+2026-05-01 14:50:22.585 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetType_Value_1='?' (DbType = Int32), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."ReporterUserId" = @__userId_0 AND p."PetType" = @__queryModel_PetType_Value_1
+ORDER BY a."CreatedOn" DESC, a."Id" DESC
+LIMIT @__p_3 OFFSET @__p_2
+2026-05-01 14:50:22.602 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 73.3483ms.
+2026-05-01 14:50:22.615 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:50:22.622 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetPagedAsync (Api) in 103.997ms
+2026-05-01 14:50:22.631 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:50:22.644 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetType=0&pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 293.7582ms
+2026-05-01 14:52:21.120 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetType=0&Country=f&pageNumber=0&pageSize=20 - null null
+2026-05-01 14:52:21.558 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:52:21.670 -04:00 [INF] Route matched with {action = "GetPaged", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPagedAsync(Domain.Models.DTOS.Announcements.Models.AnnouncementListQueryModel, Int32, Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-05-01 14:52:21.707 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api) - Validation state: "Valid"
+2026-05-01 14:52:21.765 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetType_Value_1='?' (DbType = Int32), @__ToLower_2='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."ReporterUserId" = @__userId_0 AND p."PetType" = @__queryModel_PetType_Value_1 AND a."Country" IS NOT NULL AND lower(a."Country") = @__ToLower_2
+2026-05-01 14:52:22.018 -04:00 [INF] Executed DbCommand (189ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetType_Value_1='?' (DbType = Int32), @__ToLower_2='?', @__p_4='?' (DbType = Int32), @__p_3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."ReporterUserId" = @__userId_0 AND p."PetType" = @__queryModel_PetType_Value_1 AND a."Country" IS NOT NULL AND lower(a."Country") = @__ToLower_2
+ORDER BY a."CreatedOn" DESC, a."Id" DESC
+LIMIT @__p_4 OFFSET @__p_3
+2026-05-01 14:52:23.562 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 1842.2014ms.
+2026-05-01 14:52:24.003 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:52:24.310 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetPagedAsync (Api) in 2606.9877ms
+2026-05-01 14:52:24.798 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:52:25.229 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetType=0&Country=f&pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 4109.6899ms
+2026-05-01 14:52:30.812 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetType=0&pageNumber=0&pageSize=20 - null null
+2026-05-01 14:52:30.860 -04:00 [INF] Executing endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:52:31.011 -04:00 [INF] Route matched with {action = "GetPaged", controller = "Announcements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPagedAsync(Domain.Models.DTOS.Announcements.Models.AnnouncementListQueryModel, Int32, Int32) on controller Api.Controllers.AnnouncementsController (Api).
+2026-05-01 14:52:31.228 -04:00 [INF] Executing action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api) - Validation state: "Valid"
+2026-05-01 14:52:31.247 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetType_Value_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."ReporterUserId" = @__userId_0 AND p."PetType" = @__queryModel_PetType_Value_1
+2026-05-01 14:52:31.403 -04:00 [INF] Executed DbCommand (7ms) [Parameters=[@__userId_0='?' (DbType = Int32), @__queryModel_PetType_Value_1='?' (DbType = Int32), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ApproximateTime", a."City", a."Country", a."CreatedOn", a."IsActive", a."IsPhonePublic", a."IsTelegramActive", a."LastDateWhenSeen", a."LastModifiedOn", a."LastSeenLatitude", a."LastSeenLongitude", a."NearLandmark", a."PetDetails", a."PetId", a."PetStatus", a."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM "Announcements" AS a
+INNER JOIN "Pets" AS p ON a."PetId" = p."Id"
+WHERE a."ReporterUserId" = @__userId_0 AND p."PetType" = @__queryModel_PetType_Value_1
+ORDER BY a."CreatedOn" DESC, a."Id" DESC
+LIMIT @__p_3 OFFSET @__p_2
+2026-05-01 14:52:31.491 -04:00 [INF] Executed action method Api.Controllers.AnnouncementsController.GetPagedAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 247.2417ms.
+2026-05-01 14:52:31.524 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.Announcements.Responses.AnnouncementResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-01 14:52:31.530 -04:00 [INF] Executed action Api.Controllers.AnnouncementsController.GetPagedAsync (Api) in 302.7715ms
+2026-05-01 14:52:31.698 -04:00 [INF] Executed endpoint 'Api.Controllers.AnnouncementsController.GetPagedAsync (Api)'
+2026-05-01 14:52:31.711 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/announcements?PetType=0&pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 899.6326ms
+2026-05-01 14:53:56.763 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/users/me/pets - null null
+2026-05-01 14:53:56.845 -04:00 [INF] Executing endpoint 'Api.Controllers.PetsController.GetAllAsync (Api)'
+2026-05-01 14:53:56.892 -04:00 [INF] Route matched with {action = "GetAll", controller = "Pets"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllAsync() on controller Api.Controllers.PetsController (Api).
+2026-05-01 14:53:56.909 -04:00 [INF] Executing action method Api.Controllers.PetsController.GetAllAsync (Api) - Validation state: "Valid"
+2026-05-01 14:53:57.054 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "AspNetUsers" AS a
+    WHERE a."Id" = @__userId_0)
+2026-05-01 14:53:57.173 -04:00 [INF] Executed DbCommand (6ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM "Pets" AS p
+WHERE p."UserId" = @__userId_0
+ORDER BY p."CreatedOn" DESC
+2026-05-01 14:53:57.210 -04:00 [INF] Executed action method Api.Controllers.PetsController.GetAllAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 285.6541ms.
+2026-05-01 14:53:57.233 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[System.Collections.Generic.IEnumerable`1[[Domain.Models.DTOS.Pets.Responses.PetResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-05-01 14:53:57.406 -04:00 [INF] Executed action Api.Controllers.PetsController.GetAllAsync (Api) in 501.9998ms
+2026-05-01 14:53:57.485 -04:00 [INF] Executed endpoint 'Api.Controllers.PetsController.GetAllAsync (Api)'
+2026-05-01 14:53:57.498 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/users/me/pets - 200 null application/json; charset=utf-8 734.3592ms

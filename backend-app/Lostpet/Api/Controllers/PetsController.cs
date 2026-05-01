@@ -75,6 +75,42 @@ public class PetsController : ControllerBase
         );
     }
 
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UpdatePetModel model)
+    {
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+        }
+
+        var result = await _petService.UpdateAsync(userIdResult.Value, id, model);
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+    {
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+        }
+
+        var result = await _petService.DeleteAsync(userIdResult.Value, id);
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
     private int? TryGetCurrentUserId()
     {
         var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

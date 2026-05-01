@@ -4,6 +4,7 @@ using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.Pets.Models;
 using Domain.Models.DTOS.Pets.Responses;
+using Infrastructure.Common.Errors;
 using Infrastructure.Common.Errors.User;
 using Infrastructure.Common.ResultPattern;
 using Infrastructure.Data;
@@ -25,8 +26,7 @@ public class PetService : IPetService
 
     public async Task<Result<PetResponse>> CreateAsync(int userId, CreatePetModel model)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
-        if (user is null)
+        if (!await UserExistsAsync(userId))
         {
             return Result<PetResponse>.Failure(UserErrors.UserNotFoundError());
         }
@@ -76,8 +76,7 @@ public class PetService : IPetService
 
     public async Task<Result<IEnumerable<PetResponse>>> GetAllByUserAsync(int userId)
     {
-        var userExists = await _userManager.Users.AnyAsync(u => u.Id == userId);
-        if (!userExists)
+        if (!await UserExistsAsync(userId))
         {
             return Result<IEnumerable<PetResponse>>.Failure(UserErrors.UserNotFoundError());
         }
@@ -96,8 +95,7 @@ public class PetService : IPetService
 
     public async Task<Result<PetResponse>> GetByIdAsync(int userId, int petId)
     {
-        var userExists = await _userManager.Users.AnyAsync(u => u.Id == userId);
-        if (!userExists)
+        if (!await UserExistsAsync(userId))
         {
             return Result<PetResponse>.Failure(UserErrors.UserNotFoundError());
         }
@@ -112,6 +110,62 @@ public class PetService : IPetService
         }
 
         return Result<PetResponse>.Success(MapPetResponse(pet));
+    }
+
+    public async Task<Result<bool>> UpdateAsync(int userId, int petId, UpdatePetModel model)
+    {
+        if (!await UserExistsAsync(userId))
+        {
+            return Result<bool>.Failure(UserErrors.UserNotFoundError());
+        }
+
+        var pet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId && p.UserId == userId);
+        if (pet is null)
+        {
+            return Result<bool>.Failure(Error.NotFound("Pet.NotFound", "Pet not found"));
+        }
+
+        if (string.IsNullOrWhiteSpace(model.PetName))
+        {
+            return Result<bool>.Failure(UserErrors.RequiredField("petName"));
+        }
+
+        pet.PetName = model.PetName.Trim();
+        pet.PetType = model.PetType ?? default;
+        pet.PetSex = model.PetSex ?? default;
+        pet.PetSize = model.PetSize ?? default;
+        pet.PetAgeCategory = model.PetAgeCategory ?? default;
+        pet.Breed = string.IsNullOrWhiteSpace(model.Breed) ? null : model.Breed.Trim();
+        pet.ChipNumber = string.IsNullOrWhiteSpace(model.ChipNumber) ? null : model.ChipNumber.Trim();
+        pet.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description.Trim();
+        pet.PetPhotoUrl = string.IsNullOrWhiteSpace(model.PetPhotoUrl) ? null : model.PetPhotoUrl.Trim();
+        pet.LastModifiedOn = DateTimeOffset.UtcNow;
+
+        await _context.SaveChangesAsync();
+        return Result<bool>.Success(true);
+    }
+
+    public async Task<Result<bool>> DeleteAsync(int userId, int petId)
+    {
+        if (!await UserExistsAsync(userId))
+        {
+            return Result<bool>.Failure(UserErrors.UserNotFoundError());
+        }
+
+        var pet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId && p.UserId == userId);
+        if (pet is null)
+        {
+            return Result<bool>.Failure(Error.NotFound("Pet.NotFound", "Pet not found"));
+        }
+
+        _context.Pets.Remove(pet);
+        await _context.SaveChangesAsync();
+        return Result<bool>.Success(true);
+    }
+
+    private Task<bool> UserExistsAsync(int userId)
+    {
+        return _userManager.Users.AnyAsync(u => u.Id == userId);
     }
 
     private static PetResponse MapPetResponse(Pet p)
