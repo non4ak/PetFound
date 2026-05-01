@@ -8,6 +8,8 @@ using Application.AdminUsers.Interfaces;
 using Application.AdminUsers.Services;
 using Application.Auth.Interfaces;
 using Application.Auth.Services;
+using Application.Comments.Interfaces;
+using Application.Comments.Services;
 using Application.Meta.Interfaces;
 using Application.Meta.Services;
 using Application.Onboarding.Interfaces;
@@ -136,6 +138,7 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
         builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
         builder.Services.AddScoped<IEnumMetadataService, EnumMetadataService>();
+        builder.Services.AddScoped<ICommentService, CommentService>();
     }
 
     private static void ApplyAzureStorageEnvironmentOverrides(
