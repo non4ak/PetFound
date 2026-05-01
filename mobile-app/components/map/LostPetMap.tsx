@@ -1,15 +1,15 @@
-import React from 'react';
-import { Image, View } from 'react-native';
+import React from "react";
+import { Image, View } from "react-native";
 import MapView, {
   Marker,
   PROVIDER_GOOGLE,
   type MapStyleElement,
   type Region,
-} from 'react-native-maps';
-import { cssInterop } from 'nativewind';
+} from "react-native-maps";
+import { cssInterop } from "nativewind";
 
 cssInterop(MapView, {
-  className: 'style',
+  className: "style",
 });
 
 interface MarkerData {
@@ -21,135 +21,135 @@ interface MarkerData {
   id: string;
   image: string;
   title: string;
-  type: 'found' | 'lost';
+  type: "found" | "lost";
 }
 
 const CUSTOM_MAP_STYLE: MapStyleElement[] = [
   {
-    elementType: 'geometry',
-    stylers: [{ color: '#f2efe9' }],
+    elementType: "geometry",
+    stylers: [{ color: "#f2efe9" }],
 ***REMOVED***,
   {
-    elementType: 'labels.icon',
-    stylers: [{ visibility: 'off' }],
+    elementType: "labels.icon",
+    stylers: [{ visibility: "off" }],
 ***REMOVED***,
   {
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#b0aaa0' }],
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#b0aaa0" }],
 ***REMOVED***,
   {
-    elementType: 'labels.text.stroke',
-    stylers: [{ color: '#f2efe9' }],
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#f2efe9" }],
 ***REMOVED***,
   {
-    featureType: 'administrative',
-    elementType: 'geometry.stroke',
-    stylers: [{ color: '#c9c3b8' }],
+    featureType: "administrative",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#c9c3b8" }],
 ***REMOVED***,
   {
-    featureType: 'administrative.land_parcel',
-    stylers: [{ visibility: 'off' }],
+    featureType: "administrative.land_parcel",
+    stylers: [{ visibility: "off" }],
 ***REMOVED***,
   {
-    featureType: 'administrative.neighborhood',
-    stylers: [{ visibility: 'off' }],
+    featureType: "administrative.neighborhood",
+    stylers: [{ visibility: "off" }],
 ***REMOVED***,
   {
-    featureType: 'poi',
-    stylers: [{ visibility: 'off' }],
+    featureType: "poi",
+    stylers: [{ visibility: "off" }],
 ***REMOVED***,
   {
-    featureType: 'poi.business',
-    stylers: [{ visibility: 'off' }],
+    featureType: "poi.business",
+    stylers: [{ visibility: "off" }],
 ***REMOVED***,
   {
-    featureType: 'road',
-    elementType: 'geometry',
-    stylers: [{ color: '#dcd8d2' }],
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#dcd8d2" }],
 ***REMOVED***,
   {
-    featureType: 'road',
-    elementType: 'labels',
-    stylers: [{ visibility: 'simplified' }],
+    featureType: "road",
+    elementType: "labels",
+    stylers: [{ visibility: "simplified" }],
 ***REMOVED***,
   {
-    featureType: 'road',
-    elementType: 'labels.icon',
-    stylers: [{ visibility: 'off' }],
+    featureType: "road",
+    elementType: "labels.icon",
+    stylers: [{ visibility: "off" }],
 ***REMOVED***,
   {
-    featureType: 'road.arterial',
-    elementType: 'geometry',
-    stylers: [{ color: '#dcd8d2' }],
+    featureType: "road.arterial",
+    elementType: "geometry",
+    stylers: [{ color: "#dcd8d2" }],
 ***REMOVED***,
   {
-    featureType: 'road.highway',
-    elementType: 'geometry',
-    stylers: [{ color: '#d4d0c9' }],
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [{ color: "#d4d0c9" }],
 ***REMOVED***,
   {
-    featureType: 'road.highway',
-    elementType: 'geometry.stroke',
-    stylers: [{ color: '#c9c3b8' }],
+    featureType: "road.highway",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#c9c3b8" }],
 ***REMOVED***,
   {
-    featureType: 'road.local',
-    elementType: 'geometry',
-    stylers: [{ color: '#e8e4dd' }],
+    featureType: "road.local",
+    elementType: "geometry",
+    stylers: [{ color: "#e8e4dd" }],
 ***REMOVED***,
   {
-    featureType: 'transit',
-    stylers: [{ visibility: 'off' }],
+    featureType: "transit",
+    stylers: [{ visibility: "off" }],
 ***REMOVED***,
   {
-    featureType: 'water',
-    elementType: 'geometry',
-    stylers: [{ color: '#d4e4ed' }],
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#d4e4ed" }],
 ***REMOVED***,
   {
-    featureType: 'water',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#9eb8cc' }],
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#9eb8cc" }],
 ***REMOVED***,
   {
-    featureType: 'landscape.man_made',
-    elementType: 'geometry',
-    stylers: [{ color: '#eceae4' }],
+    featureType: "landscape.man_made",
+    elementType: "geometry",
+    stylers: [{ color: "#eceae4" }],
 ***REMOVED***,
   {
-    featureType: 'landscape.natural',
-    elementType: 'geometry',
-    stylers: [{ color: '#e8e5de' }],
+    featureType: "landscape.natural",
+    elementType: "geometry",
+    stylers: [{ color: "#e8e5de" }],
 ***REMOVED***,
 ];
 
 const EXAMPLE_MARKERS: readonly MarkerData[] = [
   {
     coordinate: { latitude: 50.4571, longitude: 30.5134 },
-    description: 'Lost parrot',
-    id: '1',
+    description: "Lost parrot",
+    id: "1",
     image:
-      'https://images.unsplash.com/photo-1552728089-57168a151b75?q=80&w=200&auto=format&fit=crop',
-    title: 'Parrot',
-    type: 'lost',
+      "https://images.unsplash.com/photo-1552728089-57168a151b75?q=80&w=200&auto=format&fit=crop",
+    title: "Parrot",
+    type: "lost",
 ***REMOVED***,
   {
     coordinate: { latitude: 50.4501, longitude: 30.5234 },
-    description: 'Lost dog',
-    id: '2',
+    description: "Lost dog",
+    id: "2",
     image:
-      'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop',
-    title: 'Golden Retriever',
-    type: 'lost',
+      "https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop",
+    title: "Golden Retriever",
+    type: "lost",
 ***REMOVED***,
   {
     coordinate: { latitude: 50.4435, longitude: 30.5368 },
-    description: 'Found cat',
-    id: '3',
+    description: "Found cat",
+    id: "3",
     image:
-      'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=200&auto=format&fit=crop',
-    title: 'Tabby Cat',
-    type: 'found',
+      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=200&auto=format&fit=crop",
+    title: "Tabby Cat",
+    type: "found",
 ***REMOVED***,
 ];
 
@@ -160,8 +160,8 @@ const INITIAL_REGION: Region = {
   longitudeDelta: 0.04,
 };
 
-function getMarkerBackgroundColor(type: MarkerData['type']): string {
-  return type === 'lost' ? '#ff4b4b' : '#34c759';
+function getMarkerBackgroundColor(type: MarkerData["type"]): string {
+  return type === "lost" ? "#ff4b4b" : "#34c759";
 }
 
 export function LostPetMap() {
@@ -187,7 +187,9 @@ export function LostPetMap() {
       </Marker>
 
       {EXAMPLE_MARKERS.map((marker: MarkerData) => {
-        const markerBackgroundColor: string = getMarkerBackgroundColor(marker.type);
+        const markerBackgroundColor: string = getMarkerBackgroundColor(
+          marker.type,
+        );
 
         return (
           <Marker
@@ -203,7 +205,7 @@ export function LostPetMap() {
                 style={{
                   backgroundColor: markerBackgroundColor,
                   elevation: 5,
-                  shadowColor: '#000',
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.3,
                   shadowRadius: 4,
