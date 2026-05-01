@@ -38,6 +38,7 @@ public class AnnouncementService : IAnnouncementService
             return Result<AnnouncementResponse>.Failure(UserErrors.RequiredField("nearLandmark"));
 
         var petId = model.PetId;
+        PetType petTypeForResponse;
         if (petId.HasValue)
         {
             var existingPet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId.Value);
@@ -50,6 +51,8 @@ public class AnnouncementService : IAnnouncementService
             {
                 return Result<AnnouncementResponse>.Failure(Error.Forbidden("Pet.Forbidden", "Lost announcement requires your own pet"));
           ***REMOVED***
+
+            petTypeForResponse = existingPet.PetType;
       ***REMOVED***
         else
         {
@@ -77,6 +80,7 @@ public class AnnouncementService : IAnnouncementService
             await _context.Pets.AddAsync(generatedPet);
             await _context.SaveChangesAsync();
             petId = generatedPet.Id;
+            petTypeForResponse = generatedPet.PetType;
       ***REMOVED***
 
         var now = DateTimeOffset.UtcNow;
@@ -109,6 +113,8 @@ public class AnnouncementService : IAnnouncementService
             PetId = announcement.PetId,
             PetStatus = announcement.PetStatus,
             PetStatusLabel = announcement.PetStatus.GetDisplayName(),
+            PetType = petTypeForResponse,
+            PetTypeLabel = petTypeForResponse.GetDisplayName(),
             Country = announcement.Country,
             City = announcement.City,
             LastDateWhenSeen = announcement.LastDateWhenSeen,
@@ -124,33 +130,50 @@ public class AnnouncementService : IAnnouncementService
       ***REMOVED***);
   ***REMOVED***
 
-    public async Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int pageNumber, int pageSize)
+    public async Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int userId, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
     {
         var query = _context.Announcements
             .AsNoTracking()
-            .OrderByDescending(a => a.CreatedOn)
-            .ThenByDescending(a => a.Id);
+            .Include(a => a.Pet)
+            .Where(a => a.ReporterUserId == userId)
+            .AsQueryable();
+
+        if (queryModel.PetStatus.HasValue)
+        {
+            query = query.Where(a => a.PetStatus == queryModel.PetStatus.Value);
+      ***REMOVED***
+
+        if (queryModel.PetType.HasValue)
+        {
+            query = query.Where(a => a.Pet.PetType == queryModel.PetType.Value);
+      ***REMOVED***
+
+        if (!string.IsNullOrWhiteSpace(queryModel.Country))
+        {
+            var country = queryModel.Country.Trim();
+            query = query.Where(a => a.Country != null && a.Country.ToLower() == country.ToLower());
+      ***REMOVED***
+
+        if (!string.IsNullOrWhiteSpace(queryModel.City))
+        {
+            var city = queryModel.City.Trim();
+            query = query.Where(a => a.City != null && a.City.ToLower() == city.ToLower());
+      ***REMOVED***
+
+        if (queryModel.CreatedFrom.HasValue)
+        {
+            query = query.Where(a => a.CreatedOn >= queryModel.CreatedFrom.Value);
+      ***REMOVED***
+
+        if (queryModel.CreatedTo.HasValue)
+        {
+            query = query.Where(a => a.CreatedOn <= queryModel.CreatedTo.Value);
+      ***REMOVED***
+
+        query = ApplySorting(query, queryModel.SortBy, queryModel.SortDirection);
 
         var pagedEntities = await PagedList<Announcement>.CreateAsync(query, pageNumber, pageSize);
-        var items = pagedEntities.Items.Select(a => new AnnouncementResponse
-        {
-            Id = a.Id,
-            PetId = a.PetId,
-            PetStatus = a.PetStatus,
-            PetStatusLabel = a.PetStatus.GetDisplayName(),
-            Country = a.Country,
-            City = a.City,
-            LastDateWhenSeen = a.LastDateWhenSeen,
-            ApproximateTime = a.ApproximateTime,
-            PetDetails = a.PetDetails,
-            IsPhonePublic = a.IsPhonePublic,
-            IsTelegramActive = a.IsTelegramActive,
-            NearLandmark = a.NearLandmark,
-            LastSeenLatitude = a.LastSeenLatitude,
-            LastSeenLongitude = a.LastSeenLongitude,
-            IsActive = a.IsActive,
-            CreatedOn = a.CreatedOn
-      ***REMOVED***);
+        var items = pagedEntities.Items.Select(MapAnnouncementResponse);
 
         IPagedList<AnnouncementResponse> paged = new PagedList<AnnouncementResponse>(
             currentPage: items,
@@ -165,12 +188,12 @@ public class AnnouncementService : IAnnouncementService
         return Result<IPagedList<AnnouncementResponse>>.Success(paged);
   ***REMOVED***
 
-    public async Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int id)
+    public async Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int userId, int id)
     {
         var announcement = await _context.Announcements
             .AsNoTracking()
             .Include(a => a.Pet)
-            .FirstOrDefaultAsync(a => a.Id == id);
+            .FirstOrDefaultAsync(a => a.Id == id && a.ReporterUserId == userId);
 
         if (announcement is null)
         {
@@ -213,6 +236,132 @@ public class AnnouncementService : IAnnouncementService
                 PetPhotoUrl = announcement.Pet.PetPhotoUrl
           ***REMOVED***
       ***REMOVED***);
+  ***REMOVED***
+
+    public async Task<Result<bool>> UpdateAsync(int userId, int id, UpdateAnnouncementModel model)
+    {
+        var announcement = await _context.Announcements
+            .Include(a => a.Pet)
+            .FirstOrDefaultAsync(a => a.Id == id && a.ReporterUserId == userId);
+
+        if (announcement is null)
+        {
+            return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
+      ***REMOVED***
+
+        if (string.IsNullOrWhiteSpace(model.Country))
+            return Result<bool>.Failure(UserErrors.RequiredField("country"));
+        if (string.IsNullOrWhiteSpace(model.City))
+            return Result<bool>.Failure(UserErrors.RequiredField("city"));
+        if (!model.LastDateWhenSeen.HasValue)
+            return Result<bool>.Failure(UserErrors.RequiredField("lastDateWhenSeen"));
+        if (string.IsNullOrWhiteSpace(model.ApproximateTime))
+            return Result<bool>.Failure(UserErrors.RequiredField("approximateTime"));
+        if (string.IsNullOrWhiteSpace(model.PetDetails))
+            return Result<bool>.Failure(UserErrors.RequiredField("petDetails"));
+        if (string.IsNullOrWhiteSpace(model.NearLandmark))
+            return Result<bool>.Failure(UserErrors.RequiredField("nearLandmark"));
+
+        announcement.Country = model.Country.Trim();
+        announcement.City = model.City.Trim();
+        announcement.LastDateWhenSeen = model.LastDateWhenSeen;
+        announcement.ApproximateTime = model.ApproximateTime.Trim();
+        announcement.PetDetails = model.PetDetails.Trim();
+        announcement.IsPhonePublic = model.IsPhonePublic;
+        announcement.IsTelegramActive = model.IsTelegramActive;
+        announcement.NearLandmark = model.NearLandmark.Trim();
+        announcement.LastSeenLatitude = model.LastSeenLatitude;
+        announcement.LastSeenLongitude = model.LastSeenLongitude;
+        announcement.PetStatus = model.PetStatus;
+        announcement.LastModifiedOn = DateTimeOffset.UtcNow;
+
+        // Keep pet ownership rules aligned when status changes.
+        if (announcement.PetStatus == AnnouncementPetStatus.Lost)
+        {
+            announcement.Pet.UserId = userId;
+      ***REMOVED***
+        else
+        {
+            announcement.Pet.UserId = null;
+      ***REMOVED***
+
+        await _context.SaveChangesAsync();
+        return Result<bool>.Success(true);
+  ***REMOVED***
+
+    public async Task<Result<bool>> ArchiveAsync(int userId, int id)
+    {
+        var announcement = await _context.Announcements
+            .FirstOrDefaultAsync(a => a.Id == id && a.ReporterUserId == userId);
+
+        if (announcement is null)
+        {
+            return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
+      ***REMOVED***
+
+        announcement.IsActive = false;
+        announcement.LastModifiedOn = DateTimeOffset.UtcNow;
+
+        await _context.SaveChangesAsync();
+        return Result<bool>.Success(true);
+  ***REMOVED***
+
+    public async Task<Result<bool>> RestoreAsync(int userId, int id)
+    {
+        var announcement = await _context.Announcements
+            .FirstOrDefaultAsync(a => a.Id == id && a.ReporterUserId == userId);
+
+        if (announcement is null)
+        {
+            return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
+      ***REMOVED***
+
+        announcement.IsActive = true;
+        announcement.LastModifiedOn = DateTimeOffset.UtcNow;
+
+        await _context.SaveChangesAsync();
+        return Result<bool>.Success(true);
+  ***REMOVED***
+
+    private static IOrderedQueryable<Announcement> ApplySorting(IQueryable<Announcement> query, string? sortBy, string? sortDirection)
+    {
+        var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase);
+        var normalizedSortBy = sortBy?.Trim().ToLowerInvariant();
+
+        return normalizedSortBy switch
+        {
+            "lastdatewhenseen" => isAsc
+                ? query.OrderBy(a => a.LastDateWhenSeen).ThenBy(a => a.Id)
+                : query.OrderByDescending(a => a.LastDateWhenSeen).ThenByDescending(a => a.Id),
+            _ => isAsc
+                ? query.OrderBy(a => a.CreatedOn).ThenBy(a => a.Id)
+                : query.OrderByDescending(a => a.CreatedOn).ThenByDescending(a => a.Id)
+      ***REMOVED***;
+  ***REMOVED***
+
+    private static AnnouncementResponse MapAnnouncementResponse(Announcement a)
+    {
+        return new AnnouncementResponse
+        {
+            Id = a.Id,
+            PetId = a.PetId,
+            PetStatus = a.PetStatus,
+            PetStatusLabel = a.PetStatus.GetDisplayName(),
+            PetType = a.Pet.PetType,
+            PetTypeLabel = a.Pet.PetType.GetDisplayName(),
+            Country = a.Country,
+            City = a.City,
+            LastDateWhenSeen = a.LastDateWhenSeen,
+            ApproximateTime = a.ApproximateTime,
+            PetDetails = a.PetDetails,
+            IsPhonePublic = a.IsPhonePublic,
+            IsTelegramActive = a.IsTelegramActive,
+            NearLandmark = a.NearLandmark,
+            LastSeenLatitude = a.LastSeenLatitude,
+            LastSeenLongitude = a.LastSeenLongitude,
+            IsActive = a.IsActive,
+            CreatedOn = a.CreatedOn
+      ***REMOVED***;
   ***REMOVED***
 }
 

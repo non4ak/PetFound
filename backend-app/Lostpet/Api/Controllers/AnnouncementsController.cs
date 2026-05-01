@@ -21,10 +21,70 @@ public class AnnouncementsController : ControllerBase
         _announcementService = announcementService;
   ***REMOVED***
 
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UpdateAnnouncementModel model)
+    {
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+      ***REMOVED***
+
+        var result = await _announcementService.UpdateAsync(userIdResult.Value, id, model);
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+  ***REMOVED***
+
+    [HttpPost("{id:int}/archive")]
+    public async Task<IActionResult> ArchiveAsync([FromRoute] int id)
+    {
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+      ***REMOVED***
+
+        var result = await _announcementService.ArchiveAsync(userIdResult.Value, id);
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+  ***REMOVED***
+
+    [HttpPost("{id:int}/restore")]
+    public async Task<IActionResult> RestoreAsync([FromRoute] int id)
+    {
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+      ***REMOVED***
+
+        var result = await _announcementService.RestoreAsync(userIdResult.Value, id);
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+  ***REMOVED***
+
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
     {
-        var result = await _announcementService.GetByIdAsync(id);
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+      ***REMOVED***
+
+        var result = await _announcementService.GetByIdAsync(userIdResult.Value, id);
         return result.Match(
             successStatusCode: 200,
             includeBody: true,
@@ -34,9 +94,15 @@ public class AnnouncementsController : ControllerBase
   ***REMOVED***
 
     [HttpGet]
-    public async Task<IActionResult> GetPagedAsync([FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> GetPagedAsync([FromQuery] AnnouncementListQueryModel query, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
     {
-        var result = await _announcementService.GetPagedAsync(pageNumber, pageSize);
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+      ***REMOVED***
+
+        var result = await _announcementService.GetPagedAsync(userIdResult.Value, pageNumber, pageSize, query);
         return result.Match(
             successStatusCode: 200,
             includeBody: true,
@@ -48,19 +114,25 @@ public class AnnouncementsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateAnnouncementModel model)
     {
-        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (!int.TryParse(id, out var userId))
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
       ***REMOVED***
 
-        var result = await _announcementService.CreateAsync(userId, model);
+        var result = await _announcementService.CreateAsync(userIdResult.Value, model);
         return result.Match(
             successStatusCode: 201,
             includeBody: true,
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
+  ***REMOVED***
+
+    private int? TryGetCurrentUserId()
+    {
+        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(id, out var userId) ? userId : null;
   ***REMOVED***
 }
 

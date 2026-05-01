@@ -8,6 +8,8 @@ using Application.AdminUsers.Interfaces;
 using Application.AdminUsers.Services;
 using Application.Auth.Interfaces;
 using Application.Auth.Services;
+using Application.Meta.Interfaces;
+using Application.Meta.Services;
 using Application.Onboarding.Interfaces;
 using Application.Onboarding.Services;
 using Application.Pets.Interfaces;
@@ -124,6 +126,7 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IOnboardingService, OnboardingService>();
         builder.Services.AddScoped<IPetService, PetService>();
         builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+        builder.Services.AddScoped<IEnumMetadataService, EnumMetadataService>();
   ***REMOVED***
 
     private static void AddSwagger(this WebApplicationBuilder builder)
