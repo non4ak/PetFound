@@ -27,7 +27,7 @@ const variantClassNames: Record<ButtonVariant, string> = {
     primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
     secondary: "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-400",
     success: "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500",
-    toggle: "relative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent focus:ring-blue-500",
+    toggle: "relative inline-flex justify-start h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent focus:ring-blue-500",
     dangerExtra: "border border-red-200 bg-red-500 text-gray-100 hover:text-gray-100 hover:border-red-300 focus:ring-red-500",
 };
 
