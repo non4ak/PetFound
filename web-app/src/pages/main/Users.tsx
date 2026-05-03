@@ -28,18 +28,6 @@ export const Users = () => {
         }
     }
 
-    const handleDeactivate = async (id: number) => {
-        await deactivateUser(id);
-    }
-
-    const handleActivate = async (id: number) => {
-        await activateUser(id);
-    }
-
-    const handleDelete = async (id: number) => {
-        await deleteUser(id);
-    }
-
     const handleConfirm = async () => {
         if (!modal) return;
 
