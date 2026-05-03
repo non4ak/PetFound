@@ -3179,3 +3179,106 @@ ORDER BY c0."CommentedAt", c0."Id"
 2026-05-01 15:12:50.069 -04:00 [INF] Executed action Api.Controllers.CommentsController.GetThreadAsync (Api) in 2675.6272ms
 2026-05-01 15:12:50.658 -04:00 [INF] Executed endpoint 'Api.Controllers.CommentsController.GetThreadAsync (Api)'
 2026-05-01 15:12:50.696 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/announcements/1/comments?pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 4059.4771ms
+2026-05-03 04:27:09.199 -04:00 [INF] Application is shutting down...
+2026-05-03 06:36:27.487 -04:00 [INF] Executed DbCommand (108ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-05-03 06:36:28.586 -04:00 [INF] Executed DbCommand (16ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-05-03 06:36:29.119 -04:00 [INF] User profile is available. Using 'C:\Users\Ivan\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-03 06:36:29.326 -04:00 [INF] Now listening on: http://localhost:5148
+2026-05-03 06:36:29.337 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-03 06:36:29.341 -04:00 [INF] Hosting environment: Development
+2026-05-03 06:36:29.349 -04:00 [INF] Content root path: C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Api
+2026-05-03 06:36:31.189 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/ - null null
+2026-05-03 06:36:31.269 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-05-03 06:36:31.405 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/ - 404 0 null 226.9576ms
+2026-05-03 06:36:31.422 -04:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5148/, Response status code: 404
+2026-05-03 06:36:40.529 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger - null null
+2026-05-03 06:36:40.537 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger - 301 0 null 8.0678ms
+2026-05-03 06:36:40.546 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.html - null null
+2026-05-03 06:36:40.654 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.html - 200 null text/html;charset=utf-8 108.1441ms
+2026-05-03 06:36:40.688 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui.css - null null
+2026-05-03 06:36:40.688 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.css - null null
+2026-05-03 06:36:40.690 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-bundle.js - null null
+2026-05-03 06:36:40.690 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-03 06:36:40.690 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/index.js - null null
+2026-05-03 06:36:40.712 -04:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2026-05-03 06:36:40.727 -04:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2026-05-03 06:36:40.727 -04:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2026-05-03 06:36:40.735 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.js - 200 null application/javascript;charset=utf-8 44.2809ms
+2026-05-03 06:36:40.737 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/index.css - 200 202 text/css 48.778ms
+2026-05-03 06:36:40.741 -04:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2026-05-03 06:36:40.747 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-standalone-preset.js - 200 229223 text/javascript 56.4738ms
+2026-05-03 06:36:40.747 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui.css - 200 154949 text/css 59.3244ms
+2026-05-03 06:36:40.762 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/swagger-ui-bundle.js - 200 1485241 text/javascript 71.1458ms
+2026-05-03 06:36:40.915 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - null null
+2026-05-03 06:36:40.935 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/swagger/favicon-32x32.png - null null
+2026-05-03 06:36:40.944 -04:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2026-05-03 06:36:40.949 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/favicon-32x32.png - 200 628 image/png 13.6963ms
+2026-05-03 06:36:41.248 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 333.6746ms
+2026-05-03 06:36:47.861 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/admin/comments?pageNumber=0&pageSize=20 - null null
+2026-05-03 06:36:47.889 -04:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (admin)
+2026-05-03 06:36:47.945 -04:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-05-03 06:36:47.950 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/admin/comments?pageNumber=0&pageSize=20 - 401 null application/json; charset=utf-8 88.9824ms
+2026-05-03 06:37:03.221 -04:00 [INF] Request starting HTTP/1.1 POST http://localhost:5148/Auth/login - application/json 61
+2026-05-03 06:37:03.232 -04:00 [INF] CORS policy execution failed.
+2026-05-03 06:37:03.239 -04:00 [INF] Request origin http://localhost:5148 does not have permission to access the resource.
+2026-05-03 06:37:03.247 -04:00 [INF] Executing endpoint 'Api.Controllers.AuthController.LoginAsync (Api)'
+2026-05-03 06:37:03.283 -04:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] LoginAsync(Domain.Models.DTOS.Auth.Models.LoginModel) on controller Api.Controllers.AuthController (Api).
+2026-05-03 06:37:03.343 -04:00 [INF] Executing action method Api.Controllers.AuthController.LoginAsync (Api) - Validation state: "Valid"
+2026-05-03 06:37:03.480 -04:00 [INF] Executed DbCommand (11ms) [Parameters=[@__normalizedEmail_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AccessFailedCount", a."City", a."ConcurrencyStamp", a."Country", a."Email", a."EmailConfirmed", a."IsOnboardingCompleted", a."LockoutEnabled", a."LockoutEnd", a."NormalizedEmail", a."NormalizedUserName", a."NotificationChannelPreference", a."PasswordHash", a."PhoneNumber", a."PhoneNumberConfirmed", a."RegisteredAt", a."SecurityStamp", a."SocialNetwork", a."TwoFactorEnabled", a."UserName"
+FROM "AspNetUsers" AS a
+WHERE a."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2026-05-03 06:37:03.708 -04:00 [INF] Executed DbCommand (12ms) [Parameters=[@__user_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."ExpiresOnUtc", r."Token", r."UserId"
+FROM "RefreshTokens" AS r
+WHERE r."UserId" = @__user_Id_0
+2026-05-03 06:37:04.087 -04:00 [INF] Executed DbCommand (31ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RefreshTokens"
+WHERE "Id" = @p0;
+INSERT INTO "RefreshTokens" ("ExpiresOnUtc", "Token", "UserId")
+VALUES (@p1, @p2, @p3)
+RETURNING "Id";
+2026-05-03 06:37:04.261 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a0."Name"
+FROM "AspNetUserRoles" AS a
+INNER JOIN "AspNetRoles" AS a0 ON a."RoleId" = a0."Id"
+WHERE a."UserId" = @__userId_0
+2026-05-03 06:37:04.382 -04:00 [INF] Executed action method Api.Controllers.AuthController.LoginAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 1026.1181ms.
+2026-05-03 06:37:04.404 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Domain.Models.DTOS.Auth.Responses.LoginResponse, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-03 06:37:04.428 -04:00 [INF] Executed action Api.Controllers.AuthController.LoginAsync (Api) in 1128.3349ms
+2026-05-03 06:37:04.435 -04:00 [INF] Executed endpoint 'Api.Controllers.AuthController.LoginAsync (Api)'
+2026-05-03 06:37:04.455 -04:00 [INF] Request finished HTTP/1.1 POST http://localhost:5148/Auth/login - 200 null application/json; charset=utf-8 1234.9045ms
+2026-05-03 06:37:14.036 -04:00 [INF] Request starting HTTP/1.1 GET http://localhost:5148/admin/comments?pageNumber=0&pageSize=20 - null null
+2026-05-03 06:37:14.115 -04:00 [INF] Executing endpoint 'Api.Controllers.AdminCommentsController.ListAsync (Api)'
+2026-05-03 06:37:14.128 -04:00 [INF] Route matched with {action = "List", controller = "AdminComments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListAsync(Domain.Models.DTOS.AdminComments.Models.AdminCommentListQueryModel, Int32, Int32) on controller Api.Controllers.AdminCommentsController (Api).
+2026-05-03 06:37:14.152 -04:00 [INF] Executing action method Api.Controllers.AdminCommentsController.ListAsync (Api) - Validation state: "Valid"
+2026-05-03 06:37:14.247 -04:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Comments" AS c
+2026-05-03 06:37:14.375 -04:00 [INF] Executed DbCommand (9ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT c0."Id", c0."AnnouncementId", c0."CommentMessage", c0."CommentedAt", c0."CreatedOn", c0."DeletedAt", c0."ImageUrl", c0."IsDeleted", c0."LastModifiedOn", c0."Latitude", c0."LocationDescription", c0."Longitude", c0."ParentCommentId", c0."UserId", a."Id", a."AccessFailedCount", a."City", a."ConcurrencyStamp", a."Country", a."Email", a."EmailConfirmed", a."IsOnboardingCompleted", a."LockoutEnabled", a."LockoutEnd", a."NormalizedEmail", a."NormalizedUserName", a."NotificationChannelPreference", a."PasswordHash", a."PhoneNumber", a."PhoneNumberConfirmed", a."RegisteredAt", a."SecurityStamp", a."SocialNetwork", a."TwoFactorEnabled", a."UserName", a0."Id", a0."ApproximateTime", a0."City", a0."Country", a0."CreatedOn", a0."IsActive", a0."IsPhonePublic", a0."IsTelegramActive", a0."LastDateWhenSeen", a0."LastModifiedOn", a0."LastSeenLatitude", a0."LastSeenLongitude", a0."NearLandmark", a0."PetDetails", a0."PetId", a0."PetStatus", a0."ReporterUserId", p."Id", p."Breed", p."ChipNumber", p."Color", p."CreatedOn", p."Description", p."LastModifiedOn", p."PetAgeCategory", p."PetName", p."PetPhotoUrl", p."PetSex", p."PetSize", p."PetType", p."UserId"
+FROM (
+    SELECT c."Id", c."AnnouncementId", c."CommentMessage", c."CommentedAt", c."CreatedOn", c."DeletedAt", c."ImageUrl", c."IsDeleted", c."LastModifiedOn", c."Latitude", c."LocationDescription", c."Longitude", c."ParentCommentId", c."UserId"
+    FROM "Comments" AS c
+    ORDER BY c."CommentedAt" DESC, c."Id" DESC
+    LIMIT @__p_1 OFFSET @__p_0
+) AS c0
+INNER JOIN "AspNetUsers" AS a ON c0."UserId" = a."Id"
+INNER JOIN "Announcements" AS a0 ON c0."AnnouncementId" = a0."Id"
+INNER JOIN "Pets" AS p ON a0."PetId" = p."Id"
+ORDER BY c0."CommentedAt" DESC, c0."Id" DESC
+2026-05-03 06:37:14.387 -04:00 [INF] Executed action method Api.Controllers.AdminCommentsController.ListAsync (Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 231.4426ms.
+2026-05-03 06:37:14.393 -04:00 [INF] Executing ObjectResult, writing value of type 'Api.ApiResult.ApiResponse`1[[Infrastructure.Common.PagedList.IPagedList`1[[Domain.Models.DTOS.AdminComments.Responses.AdminCommentListItemDto, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-05-03 06:37:14.455 -04:00 [INF] Executed action Api.Controllers.AdminCommentsController.ListAsync (Api) in 321.3361ms
+2026-05-03 06:37:14.462 -04:00 [INF] Executed endpoint 'Api.Controllers.AdminCommentsController.ListAsync (Api)'
+2026-05-03 06:37:14.466 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/admin/comments?pageNumber=0&pageSize=20 - 200 null application/json; charset=utf-8 430.1187ms
