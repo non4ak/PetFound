@@ -28,18 +28,6 @@ export const Users = () => {
       ***REMOVED***
   ***REMOVED***
 
-    const handleDeactivate = async (id: number) => {
-        await deactivateUser(id);
-  ***REMOVED***
-
-    const handleActivate = async (id: number) => {
-        await activateUser(id);
-  ***REMOVED***
-
-    const handleDelete = async (id: number) => {
-        await deleteUser(id);
-  ***REMOVED***
-
     const handleConfirm = async () => {
         if (!modal) return;
 
