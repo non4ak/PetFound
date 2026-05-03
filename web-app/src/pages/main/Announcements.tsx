@@ -2,12 +2,17 @@ import { Button } from "@/components/ui/Button";
 import { getAnnouncements, getAnnouncementById } from "@/data/queries/announcements";
 import type { AnnouncementDto, FullAnnouncementDto } from "@/types/announcements";
 import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from 'leaflet';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 export const Announcements = () => {
     const [announcements, setAnnouncements] = useState<AnnouncementDto[]>([]);
     const [showIds, setShowIds] = useState(false);
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<FullAnnouncementDto | null>(null);
-
+    
     const loadAnnouncementById = async (id: number) => {
         try {
             const data = await getAnnouncementById(id);
@@ -25,6 +30,10 @@ export const Announcements = () => {
 
         fetchAnnouncements();
   ***REMOVED***, []);
+
+    const LeafletMap = () => {
+    const position: [number, number] = [55.75, 37.61]; // Координаты [lat, lng]
+  ***REMOVED***;
 
     return (
         <div className="bg-white shadow rounded-lg p-6">
@@ -64,39 +73,70 @@ export const Announcements = () => {
                         {showIds && <p className="text-gray-600 text-sm">Reporter ID: {announcement.reporterUserId}</p>}
                     </div>
                 ))}
-
-                                <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col hover:shadow-lg transition-shadow">
-                                    <h3 className="text-lg font-semibold mb-1">TEST</h3>
-                                    <p className="text-gray-900 text-mb">TEST</p>
-                                    <p className="text-gray-600 text-mb">Roles</p>
-                                    <p className="text-gray-600 text-sm">Phone</p>
-                                    <p className="text-gray-600 text-sm">Social Network</p>
-                                    <p className="text-gray-600 text-sm">ID: ID</p>
-                                    <p className="text-gray-600 text-sm">deactivated</p>
-                                    <p className="text-gray-600 text-sm mb-1">aaa</p>
-                                    <div className="mt-auto">
-                                        
-                                        <Button className="mt-1.5" size="sm" variant="danger" fullWidth={true} >Delete</Button>
-                                    </div>
-                                    
-                                </div>
                                      
             </div>
             {selectedAnnouncement && (
-                <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col hover:shadow-lg transition-shadow">
-                    <h2 className="text-xl font-semibold mb-2">Announcement Details</h2>
-                    <p className="text-gray-900 text-lg font-semibold">Pet details</p>
-                    <p className="text-gray-900">Status: {selectedAnnouncement.petStatusLabel}</p>
-                    <p className="text-gray-900">Name: {selectedAnnouncement.pet.petName}</p>
-                    <p className="text-gray-900">Type: {selectedAnnouncement.pet.petTypeLabel}</p>
-                    <p className="text-gray-900">Breed: {selectedAnnouncement.pet.breed}</p>
-                    <p className="text-gray-900">Sex: {selectedAnnouncement.pet.petSexLabel}</p>
-                    <p className="text-gray-900">Size: {selectedAnnouncement.pet.petSizeLabel}</p>
-                    <p className="text-gray-900">Age: {selectedAnnouncement.pet.petAgeCategoryLabel}</p>
-                    <p className="text-gray-900">Chip number: {selectedAnnouncement.pet.chipNumber}</p>
-                    <Button variant="secondary" onClick={() => setSelectedAnnouncement(null)}>Close</Button>
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col hover:shadow-lg transition-shadow w-11/12 md:w-3/4 lg:w-1/2 xl:w-2/5">
+                        <h2 className="text-xl font-semibold mb-2">Announcement Details</h2>
+                        <p className="text-gray-900 text-lg font-semibold">Pet details</p>
+                        <p className="text-gray-900">
+                            Status: {selectedAnnouncement.petStatusLabel}
+                            <span className="text-gray-600">
+                                {showIds && ` | ${selectedAnnouncement.petStatus}`}
+                            </span>
+                        </p>
+                        <p className="text-gray-900">Name: {selectedAnnouncement.pet.petName}</p>
+                        <p className="text-gray-900">
+                            Type: {selectedAnnouncement.pet.petTypeLabel}
+                            <span className="text-gray-600">
+                                {showIds && ` | ${selectedAnnouncement.pet.petType}`}
+                            </span>
+                        </p>
+                        <p className="text-gray-900">Breed: {selectedAnnouncement.pet.breed}</p>
+                        <p className="text-gray-900">
+                            Sex: {selectedAnnouncement.pet.petSexLabel}
+                            <span className="text-gray-600">
+                                {showIds && ` | ${selectedAnnouncement.pet.petSex}`}
+                            </span>
+                        </p>
+                        <p className="text-gray-900">
+                            Size: {selectedAnnouncement.pet.petSizeLabel}
+                            <span className="text-gray-600">
+                                {showIds && ` | ${selectedAnnouncement.pet.petSize}`}
+                            </span>
+                        </p>
+                        <p className="text-gray-900">
+                            Age: {selectedAnnouncement.pet.petAgeCategoryLabel}
+                            <span className="text-gray-600">
+                                {showIds && ` | ${selectedAnnouncement.pet.petAgeCategory}`}
+                            </span>
+                        </p>
+                        <p className="text-gray-900">Chip number: {selectedAnnouncement.pet.chipNumber}</p>
+                        
+
+                        <MapContainer 
+                            center={[selectedAnnouncement.lastSeenLatitude, selectedAnnouncement.lastSeenLongitude]} 
+                            zoom={17} 
+                            style={{ height: "500px", width: "100%", borderRadius: "0.5rem", marginTop: "1rem", marginBottom: "1rem" }}
+                        >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            
+                            <Marker position={[selectedAnnouncement.lastSeenLatitude, selectedAnnouncement.lastSeenLongitude]}>
+                                <Popup>
+                                    Last seen location of the pet. <br></br> {selectedAnnouncement.nearLandmark && `Near: ${selectedAnnouncement.nearLandmark}`}
+                                </Popup>
+                            </Marker>
+                        </MapContainer>
+
+
+                        <Button variant="secondary" onClick={() => setSelectedAnnouncement(null)}>Close</Button>
+                    </div>
                 </div>
             )}
         </div>
     );
-};
+}
