@@ -54,5 +54,5 @@ export interface PetDto {
     petAgeCategoryLabel: string;
     chipNumber: string | null;
     description: string | null;
-    petPhotoUrl: string | null;
+    petPhotoUrl: string | undefined;
 }
