@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import { getAnnouncements, getAnnouncementById } from "@/data/queries/announcements";
+import { getAnnouncements, getAnnouncementById, archiveAnnouncement, restoreAnnouncement } from "@/data/queries/announcements";
 import type { AnnouncementDto, FullAnnouncementDto } from "@/types/announcements";
 import { getCommentsByAnnouncementId } from "@/data/queries/comments";
 import type { CommentDto } from "@/types/comments";
@@ -15,6 +15,11 @@ export const Announcements = () => {
     const [showIds, setShowIds] = useState(false);
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<FullAnnouncementDto | null>(null);
     const [comments, setComments] = useState<CommentDto[] | null>([]);
+    const [petTypeFilter, setPetTypeFilter] = useState<number | undefined>(undefined);
+    const [statusFilter, setStatusFilter] = useState<number | undefined>(undefined);
+    const [isActiveFilter, setIsActiveFilter] = useState<boolean | undefined>(undefined);
+    const [cityFilter, setCityFilter] = useState<string | undefined>(undefined);
+    const [countryFilter, setCountryFilter] = useState<string | undefined>(undefined);
     
     const loadAnnouncementById = async (id: number) => {
         try {
@@ -32,14 +37,24 @@ export const Announcements = () => {
         setComments(null);
   ***REMOVED***
 
+    const handleArchive = async (id: number) => {
+        await archiveAnnouncement(id);
+        handleCancelDetails();
+  ***REMOVED***
+
+    const handleRestore = async (id: number) => {
+        await restoreAnnouncement(id);
+        handleCancelDetails();
+  ***REMOVED***
+
     useEffect(() => {
         const fetchAnnouncements = async () => {
-            const data = await getAnnouncements();
+            const data = await getAnnouncements(petTypeFilter, statusFilter, isActiveFilter, cityFilter, countryFilter);
             setAnnouncements(data.items);
       ***REMOVED***;
 
         fetchAnnouncements();
-  ***REMOVED***, []);
+  ***REMOVED***, [selectedAnnouncement, petTypeFilter, statusFilter, isActiveFilter, cityFilter, countryFilter]);
 
     return ( 
         <div className="bg-white shadow rounded-lg p-6">
@@ -54,6 +69,73 @@ export const Announcements = () => {
                 <Button variant="toggle" isActive={showIds} onClick={() => setShowIds(!showIds)}>
                     Toggle ID's
                 </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-[1fr_1fr_1.5fr_1fr] gap-4 mb-4">
+                <div className="flex flex-col items-center gap-2 border-r-1 border-gray-300 pr-4">
+                    <p className="text-gray-900 text-mb">Status</p>
+                    <div className="flex gap-2">
+                        <Button variant={statusFilter === undefined ? "primary" : "secondary"} onClick={() => setStatusFilter(undefined)}>
+                            All
+                        </Button>
+                        <Button variant={statusFilter === 0 ? "primary" : "secondary"} onClick={() => setStatusFilter(0)}>
+                            Lost
+                        </Button>
+                        <Button variant={statusFilter === 1 ? "primary" : "secondary"} onClick={() => setStatusFilter(1)}>
+                            Found
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center gap-2 border-r-1 border-gray-300 pr-4">
+                    <p className="text-gray-900 text-mb">Pet Type</p>
+                    <div className="flex gap-2">
+                        <Button variant={petTypeFilter === undefined ? "primary" : "secondary"} onClick={() => setPetTypeFilter(undefined)}>
+                            All
+                        </Button>
+                        <Button variant={petTypeFilter === 0 ? "primary" : "secondary"} onClick={() => setPetTypeFilter(0)}>
+                            Cats
+                        </Button>
+                        <Button variant={petTypeFilter === 1 ? "primary" : "secondary"} onClick={() => setPetTypeFilter(1)}>
+                            Dogs
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center gap-2 border-r-1 border-gray-300 pr-4">
+                    <p className="text-gray-900 text-mb">Is Active</p>
+                    <div className="flex gap-2">
+                        <Button variant={isActiveFilter === undefined ? "primary" : "secondary"} onClick={() => setIsActiveFilter(undefined)}>
+                            All
+                        </Button>
+                        <Button variant={isActiveFilter === true ? "primary" : "secondary"} onClick={() => setIsActiveFilter(true)}>
+                            Active
+                        </Button>
+                        <Button variant={isActiveFilter === false ? "primary" : "secondary"} onClick={() => setIsActiveFilter(false)}>
+                            Archived
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center gap-2 pr-4">
+                    <p className="text-gray-900 text-mb">Location</p>
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            placeholder="Country"
+                            className="bg-white rounded-2xl shadow-sm border-solid p-2 pl-4 mt-2 mb-3
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setCountryFilter(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="City"
+                            className="bg-white rounded-2xl shadow-sm border-solid p-2 pl-4 mt-2 mb-3
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setCityFilter(e.target.value)}
+                        />
+                    </div>
+                </div>
+
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {announcements.map((announcement) => (
@@ -72,7 +154,7 @@ export const Announcements = () => {
                             ? `${announcement.country}, ${announcement.city}`
                             : announcement.country || announcement.city || ""    
                           ***REMOVED***</p>
-                        {announcement.isActive ? <p className="text-green-600 text-mb">Active</p> : <p className="text-red-600 text-mb">Inactive</p>}
+                        {announcement.isActive ? <p className="text-green-600 text-mb">Active</p> : <p className="text-red-600 text-mb">Archived</p>}
                         <p className="text-gray-600 text-sm">Created on: {new Date(announcement.createdOn).toLocaleDateString()}</p>
                         {showIds && <p className="text-gray-600 text-sm mt-1">Announcement ID: {announcement.id}</p>}
                         {showIds && <p className="text-gray-600 text-sm">Pet ID: {announcement.petId}</p>}
@@ -145,6 +227,10 @@ export const Announcements = () => {
                                         </Popup>
                                     </Marker>
                                 </MapContainer>
+                                {selectedAnnouncement.isActive ? 
+                                    ( <Button variant="danger" className="mb-3" onClick={() => handleArchive(selectedAnnouncement.id)}>Archive</Button> ) :
+                                    ( <Button variant="danger" className="mb-3" onClick={() => handleRestore(selectedAnnouncement.id)}>Restore</Button> )
+                              ***REMOVED***
                             </div>
                         </div>
                         
