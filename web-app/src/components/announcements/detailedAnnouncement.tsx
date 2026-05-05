@@ -1,5 +1,6 @@
 import { Button } from "../ui/Button";
 import { Comment } from "../ui/Comment";
+import { ConfirmModal } from "../ui/ConfirmModal";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useState, useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
@@ -19,6 +20,7 @@ interface DetailedAnnouncementProps {
 
 export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, showIds, handleArchive, handleRestore, handleEdit }: DetailedAnnouncementProps) => {
     const [editMode, setEditMode] = useState(false);
+    const [action, setAction] = useState<string | null>(null);
 
     const countryRef = useRef<HTMLInputElement>(selectedAnnouncement.country);
     const cityRef = useRef<HTMLInputElement>(selectedAnnouncement.city);
@@ -251,7 +253,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             <MapContainer 
                                 center={[selectedAnnouncement.lastSeenLatitude, selectedAnnouncement.lastSeenLongitude]} 
                                 zoom={17} 
-                                style={{ minHeight: "300px", width: "100%", borderRadius: "0.5rem", marginBottom: "1rem" }}
+                                style={{ minHeight: "300px", width: "100%", borderRadius: "0.5rem", marginBottom: "1rem", zIndex: 60 }}
                             >
                                 <TileLayer
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -266,13 +268,13 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             </MapContainer>
                         </div>
                         {selectedAnnouncement.isActive ? 
-                            ( <Button variant="danger" className="mb-2" onClick={() => handleArchive(selectedAnnouncement.id)}>Archive</Button> ) :
-                            ( <Button variant="danger" className="mb-2" onClick={() => handleRestore(selectedAnnouncement.id)}>Restore</Button> )
+                            ( <Button variant="danger" className="mb-2" onClick={() => setAction("archive")}>Archive</Button> ) :
+                            ( <Button variant="danger" className="mb-2" onClick={() => setAction("restore")}>Restore</Button> )
                       ***REMOVED***
                         {editMode ? 
                             ( <div className="grid grid-cols-2 gap-2">
-                                <Button variant="secondary" className="mb-3" fullWidth={true} onClick={() => setEditMode(false)}>Cancel</Button>
-                                <Button variant="danger" className="mb-3" fullWidth={true} onClick={() => handleSave()}>Save</Button>
+                                <Button variant="secondary" className="mb-3" fullWidth={true} onClick={() => setAction("cancelEdit")}>Cancel</Button>
+                                <Button variant="danger" className="mb-3" fullWidth={true} onClick={() => setAction("saveEdit")}>Save</Button>
                             </div> ) :
                             ( <Button variant="edit" className="mb-3" onClick={() => setEditMode(true)}>Edit</Button> )
                       ***REMOVED***
@@ -287,10 +289,42 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                         ))}
                     </div>
                )}
-                <Button variant="secondary" onClick={cancel} className="mt-3">
+                <Button variant="secondary" onClick={() => cancel()} className="mt-3">
                     Close
                 </Button>
             </div>
+            {action === "saveEdit" && (
+                <ConfirmModal
+                    title="Confirm Edit"
+                    message="Are you sure you want to save the changes to this announcement?"
+                    onConfirm={() => {handleSave(); setAction(null);}}
+                    onCancel={() => setAction(null)}
+                />
+            )}
+            {action === "cancelEdit" && (
+                <ConfirmModal
+                    title="Are you sure?"
+                    message="You want to discard the changes to this announcement?"
+                    onConfirm={() => {setEditMode(false); setAction(null);}}
+                    onCancel={() => setAction(null)}
+                />
+            )}
+            {action === "archive" && (
+                <ConfirmModal
+                    title="Confirm archiving"
+                    message="Are you sure you want to archive this announcement?"
+                    onConfirm={() => {setEditMode(false); setAction(null); handleArchive(selectedAnnouncement.id);}}
+                    onCancel={() => setAction(null)}
+                />
+            )}
+            {action === "restore" && (
+                <ConfirmModal
+                    title="Confirm restoration"
+                    message="Are you sure you want to restore this announcement?"
+                    onConfirm={() => {setEditMode(false); setAction(null); handleRestore(selectedAnnouncement.id);}}
+                    onCancel={() => setAction(null)}
+                />
+            )}
         </div>
     )
 }
