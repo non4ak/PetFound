@@ -5,6 +5,7 @@ import { Settings } from "@/pages/main/Settings";
 import { MainLayout } from "@/components/MainLayout";
 import { ProtectedGuard } from "@/components/Guards";
 import { Users } from "@/pages/main/Users";
+import { Announcements } from "@/pages/main/Announcements";
 
 export const MainRouter: RouteObject = {
     element: (
@@ -25,5 +26,9 @@ export const MainRouter: RouteObject = {
             path: ROUTES.USERS,
             element: <Users />,
         },
+        {
+            path: ROUTES.ANNOUNCEMENTS,
+            element: <Announcements />,
+        }
     ],
 };
