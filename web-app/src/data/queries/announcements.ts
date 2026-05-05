@@ -26,3 +26,21 @@ export async function archiveAnnouncement(id: number) {
 export async function restoreAnnouncement(id: number) {
     await axiosClient.post(`/admin/announcements/${id}/restore`);
 }
+
+export async function editAnnouncement(id: number, petStatus: number, city: string, country: string, petDetails: string, lastDateWhenSeen: string, approximateTime: string, isPhonePublic: boolean, isTelegramActive: boolean, nearLandmark: string, latitude: number, longitude: number) {
+    const requestBody = {
+        "country": country,
+        "city": city,
+        "lastDateWhenSeen": lastDateWhenSeen,
+        "approximateTime": approximateTime,
+        "petDetails": petDetails,
+        "isPhonePublic": isPhonePublic,
+        "isTelegramActive": isTelegramActive,
+        "nearLandmark": nearLandmark,
+        "lastSeenLatitude": latitude,
+        "lastSeenLongitude": longitude,
+        "petStatus": petStatus
+    };
+    console.log("Request body for editing announcement:", requestBody); // Debug alert
+    await axiosClient.put(`/admin/announcements/${id}`, requestBody);
+}

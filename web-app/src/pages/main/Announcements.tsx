@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { Comment } from "@/components/ui/Comment";
 import { Pagination } from "@/components/ui/Pagination";
-import { getAnnouncements, getAnnouncementById, archiveAnnouncement, restoreAnnouncement } from "@/data/queries/announcements";
+import { getAnnouncements, getAnnouncementById, archiveAnnouncement, restoreAnnouncement, editAnnouncement } from "@/data/queries/announcements";
 import type { AnnouncementDto, FullAnnouncementDto } from "@/types/announcements";
 import { getCommentsByAnnouncementId } from "@/data/queries/comments";
 import type { CommentDto } from "@/types/comments";
@@ -63,6 +63,12 @@ export const Announcements = () => {
     const handleRestore = async (id: number) => {
         await restoreAnnouncement(id);
         handleCancelDetails();
+    }
+
+    const handleEdit = async (id: number, petStatus: number, city: string, country: string, petDetails: string, lastDateWhenSeen: string, approximateTime: string, isPhonePublic: boolean, isTelegramActive: boolean, nearLandmark: string, latitude: number, longitude: number) => {
+        await editAnnouncement(id, petStatus, city, country, petDetails, lastDateWhenSeen, approximateTime, isPhonePublic, isTelegramActive, nearLandmark, latitude, longitude);
+        setSelectedAnnouncement(null);
+        loadAnnouncementById(id);
     }
 
     useEffect(() => {
@@ -219,6 +225,7 @@ export const Announcements = () => {
                     showIds={showIds}
                     handleArchive={handleArchive}
                     handleRestore={handleRestore}
+                    handleEdit={handleEdit}
                 />
             }
         </div>
