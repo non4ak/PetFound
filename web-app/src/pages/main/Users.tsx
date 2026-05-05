@@ -2,6 +2,7 @@ import { activateUser, deactivateUser, getAllUsers, deleteUser } from "@/data/qu
 import type { UserDto } from "@/types/users";
 import { act, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 
 export const Users = () => {
     const [users, setUsers] = useState<UserDto[]>([]);
@@ -19,7 +20,7 @@ export const Users = () => {
 
     const loadUsers = async () => {
         try {
-            const data = await getAllUsers({search: search, pageNumber: pageNumber, pageSize: pageSize});
+            const data = await getAllUsers({search: search, pageNumber: pageNumber, pageSize: pageSize ? pageSize : 20});
             setUsers(data.items);
             setUsersCount(data.totalCount);
             setTotalPages(data.totalPages);
@@ -103,27 +104,12 @@ export const Users = () => {
                     </div>
                 ))}            
             </div>
-            <div className="mt-5 flex justify-center">
-                <p className="text-gray-800 text-xl inline"
-                    onClick={handlePrevPage}
-                > {"<"} </p>
-                <p className="text-gray-900 text-xl inline mr-2 ml-2"> {pageNumber+1} </p>
-                <p className="text-gray-800 text-xl inline "
-                    onClick={handleNextPage}
-                > {">"} </p>
-            </div>
-            <div className="mt-5">
-                <div className="">
-                    <p className="text-gray-600 text-sm inline mr-1">Page size: </p>
-                    <input
-                        type="text"
-                        placeholder= {pageSize.toString()}
-                        className="bg-white rounded-2xl shadow-sm p-2 pl-3 mt-2 mb-3 inline w-11
-                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        onChange={(e) => setPageSize(parseInt(e.target.value))}
-                    />
-                </div>
-            </div>
+            <Pagination
+                prevPage={handlePrevPage}
+                nextPage={handleNextPage}
+                currentPage={pageNumber + 1}
+                onChangeTotalPages={setPageSize}
+            />
 
             {modal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
