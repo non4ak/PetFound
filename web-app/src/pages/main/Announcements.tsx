@@ -119,47 +119,47 @@ export const Announcements = () => {
                 </div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-[1fr_1fr_1.5fr_1fr] gap-4 mb-4">
-                <div className="flex flex-col items-center gap-2 border-r-1 border-gray-300 pr-4">
+            <div className="grid grid-cols-1 sm:grid-cols-[repeat(2,auto)] md:grid-cols-[repeat(3,auto)] lg:grid-cols-[repeat(4,auto)] xl:grid-cols-[repeat(4,auto)] gap-4 mb-4">
+                <div className="flex flex-col items-center gap-2 sm:border-r-1 md:border-r-1 lg:border-r-1 xl:border-r-1 border-gray-300 pr-4">
                     <p className="text-gray-900 text-mb">Status</p>
                     <div className="flex gap-2">
-                        <Button variant={statusFilter === undefined ? "primary" : "secondary"} onClick={() => setStatusFilter(undefined)}>
+                        <Button variant={statusFilter === undefined ? "primary" : "secondary"} onClick={() => setStatusFilter(undefined)} size="sm">
                             All
                         </Button>
-                        <Button variant={statusFilter === 0 ? "primary" : "secondary"} onClick={() => setStatusFilter(0)}>
+                        <Button variant={statusFilter === 0 ? "primary" : "secondary"} onClick={() => setStatusFilter(0)} size="sm">
                             Lost
                         </Button>
-                        <Button variant={statusFilter === 1 ? "primary" : "secondary"} onClick={() => setStatusFilter(1)}>
+                        <Button variant={statusFilter === 1 ? "primary" : "secondary"} onClick={() => setStatusFilter(1)} size="sm">
                             Found
                         </Button>
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-2 border-r-1 border-gray-300 pr-4">
+                <div className="flex flex-col items-center gap-2 md:border-r-1 lg:border-r-1 xl:border-r-1 border-gray-300 pr-4">
                     <p className="text-gray-900 text-mb">Pet Type</p>
                     <div className="flex gap-2">
-                        <Button variant={petTypeFilter === undefined ? "primary" : "secondary"} onClick={() => setPetTypeFilter(undefined)}>
+                        <Button variant={petTypeFilter === undefined ? "primary" : "secondary"} onClick={() => setPetTypeFilter(undefined)} size="sm">
                             All
                         </Button>
-                        <Button variant={petTypeFilter === 0 ? "primary" : "secondary"} onClick={() => setPetTypeFilter(0)}>
+                        <Button variant={petTypeFilter === 0 ? "primary" : "secondary"} onClick={() => setPetTypeFilter(0)} size="sm">
                             Cats
                         </Button>
-                        <Button variant={petTypeFilter === 1 ? "primary" : "secondary"} onClick={() => setPetTypeFilter(1)}>
+                        <Button variant={petTypeFilter === 1 ? "primary" : "secondary"} onClick={() => setPetTypeFilter(1)} size="sm">
                             Dogs
                         </Button>
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-2 border-r-1 border-gray-300 pr-4">
+                <div className="flex flex-col items-center gap-2 sm:border-r-1 lg:border-r-1 xl:border-r-1 border-gray-300 pr-4">
                     <p className="text-gray-900 text-mb">Is Active</p>
                     <div className="flex gap-2">
-                        <Button variant={isActiveFilter === undefined ? "primary" : "secondary"} onClick={() => setIsActiveFilter(undefined)}>
+                        <Button variant={isActiveFilter === undefined ? "primary" : "secondary"} onClick={() => setIsActiveFilter(undefined)} size="sm">
                             All
                         </Button>
-                        <Button variant={isActiveFilter === true ? "primary" : "secondary"} onClick={() => setIsActiveFilter(true)}>
+                        <Button variant={isActiveFilter === true ? "primary" : "secondary"} onClick={() => setIsActiveFilter(true)} size="sm">
                             Active
                         </Button>
-                        <Button variant={isActiveFilter === false ? "primary" : "secondary"} onClick={() => setIsActiveFilter(false)}>
+                        <Button variant={isActiveFilter === false ? "primary" : "secondary"} onClick={() => setIsActiveFilter(false)} size="sm">
                             Archived
                         </Button>
                     </div>
@@ -167,18 +167,18 @@ export const Announcements = () => {
 
                 <div className="flex flex-col items-center gap-2 pr-4">
                     <p className="text-gray-900 text-mb">Location</p>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-2">
                         <input
                             type="text"
                             placeholder="Country"
-                            className="bg-white rounded-2xl shadow-sm border-solid p-2 pl-4 mb-3
+                            className="bg-white rounded-2xl shadow-sm border-solid p-1.5 pl-4 mb-3
                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             onChange={(e) => setCountryFilter(e.target.value)}
                         />
                         <input
                             type="text"
                             placeholder="City"
-                            className="bg-white rounded-2xl shadow-sm border-solid p-2 pl-4 mb-3
+                            className="bg-white rounded-2xl shadow-sm border-solid p-1.5 pl-4 mb-3
                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             onChange={(e) => setCityFilter(e.target.value)}
                         />

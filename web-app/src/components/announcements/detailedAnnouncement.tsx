@@ -26,7 +26,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
     const cityRef = useRef<HTMLInputElement>(selectedAnnouncement.city);
     const lastDateWhenSeenRef = useRef<HTMLInputElement>(selectedAnnouncement.lastDateWhenSeen);
     const approximateTimeRef = useRef<HTMLInputElement>(selectedAnnouncement.approximateTime);
-    const petDetailsRef = useRef<HTMLInputElement>(selectedAnnouncement.petDetails);
+    const petDetailsRef = useRef<HTMLTextAreaElement>(selectedAnnouncement.petDetails);
     const nearLandmarkRef = useRef<HTMLInputElement>(selectedAnnouncement.nearLandmark);
     const lastSeenLatitudeRef = useRef<HTMLInputElement>(selectedAnnouncement.lastSeenLatitude);
     const lastSeenLongitudeRef = useRef<HTMLInputElement>(selectedAnnouncement.lastSeenLongitude);
@@ -43,13 +43,16 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col hover:shadow-lg transition-shadow w-11/12 md:w-3/4 lg:w-1/2 xl:w-3/5 max-h-[95vh] overflow-y-auto">
-                <h2 className="text-xl font-semibold mb-2">Announcement Details</h2>
+                <h2 className="text-xl font-semibold mb-2">Detailed information</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="flex flex-col">
-                        {selectedAnnouncement.pet.petPhotoUrl && (
+                        {selectedAnnouncement.pet.petPhotoUrl && selectedAnnouncement.pet.petPhotoUrl != "string" && (
                             <img src={selectedAnnouncement.pet.petPhotoUrl} alt="Pet" className="rounded-lg shadow-md max-h-[300px] object-cover" width="full" />
                         )}
-                        <p className="text-gray-900">Status: {
+                        <p className="text-gray-900 text-lg font-semibold mt-1">Announcement details</p>
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Status: </span>
+                            {
                             editMode ? (
                                 <input
                                     type="text"
@@ -67,7 +70,9 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 {showIds && !editMode && ` | ${selectedAnnouncement.petStatus}`}
                             </span>
                         </p>
-                        <p className="text-gray-900">Date: {
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Date: </span>
+                            {
                             editMode ? (
                                 <input
                                     type="text"
@@ -81,7 +86,9 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 new Date(selectedAnnouncement.lastDateWhenSeen).toLocaleDateString()
                             )
                         }</p>
-                        <p className="text-gray-900">Time: {
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Time: </span>
+                            {
                             editMode ? (
                                 <input
                                     type="text"
@@ -95,13 +102,14 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 selectedAnnouncement.approximateTime
                             )
                         }</p>
-                        <p className="text-gray-900">Details: {
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Details: </span>
+                            {
                             editMode ? (
-                                <input
-                                    type="text"
-                                    placeholder="Pet details"
+                                <textarea
+                                    placeholder="Announcement details"
                                     defaultValue={selectedAnnouncement.petDetails}
-                                    className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1
+                                    className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
                                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     ref = {petDetailsRef}
                                 />
@@ -112,44 +120,65 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                         <p className="text-gray-900 text-lg font-semibold mt-2">Pet details</p>
                         <div className="grid grid-cols-2">
                                             
-                            <p className="text-gray-900">Name: {selectedAnnouncement.pet.petName}</p>
                             <p className="text-gray-900">
-                                Type: {selectedAnnouncement.pet.petTypeLabel}
+                                <span className="text-gray-600 text-sm">Name: </span>
+                                {selectedAnnouncement.pet.petName}
+                            </p>
+                            <p className="text-gray-900">
+                                <span className="text-gray-600 text-sm">Type: </span>
+                                {selectedAnnouncement.pet.petTypeLabel}
                                 <span className="text-gray-600">
                                     {showIds && ` | ${selectedAnnouncement.pet.petType}`}
                                 </span>
                             </p>
-                            <p className="text-gray-900">Breed: {selectedAnnouncement.pet.breed}</p>
                             <p className="text-gray-900">
-                                Sex: {selectedAnnouncement.pet.petSexLabel}
+                                <span className="text-gray-600 text-sm">Breed: </span>
+                                {selectedAnnouncement.pet.breed}
+                            </p>
+                            <p className="text-gray-900">
+                                <span className="text-gray-600 text-sm">Sex: </span>
+                                {selectedAnnouncement.pet.petSexLabel}
                                 <span className="text-gray-600">
                                     {showIds && ` | ${selectedAnnouncement.pet.petSex}`}
                                 </span>
                             </p>
                             <p className="text-gray-900">
-                                Size: {selectedAnnouncement.pet.petSizeLabel}
+                                <span className="text-gray-600 text-sm">Size: </span>
+                                {selectedAnnouncement.pet.petSizeLabel}
                                 <span className="text-gray-600">
                                     {showIds && ` | ${selectedAnnouncement.pet.petSize}`}
                                 </span>
                             </p>
                             <p className="text-gray-900">
-                               Age: {selectedAnnouncement.pet.petAgeCategoryLabel}
+                                <span className="text-gray-600 text-sm">Age: </span>
+                                {selectedAnnouncement.pet.petAgeCategoryLabel}
                                 <span className="text-gray-600">
                                     {showIds && ` | ${selectedAnnouncement.pet.petAgeCategory}`}
                                 </span>
                             </p>
-                            <p className="text-gray-900">Chip number: {selectedAnnouncement.pet.chipNumber}</p>
-                                            
+                            <p className="text-gray-900">
+                                <span className="text-gray-600 text-sm">Chip number: </span>
+                                {selectedAnnouncement.pet.chipNumber}
+                            </p>
                         </div>
-                        <p className="text-gray-900 mt-1">Pet description: {selectedAnnouncement.pet.description}</p>
-                                        
+                        <p className="text-gray-900 mt-1">
+                            <span className="text-gray-600 text-sm">Description: </span>
+                            {selectedAnnouncement.pet.description}
+                        </p>
                     </div>
                     <div className="flex flex-col border-l-1 border-gray-300 pl-5">
                                         
                         <p className="text-gray-900 text-lg font-semibold">Reporter User Details</p>
-                        <p className="text-gray-900">Username: {selectedAnnouncement.reporterUserName}</p>
-                        <p className="text-gray-900">Email: {selectedAnnouncement.reporterEmail}</p>
-                        <p className="text-gray-900">Phone public: 
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Username: </span>
+                            {selectedAnnouncement.reporterUserName}
+                        </p>
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Email: </span>
+                            {selectedAnnouncement.reporterEmail}
+                        </p>
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Phone public: </span>
                             {editMode ? (
                                 <Button 
                                     variant="toggle" 
@@ -163,7 +192,8 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 selectedAnnouncement.isPhonePublic ? ' Yes' : ' No'
                             )}
                         </p>
-                        <p className="text-gray-900">Telegram active: 
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Telegram active: </span>
                             {editMode ? (
                                 <Button 
                                     variant="toggle" 
@@ -183,7 +213,8 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                         {editMode ? 
                             (
                                 <div>
-                                    <p className="text-gray-900">City: 
+                                    <p className="text-gray-900">
+                                        <span className="text-gray-600 text-sm">City: </span>
                                         <input
                                             type="text"
                                             placeholder="Pet details"
@@ -193,7 +224,8 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                             ref = {cityRef}
                                         />
                                     </p>
-                                    <p className="text-gray-900">Country: 
+                                    <p className="text-gray-900">
+                                        <span className="text-gray-600 text-sm">Country: </span>
                                         <input
                                             type="text"
                                             placeholder="Pet details"
@@ -207,7 +239,9 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : 
                             (<p className="text-gray-900">{selectedAnnouncement.city}, {selectedAnnouncement.country}</p>)
                         }
-                        <p className="text-gray-900">Near: {
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Near: </span>
+                            {
                             editMode ? (
                                 <input
                                     type="text"
@@ -221,7 +255,9 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 selectedAnnouncement.nearLandmark
                             )
                         }</p>
-                        <p className="text-gray-900">Latitude: {
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Latitude: </span>
+                            {
                             editMode ? (
                                 <input
                                     type="text"
@@ -235,7 +271,9 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 selectedAnnouncement.lastSeenLatitude
                             )
                         }</p>
-                        <p className="text-gray-900">Longtitude: {
+                        <p className="text-gray-900">
+                            <span className="text-gray-600 text-sm">Longitude: </span>
+                            {
                             editMode ? (
                                 <input
                                     type="text"

@@ -38,7 +38,7 @@ export const Comment = ({ comment, depth, author, showId }: CommentProps) => {
                     <span className="text-gray-600 text-sm ml-2 font-normal">User ID: {author.id}</span>
                 )}
                 <span className="text-gray-600 font-normal ml-2">
-                    {new Date(comment.commentedAt).toLocaleDateString()}
+                    {new Date(comment.commentedAt).toLocaleString()}
                 </span>
             </p>
             {showId && <p className="text-gray-600 text-sm">Comment ID: {comment.id}</p>}
