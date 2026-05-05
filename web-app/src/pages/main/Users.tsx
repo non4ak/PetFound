@@ -3,6 +3,7 @@ import type { UserDto } from "@/types/users";
 import { act, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Pagination } from "@/components/ui/Pagination";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export const Users = () => {
     const [users, setUsers] = useState<UserDto[]>([]);
@@ -111,31 +112,14 @@ export const Users = () => {
                 onChangeTotalPages={setPageSize}
             />
 
-            {modal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-2xl w-96">
-                        <h2 className="text-3xl font-semibold text-gray-900 mb-4">
-                            {modal.action === "deactivate" && "Deactivate user"}
-                            {modal.action === "activate" && "Activate user"}
-                            {modal.action === "delete" && "Delete user"}
-                        </h2>
-                        <p className="text-gray-900 text-lg">Are you sure you want to {modal.action} this user?</p>
-                        <p className="text-gray-900 text-lg">{modal.action === "delete" ? "This action is irreversible." : ""}</p>
-                        <div className="flex justify-end gap-3 mt-5">
-                            <Button
-                                variant="secondary"
-                                fullWidth={true}
-                                onClick={() => setModal(null)}
-                            >Cancel</Button>
-                            <Button
-                            variant="dangerExtra"
-                                fullWidth={true}
-                                onClick={() => handleConfirm()}
-                            >Confirm</Button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {modal && 
+            <ConfirmModal
+                title={modal.action === "deactivate" ? "Deactivate user" : modal.action === "activate" ? "Activate user" : "Delete user"}
+                message={`Are you sure you want to ${modal.action} this user? ${modal.action === "delete" ? "This action is irreversible." : ""}`}
+                onCancel={() => setModal(null)}
+                onConfirm={() => handleConfirm()}
+            />
+          ***REMOVED***
         </div>
     );
 };
