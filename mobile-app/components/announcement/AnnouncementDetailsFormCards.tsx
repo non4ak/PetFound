@@ -80,7 +80,7 @@ export function AnnouncementDetailsFormCards<
             errorText={errors.dateLastSeen?.message}
             label="Date last seen"
             name={"dateLastSeen" as Path<T>}
-            placeholder="12/10/2024"
+            placeholder="07.05.2026"
           />
           <ControlledInput
             control={control}
