@@ -36,6 +36,7 @@ export function useUpdateProfileMutation(): UseMutationResult<
         notificationChannelPreference: variables.notificationChannelPreference,
         phoneNumber: variables.phoneNumber,
         socialNetwork: variables.socialNetwork,
+        userPhotoUrl: variables.userPhotoUrl ?? cachedProfile?.userPhotoUrl ?? '',
         userName: cachedProfile?.userName ?? '',
       };
 

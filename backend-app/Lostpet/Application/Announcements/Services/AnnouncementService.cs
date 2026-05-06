@@ -39,6 +39,7 @@ public class AnnouncementService : IAnnouncementService
 
         var petId = model.PetId;
         PetType petTypeForResponse;
+        string? petPhotoUrlForResponse;
         if (petId.HasValue)
         {
             var existingPet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId.Value);
@@ -53,6 +54,7 @@ public class AnnouncementService : IAnnouncementService
             }
 
             petTypeForResponse = existingPet.PetType;
+            petPhotoUrlForResponse = existingPet.PetPhotoUrl;
         }
         else
         {
@@ -81,6 +83,7 @@ public class AnnouncementService : IAnnouncementService
             await _context.SaveChangesAsync();
             petId = generatedPet.Id;
             petTypeForResponse = generatedPet.PetType;
+            petPhotoUrlForResponse = generatedPet.PetPhotoUrl;
         }
 
         var now = DateTimeOffset.UtcNow;
@@ -115,6 +118,7 @@ public class AnnouncementService : IAnnouncementService
             PetStatusLabel = announcement.PetStatus.GetDisplayName(),
             PetType = petTypeForResponse,
             PetTypeLabel = petTypeForResponse.GetDisplayName(),
+            PetPhotoUrl = petPhotoUrlForResponse,
             Country = announcement.Country,
             City = announcement.City,
             LastDateWhenSeen = announcement.LastDateWhenSeen,
@@ -130,13 +134,22 @@ public class AnnouncementService : IAnnouncementService
         });
     }
 
-    public async Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int userId, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
+    public async Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
     {
         var query = _context.Announcements
             .AsNoTracking()
             .Include(a => a.Pet)
-            .Where(a => a.ReporterUserId == userId)
             .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(queryModel.Search))
+        {
+            var search = queryModel.Search.Trim().ToLower();
+            query = query.Where(a =>
+                (a.PetDetails != null && a.PetDetails.ToLower().Contains(search)) ||
+                (a.NearLandmark != null && a.NearLandmark.ToLower().Contains(search)) ||
+                (a.City != null && a.City.ToLower().Contains(search)) ||
+                (a.Country != null && a.Country.ToLower().Contains(search)));
+        }
 
         if (queryModel.PetStatus.HasValue)
         {
@@ -170,6 +183,11 @@ public class AnnouncementService : IAnnouncementService
             query = query.Where(a => a.CreatedOn <= queryModel.CreatedTo.Value);
         }
 
+        if (queryModel.IsActive.HasValue)
+        {
+            query = query.Where(a => a.IsActive == queryModel.IsActive.Value);
+        }
+
         query = ApplySorting(query, queryModel.SortBy, queryModel.SortDirection);
 
         var pagedEntities = await PagedList<Announcement>.CreateAsync(query, pageNumber, pageSize);
@@ -188,12 +206,12 @@ public class AnnouncementService : IAnnouncementService
         return Result<IPagedList<AnnouncementResponse>>.Success(paged);
     }
 
-    public async Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int userId, int id)
+    public async Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int id)
     {
         var announcement = await _context.Announcements
             .AsNoTracking()
             .Include(a => a.Pet)
-            .FirstOrDefaultAsync(a => a.Id == id && a.ReporterUserId == userId);
+            .FirstOrDefaultAsync(a => a.Id == id);
 
         if (announcement is null)
         {
@@ -349,6 +367,7 @@ public class AnnouncementService : IAnnouncementService
             PetStatusLabel = a.PetStatus.GetDisplayName(),
             PetType = a.Pet.PetType,
             PetTypeLabel = a.Pet.PetType.GetDisplayName(),
+            PetPhotoUrl = a.Pet.PetPhotoUrl,
             Country = a.Country,
             City = a.City,
             LastDateWhenSeen = a.LastDateWhenSeen,

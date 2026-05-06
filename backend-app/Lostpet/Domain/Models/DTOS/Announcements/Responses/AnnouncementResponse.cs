@@ -16,6 +16,8 @@ public class AnnouncementResponse
 
     public string PetTypeLabel { get; set; } = string.Empty;
 
+    public string? PetPhotoUrl { get; set; }
+
     public string? Country { get; set; }
 
     public string? City { get; set; }
