@@ -19,5 +19,6 @@ export const editProfileDefaults: EditProfileFormValues = {
   notificationChannel: NotificationChannelPreference.Push,
   phoneNumber: '',
   socialNetwork: '',
+  userPhotoUrl: '',
   userName: '',
 };

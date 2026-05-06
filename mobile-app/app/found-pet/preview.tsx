@@ -1,22 +1,73 @@
-import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 
 import { AnnouncementPreviewCard } from "@/components/announcement/AnnouncementPreviewCard";
 import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
 import { useFoundPetFlow } from "@/contexts/FoundPetFlowContext";
+import { createAnnouncementQuery } from "@/data/queries/announcements";
+import {
+  AnnouncementPetStatus,
+  type CreateAnnouncementRequest,
+} from "@/types/announcement";
+import { toAnnouncementDateTimeOffset } from "@/utils/announcementDate";
+import { getApiErrorMessage } from "@/utils/apiError";
 import { getPetSexLabel, getPetSizeLabel, getPetTypeLabel } from "@/utils/petLabels";
 
 export default function FoundPetPreviewScreen() {
   const router = useRouter();
-  const { details, info, resetDraft } = useFoundPetFlow();
+  const { details, info, photoUri, resetDraft } = useFoundPetFlow();
+  const [isPosting, setIsPosting] = useState<boolean>(false);
 
-  const handlePostPress = (): void => {
-    resetDraft();
-    router.replace("/(tabs)");
+  const handlePostPress = async (): Promise<void> => {
+    setIsPosting(true);
+
+    try {
+      const request: CreateAnnouncementRequest = {
+        approximateTime: details.timeApproximate.trim().length > 0
+          ? details.timeApproximate.trim()
+          : "Unknown",
+        city: details.city.trim(),
+        country: details.country.trim(),
+        isPhonePublic: details.showPhone,
+        isTelegramActive: details.showTelegram,
+        lastDateWhenSeen: toAnnouncementDateTimeOffset(details.dateLastSeen),
+        nearLandmark: details.city.trim(),
+        petDetails: details.description.trim().length > 0
+          ? details.description.trim()
+          : "No additional details provided.",
+        petName: "Found pet",
+        petStatus: AnnouncementPetStatus.Found,
+        ...(info.breed.trim().length > 0 ? { breed: info.breed.trim() } : {}),
+        ...(info.chipNumber.trim().length > 0
+          ? { chipNumber: info.chipNumber.trim() }
+          : {}),
+        ...(info.petAgeCategory !== null
+          ? { petAgeCategory: info.petAgeCategory }
+          : {}),
+        ...(photoUri !== null && photoUri.trim().length > 0
+          ? { petPhotoUrl: photoUri.trim() }
+          : {}),
+        ...(info.petSex !== null ? { petSex: info.petSex } : {}),
+        ...(info.petSize !== null ? { petSize: info.petSize } : {}),
+        ...(info.petType !== null ? { petType: info.petType } : {}),
+    ***REMOVED***;
+
+      await createAnnouncementQuery(request);
+      resetDraft();
+      router.replace("/(tabs)");
+  ***REMOVED*** catch (error: unknown) {
+      Alert.alert(
+        "Post failed",
+        getApiErrorMessage(error, "Could not create announcement."),
+      );
+  ***REMOVED*** finally {
+      setIsPosting(false);
+  ***REMOVED***
 ***REMOVED***;
 
   const badges: string[] = [getPetTypeLabel(info.petType)];
@@ -31,7 +82,8 @@ export default function FoundPetPreviewScreen() {
       footer={
         <Button
           fullWidth
-          label="Post"
+          disabled={isPosting}
+          label={isPosting ? "Posting..." : "Post"}
           onPress={handlePostPress}
           size="md"
           trailingIcon={
@@ -54,9 +106,9 @@ export default function FoundPetPreviewScreen() {
           >
             Preview
           </Typography>
-          <TouchableOpacity onPress={handlePostPress}>
+          <TouchableOpacity disabled={isPosting} onPress={handlePostPress}>
             <Typography variant="body-small" className="text-primary">
-              Post
+              {isPosting ? "Posting..." : "Post"}
             </Typography>
           </TouchableOpacity>
         </View>
@@ -72,9 +124,17 @@ export default function FoundPetPreviewScreen() {
         title="Found pet"
         type="found"
       >
-        <View className="h-[180px] w-full items-center justify-center rounded-[16px] bg-[#FFF7EA]">
-          <Ionicons name="camera-outline" size={40} color="#D89F35" />
-        </View>
+        {photoUri !== null && photoUri.trim().length > 0 ? (
+          <Image
+            source={{ uri: photoUri }}
+            style={{ height: 180, width: "100%", borderRadius: 16 }}
+            contentFit="cover"
+          />
+        ) : (
+          <View className="h-[180px] w-full items-center justify-center rounded-[16px] bg-[#FFF7EA]">
+            <Ionicons name="camera-outline" size={40} color="#D89F35" />
+          </View>
+        )}
       </AnnouncementPreviewCard>
     </AppScreenScaffold>
   );

@@ -12,6 +12,7 @@ function mapProfile(response: ProfileApiResponse): Profile {
       response.notificationChannelPreference ?? NotificationChannelPreference.Push,
     phoneNumber: response.phoneNumber ?? '',
     socialNetwork: response.socialNetwork ?? '',
+    userPhotoUrl: response.userPhotoUrl ?? '',
     userName: response.userName ?? '',
 ***REMOVED***;
 }

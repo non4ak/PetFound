@@ -6,6 +6,7 @@ import type {
 
 function createSubmitOnboardingRequest(draft: OnboardingDraft): SubmitOnboardingRequest {
   const socialNetwork: string = draft.profile.socialNetwork.trim();
+  const userPhotoUrl: string = draft.profile.userPhotoUrl.trim();
   const pet = draft.pet;
   const stayInLoop = draft.stayInLoop;
 
@@ -15,6 +16,7 @@ function createSubmitOnboardingRequest(draft: OnboardingDraft): SubmitOnboarding
     phoneNumber: draft.profile.phoneNumber.trim(),
     userName: draft.profile.userName.trim(),
     ...(socialNetwork.length > 0 ? { socialNetwork } : {}),
+    ...(userPhotoUrl.length > 0 ? { userPhotoUrl } : {}),
     ...(stayInLoop !== null
       ? {
           notificationChannelPreference: stayInLoop.notificationChannelPreference,
