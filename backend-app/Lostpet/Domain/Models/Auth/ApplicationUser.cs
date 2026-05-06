@@ -16,6 +16,8 @@ public class ApplicationUser : IdentityUser<int>
 
     public string? SocialNetwork { get; set; }
 
+    public string? UserPhotoUrl { get; set; }
+
     public NotificationChannelPreference NotificationChannelPreference { get; set; } = NotificationChannelPreference.Both;
 
     public ICollection<Pet> Pets { get; set; } = new List<Pet>();

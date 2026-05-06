@@ -44,6 +44,7 @@ public class OnboardingService : IOnboardingService
         user.Country = model.Country.Trim();
         user.City = model.City.Trim();
         user.SocialNetwork = string.IsNullOrWhiteSpace(model.SocialNetwork) ? null : model.SocialNetwork.Trim();
+        user.UserPhotoUrl = string.IsNullOrWhiteSpace(model.UserPhotoUrl) ? null : model.UserPhotoUrl.Trim();
 
         if (model.NotificationChannelPreference.HasValue)
         {

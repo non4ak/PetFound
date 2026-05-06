@@ -9,9 +9,9 @@ public interface IAnnouncementService
 {
     Task<Result<AnnouncementResponse>> CreateAsync(int userId, CreateAnnouncementModel model);
 
-    Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int userId, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel);
+    Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int pageNumber, int pageSize, AnnouncementListQueryModel queryModel);
 
-    Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int userId, int id);
+    Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int id);
 
     Task<Result<bool>> UpdateAsync(int userId, int id, UpdateAnnouncementModel model);
 

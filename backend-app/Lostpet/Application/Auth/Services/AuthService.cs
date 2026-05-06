@@ -266,6 +266,7 @@ public class AuthService : IAuthService
             Email = user.Email ?? string.Empty,
             PhoneNumber = user.PhoneNumber,
             SocialNetwork = user.SocialNetwork,
+            UserPhotoUrl = user.UserPhotoUrl,
             Country = user.Country,
             City = user.City,
             NotificationChannelPreference = user.NotificationChannelPreference,
@@ -299,6 +300,11 @@ public class AuthService : IAuthService
         if (model.SocialNetwork is not null)
         {
             user.SocialNetwork = string.IsNullOrWhiteSpace(model.SocialNetwork) ? null : model.SocialNetwork.Trim();
+        }
+
+        if (model.UserPhotoUrl is not null)
+        {
+            user.UserPhotoUrl = string.IsNullOrWhiteSpace(model.UserPhotoUrl) ? null : model.UserPhotoUrl.Trim();
         }
 
         if (model.Country is not null)
