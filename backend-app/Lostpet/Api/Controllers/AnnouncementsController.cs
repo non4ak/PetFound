@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("users/me/announcements")]
+[Route("announcements")]
 [Authorize]
 public class AnnouncementsController : ControllerBase
 {
@@ -78,13 +78,7 @@ public class AnnouncementsController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
     {
-        var userIdResult = TryGetCurrentUserId();
-        if (userIdResult is null)
-        {
-            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
-
-        var result = await _announcementService.GetByIdAsync(userIdResult.Value, id);
+        var result = await _announcementService.GetByIdAsync(id);
         return result.Match(
             successStatusCode: 200,
             includeBody: true,
@@ -96,13 +90,7 @@ public class AnnouncementsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPagedAsync([FromQuery] AnnouncementListQueryModel query, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
     {
-        var userIdResult = TryGetCurrentUserId();
-        if (userIdResult is null)
-        {
-            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
-
-        var result = await _announcementService.GetPagedAsync(userIdResult.Value, pageNumber, pageSize, query);
+        var result = await _announcementService.GetPagedAsync(pageNumber, pageSize, query);
         return result.Match(
             successStatusCode: 200,
             includeBody: true,

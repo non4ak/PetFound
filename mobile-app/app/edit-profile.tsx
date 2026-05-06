@@ -80,6 +80,7 @@ export default function EditProfileScreen() {
       notificationChannel: profileQuery.data.notificationChannelPreference,
       phoneNumber: profileQuery.data.phoneNumber,
       socialNetwork: profileQuery.data.socialNetwork,
+      userPhotoUrl: profileQuery.data.userPhotoUrl,
       userName: profileQuery.data.userName,
   ***REMOVED***);
 ***REMOVED***, [profileQuery.data, reset]);
@@ -93,6 +94,7 @@ export default function EditProfileScreen() {
     await updateProfileMutation.mutateAsync({
       phoneNumber: values.phoneNumber.trim(),
       socialNetwork: values.socialNetwork.trim(),
+      userPhotoUrl: values.userPhotoUrl.trim(),
       country: values.country.trim(),
       city: values.city.trim(),
       notificationChannelPreference: values.notificationChannel,
@@ -131,7 +133,7 @@ export default function EditProfileScreen() {
         <ControlledProfilePhotoUpload
           control={control}
           label="Tap to change photo"
-          name="userName"
+          name="userPhotoUrl"
         />
       </View>
 

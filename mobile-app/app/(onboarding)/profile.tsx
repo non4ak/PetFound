@@ -37,6 +37,7 @@ export default function ProfileOnboardingScreen() {
       isPhonePublic: values.isPhonePublic,
       phoneNumber: values.phoneNumber,
       socialNetwork: values.socialNetwork,
+      userPhotoUrl: values.userPhotoUrl,
       userName: values.userName,
   ***REMOVED***);
 
@@ -73,7 +74,7 @@ export default function ProfileOnboardingScreen() {
           <ControlledProfilePhotoUpload
             control={control}
             label="Add profile photo"
-            name="userName"
+            name="userPhotoUrl"
           />
         </View>
 

@@ -30,6 +30,13 @@ export const onboardingProfileSchema = z.object({
       (value: string) => value.length === 0 || socialNetworkPattern.test(value),
       'Social network must be an @handle or a valid URL',
     ),
+  userPhotoUrl: z
+    .string()
+    .trim()
+    .refine(
+      (value: string) => value.length === 0 || z.string().url().safeParse(value).success,
+      'Profile photo URL must be a valid URL',
+    ),
   userName: z
     .string()
     .trim()

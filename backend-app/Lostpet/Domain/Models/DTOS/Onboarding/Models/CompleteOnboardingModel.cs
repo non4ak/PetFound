@@ -14,6 +14,8 @@ public class CompleteOnboardingModel
 
     public string? SocialNetwork { get; set; }
 
+    public string? UserPhotoUrl { get; set; }
+
     public NotificationChannelPreference? NotificationChannelPreference { get; set; }
 
     public string? PetPhotoUrl { get; set; }
