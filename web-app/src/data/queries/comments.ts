@@ -15,8 +15,12 @@ export async function getCommentsByAnnouncementId(id: number) {
     return response.data.data;
 }
 
-export async function getAllComments() {
-    const response = await axiosClient.get<GetCommentsRespond<PagedList<CommentSecondDto>>>(`/admin/comments`);
+export async function getAllComments(announcementId: number | null, pageNumber: number, pageSize: number, isDeleted: boolean | null) {
+    const response = await axiosClient.get<GetCommentsRespond<PagedList<CommentSecondDto>>>(`/admin/comments`, {params:{announcementId: announcementId,pageNumber: pageNumber, pageSize: pageSize, isDeleted: isDeleted}});
 
     return response.data.data;
+}
+
+export async function deleteComment(announcementId: number, commentId: number) {
+    return await axiosClient.delete(`/admin/announcements/${announcementId}/comments/${commentId}`);
 }
