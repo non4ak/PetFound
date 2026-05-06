@@ -1,18 +1,31 @@
-import React, { startTransition } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import React, { startTransition } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  type ImageSourcePropType,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Typography } from '@/components/ui/Typography';
-import { useAuth } from '@/contexts/AuthContext';
-import { useLoginMutation } from '@/data/hooks/auth';
-import { getApiErrorMessage } from '@/utils/apiError';
-import { loginSchema, type LoginFormValues } from '@/utils/validations/authSchema';
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Typography } from "@/components/ui/Typography";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLoginMutation } from "@/data/hooks/auth";
+import { getApiErrorMessage } from "@/utils/apiError";
+import {
+  loginSchema,
+  type LoginFormValues,
+} from "@/utils/validations/authSchema";
+
+const GOOGLE_LOGO_SOURCE: ImageSourcePropType = require("@/assets/images/google-logo.png");
 
 export default function LoginScreen() {
   const auth = useAuth();
@@ -25,8 +38,8 @@ export default function LoginScreen() {
     setError,
   } = useForm<LoginFormValues>({
     defaultValues: {
-      login: '',
-      password: '',
+      login: "",
+      password: "",
     },
     resolver: zodResolver(loginSchema),
   });
@@ -41,11 +54,13 @@ export default function LoginScreen() {
       await auth.completeSignIn(session);
 
       startTransition(() => {
-        router.replace(auth.isOnboardingActive ? '/(onboarding)/profile' : '/(tabs)');
+        router.replace(
+          auth.isOnboardingActive ? "/(onboarding)/profile" : "/(tabs)",
+        );
       });
     } catch (error) {
-      setError('root', {
-        message: getApiErrorMessage(error, 'Unable to sign in right now.'),
+      setError("root", {
+        message: getApiErrorMessage(error, "Unable to sign in right now."),
       });
     }
   };
@@ -53,7 +68,7 @@ export default function LoginScreen() {
   return (
     <SafeAreaView className="flex-1 bg-alt-bg">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <ScrollView
@@ -70,9 +85,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
 
           <View className="mb-8">
-            <Typography variant="title-large">
-              Welcome{'\n'}back
-            </Typography>
+            <Typography variant="title-large">Welcome{"\n"}back</Typography>
             <Typography variant="body-regular" className="mt-2">
               Sign in to continue helping reunite lost pets.
             </Typography>
@@ -89,7 +102,6 @@ export default function LoginScreen() {
                   errorText={errors.login?.message}
                   keyboardType="email-address"
                   label="Email or username"
-                  leadingIcon={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   placeholder="Enter your email or username"
@@ -106,7 +118,6 @@ export default function LoginScreen() {
                   errorText={errors.password?.message}
                   isPassword
                   label="Password"
-                  leadingIcon={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   placeholder="Enter your password"
@@ -127,7 +138,7 @@ export default function LoginScreen() {
               disabled={loginMutation.isPending}
               errorText={errors.root?.message}
               fullWidth
-              label={loginMutation.isPending ? 'Signing In...' : 'Log In'}
+              label={loginMutation.isPending ? "Signing In..." : "Log In"}
               onPress={handleSubmit(handleLogin)}
               size="lg"
               variant="primary"
@@ -147,15 +158,13 @@ export default function LoginScreen() {
               disabled
               fullWidth
               label="Continue with Google"
-              leadingIcon={<Ionicons name="logo-google" size={20} color="#0F172A" />}
-              size="md"
-              variant="outline"
-            />
-            <Button
-              disabled
-              fullWidth
-              label="Continue with Apple"
-              leadingIcon={<Ionicons name="logo-apple" size={20} color="#0F172A" />}
+              leadingIcon={
+                <Image
+                  resizeMode="contain"
+                  source={GOOGLE_LOGO_SOURCE}
+                  style={{ height: 20, width: 20 }}
+                />
+              }
               size="md"
               variant="outline"
             />
@@ -164,10 +173,13 @@ export default function LoginScreen() {
           <View className="flex-1" />
           <View className="mt-8 flex-row items-center justify-center">
             <Typography variant="body-small" className="text-neutral-400">
-              Don&apos;t have an account?{' '}
+              Don&apos;t have an account?{" "}
             </Typography>
-            <TouchableOpacity onPress={() => router.replace('/(auth)/signup')}>
-              <Typography variant="body-small" className="font-bold text-primary">
+            <TouchableOpacity onPress={() => router.replace("/(auth)/signup")}>
+              <Typography
+                variant="body-small"
+                className="font-bold text-primary"
+              >
                 Sign Up
               </Typography>
             </TouchableOpacity>
