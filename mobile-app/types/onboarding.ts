@@ -30,6 +30,7 @@ export enum OnboardingPetAgeCategory {
 export interface UpdateOnboardingProfileRequest {
   userName: string;
   phoneNumber: string;
+  userPhotoUrl?: string;
   socialNetwork?: string;
 }
 
@@ -65,6 +66,7 @@ export interface SubmitOnboardingRequest {
   country: string;
   phoneNumber: string;
   userName: string;
+  userPhotoUrl?: string;
   socialNetwork?: string;
   notificationChannelPreference?: NotificationChannelPreference;
   petName?: string;
@@ -82,6 +84,7 @@ export interface OnboardingProfileStepData {
   isPhonePublic: boolean;
   phoneNumber: string;
   socialNetwork: string;
+  userPhotoUrl: string;
   userName: string;
 }
 

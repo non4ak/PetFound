@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -8,11 +8,19 @@ import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
 import { useLostPetFlow } from "@/contexts/LostPetFlowContext";
+import { createAnnouncementQuery } from "@/data/queries/announcements";
+import {
+  AnnouncementPetStatus,
+  type CreateAnnouncementRequest,
+} from "@/types/announcement";
+import { toAnnouncementDateTimeOffset } from "@/utils/announcementDate";
+import { getApiErrorMessage } from "@/utils/apiError";
 import { getPetSexLabel, getPetSizeLabel, getPetTypeLabel } from "@/utils/petLabels";
 
 export default function LostPetPreviewScreen() {
   const router = useRouter();
   const { details, resetDraft, selectedPet } = useLostPetFlow();
+  const [isPosting, setIsPosting] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectedPet === null) {
@@ -24,9 +32,45 @@ export default function LostPetPreviewScreen() {
     return null;
 ***REMOVED***
 
-  const handlePostPress = (): void => {
-    resetDraft();
-    router.replace("/(tabs)");
+  const handlePostPress = async (): Promise<void> => {
+    if (selectedPet === null) {
+      return;
+  ***REMOVED***
+
+    setIsPosting(true);
+
+    try {
+      const request: CreateAnnouncementRequest = {
+        approximateTime: details.timeApproximate.trim().length > 0
+          ? details.timeApproximate.trim()
+          : "Unknown",
+        breed: selectedPet.breed.trim(),
+        city: details.city.trim(),
+        country: details.country.trim(),
+        isPhonePublic: details.showPhone,
+        isTelegramActive: details.showTelegram,
+        lastDateWhenSeen: toAnnouncementDateTimeOffset(details.dateLastSeen),
+        nearLandmark: details.city.trim(),
+        petDetails: details.description.trim(),
+        petName: selectedPet.petName.trim(),
+        petPhotoUrl: selectedPet.imageUrl.trim(),
+        petSex: selectedPet.petSex,
+        petSize: selectedPet.petSize,
+        petStatus: AnnouncementPetStatus.Lost,
+        petType: selectedPet.petType,
+    ***REMOVED***;
+
+      await createAnnouncementQuery(request);
+      resetDraft();
+      router.replace("/(tabs)");
+  ***REMOVED*** catch (error: unknown) {
+      Alert.alert(
+        "Post failed",
+        getApiErrorMessage(error, "Could not create announcement."),
+      );
+  ***REMOVED*** finally {
+      setIsPosting(false);
+  ***REMOVED***
 ***REMOVED***;
 
   const badges: string[] = [getPetTypeLabel(selectedPet.petType)];
@@ -41,7 +85,8 @@ export default function LostPetPreviewScreen() {
       footer={
         <Button
           fullWidth
-          label="Post"
+          disabled={isPosting}
+          label={isPosting ? "Posting..." : "Post"}
           onPress={handlePostPress}
           size="md"
           trailingIcon={
@@ -64,9 +109,9 @@ export default function LostPetPreviewScreen() {
           >
             Preview
           </Typography>
-          <TouchableOpacity onPress={handlePostPress}>
+          <TouchableOpacity disabled={isPosting} onPress={handlePostPress}>
             <Typography variant="body-small" className="text-primary">
-              Post
+              {isPosting ? "Posting..." : "Post"}
             </Typography>
           </TouchableOpacity>
         </View>

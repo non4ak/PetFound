@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 
 import { ProfileSectionCard } from "@/components/profile/ProfileSectionCard";
 import { VisibilityToggle } from "@/components/profile/VisibilityToggle";
@@ -98,8 +99,16 @@ export default function ProfileScreen() {
       <View className="rounded-lg bg-white px-6 py-12">
         <View className="flex-row items-center gap-5">
           <View className="flex-1 items-center justify-center">
-            <View className="h-[80px] w-[80px] items-center justify-center rounded-full border-2 border-primary">
-              <Ionicons name="person-outline" size={22} color="#D89F35" />
+            <View className="h-[80px] w-[80px] items-center justify-center overflow-hidden rounded-full border-2 border-primary">
+              {profile?.userPhotoUrl !== undefined && profile.userPhotoUrl.trim().length > 0 ? (
+                <Image
+                  source={{ uri: profile.userPhotoUrl }}
+                  style={{ height: 80, width: 80 }}
+                  contentFit="cover"
+                />
+              ) : (
+                <Ionicons name="person-outline" size={22} color="#D89F35" />
+              )}
             </View>
           </View>
 
