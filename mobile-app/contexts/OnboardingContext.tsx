@@ -30,6 +30,7 @@ function createInitialOnboardingDraft(): OnboardingDraft {
       isPhonePublic: true,
       phoneNumber: '',
       socialNetwork: '',
+      userPhotoUrl: '',
       userName: '',
     },
     stayInLoop: null,
