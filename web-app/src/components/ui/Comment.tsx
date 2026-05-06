@@ -1,15 +1,19 @@
 import { getAddressByCoords } from "@/data/queries/address";
 import type { Address } from "@/types/address";
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/Button";
+import type { deleteComment } from "@/data/queries/comments";
 
 interface CommentProps {
     comment: any;
-    depth: number;
+    depth?: number;
     author?: any;
     showId?: boolean;
+    manageMode?: boolean;
+    deleteComment?: (announcementId: number, commentId: number) => Promise<void>;
 }
 
-export const Comment = ({ comment, depth, author, showId = false }: CommentProps) => {
+export const Comment = ({ comment, depth = 0, author, showId = false, manageMode = false, deleteComment }: CommentProps) => {
     const [address, setAddress] = useState<Address | null>(null);
 
     async function fetchAddress() {
@@ -43,10 +47,36 @@ export const Comment = ({ comment, depth, author, showId = false }: CommentProps
             </p>
             {comment.isDeleted && <p className="text-red-600 text-sm">Deleted at {new Date(comment.deletedAt).toLocaleString()}</p>}
             {showId && <p className="text-gray-600 text-sm">Comment ID: {comment.id}</p>}
-            <p className="text-gray-900">{comment.commentMessage}</p>
+
+            <p 
+                className={comment.isDeleted ? "text-gray-600 text-sm italic mt-1" : "text-gray-900"}
+            >
+                {comment.commentMessage}
+            </p>
+            
             {comment.latitude && comment.longitude && (
                 <p className="text-gray-600 text-sm mt-1">{address?.address.road}{address?.address.house_number ? `, ${address?.address.house_number}` : ''}</p>
-            )} 
+            )}
+
+            {manageMode && (
+                comment.isDeleted ? (null) : (
+                    <div className="flex gap-2 mt-2 mb-1">
+                        <Button
+                            variant="edit"
+                            size="sm">
+                            Edit
+                        </Button>
+                        <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => deleteComment && deleteComment(comment.announcementId, comment.id)}
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                )
+            )}
+
             {
             comment.replies && comment.replies.map((reply: any) => (
                 <Comment comment={reply} depth={depth + 1} author={comment.author} showId={showId} key={reply.id} />
