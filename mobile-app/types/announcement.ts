@@ -57,3 +57,45 @@ export interface AnnouncementResponse {
   petType: OnboardingPetType;
   petTypeLabel: string;
 }
+
+export type AnnouncementQueryFilter = {
+  search?: string;
+  petStatus?: number;
+  petType?: number;
+  city?: string;
+  country?: string;
+  createdFrom?: string;
+  createdTo?: string;
+  isActive?: boolean;
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
+  page?: number;
+  pageSize?: number;
+};
+
+export type Announcement = {
+  id: number;
+  petId: number;
+  petStatus: AnnouncementPetStatus;
+  petStatusLabel: string;
+  petType: OnboardingPetType;
+  petTypeLabel: string;
+  country: string;
+  city: string;
+  isActive: boolean;
+  createdOn: string;
+  reporterUserId: number;
+  reporterUserName: string;
+  reporterEmail: string;
+}
+
+export type AnnouncementQueryFilterResponse = {
+  message: string;
+  data: {
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    totalCount: number;
+    items: Announcement[]
+  }
+}

@@ -3,6 +3,8 @@ import type { ApiResponse } from "@/types/auth";
 import type {
   AnnouncementResponse,
   CreateAnnouncementRequest,
+  AnnouncementQueryFilter,
+  AnnouncementQueryFilterResponse
 } from "@/types/announcement";
 
 export async function createAnnouncementQuery(
@@ -15,3 +17,24 @@ export async function createAnnouncementQuery(
 
   return response.data.data;
 }
+
+export async function getAllAnnouncements(query?: AnnouncementQueryFilter) {
+  const params: Record<string, any> = {};
+
+  if (query) {
+    Object.entries(query).forEach(([key, value]) => {
+      // Exclude undefined, null, and empty strings
+      if (value !== undefined && value !== null && value !== "") {
+        params[key] = value;
+      }
+    });
+  }
+
+  const response = await axiosClient.get<AnnouncementQueryFilterResponse>(
+    `/announcements`,
+    { params }
+  );
+  return response.data;
+}
+
+
