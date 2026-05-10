@@ -1,4 +1,5 @@
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Configurations;
 
@@ -18,6 +19,9 @@ public static class ConfigureApp
 
         using (var scope = app.Services.CreateScope())
         {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            await db.Database.MigrateAsync();
+
             var seeder = new DatabaseSeeder(scope);
             await seeder.SeedAsync();
         }

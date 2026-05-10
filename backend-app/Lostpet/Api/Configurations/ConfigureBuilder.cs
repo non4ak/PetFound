@@ -8,12 +8,16 @@ using Application.AdminAnnouncements.Interfaces;
 using Application.AdminAnnouncements.Services;
 using Application.AdminComments.Interfaces;
 using Application.AdminComments.Services;
+using Application.AdminStatistics.Interfaces;
+using Application.AdminStatistics.Services;
 using Application.AdminUsers.Interfaces;
 using Application.AdminUsers.Services;
 using Application.Auth.Interfaces;
 using Application.Auth.Services;
 using Application.Comments.Interfaces;
 using Application.Comments.Services;
+using Application.Geotags.Interfaces;
+using Application.Geotags.Services;
 using Application.Meta.Interfaces;
 using Application.Meta.Services;
 using Application.Onboarding.Interfaces;
@@ -139,12 +143,14 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IAdminUserService, AdminUserService>();
         builder.Services.AddScoped<IAdminAnnouncementService, AdminAnnouncementService>();
         builder.Services.AddScoped<IAdminCommentService, AdminCommentService>();
+        builder.Services.AddScoped<IAdminStatisticsService, AdminStatisticsService>();
         builder.Services.AddScoped<IOnboardingService, OnboardingService>();
         builder.Services.AddScoped<IPetService, PetService>();
         builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
         builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
         builder.Services.AddScoped<IEnumMetadataService, EnumMetadataService>();
         builder.Services.AddScoped<ICommentService, CommentService>();
+        builder.Services.AddScoped<IGeotagService, GeotagService>();
     }
 
     private static void ApplyAzureStorageEnvironmentOverrides(
