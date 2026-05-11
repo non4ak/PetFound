@@ -34,6 +34,8 @@ export default function RootLayout() {
               <Stack.Screen name="found-pet" options={{ headerShown: false }} />
               <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
               <Stack.Screen name="create-pet" options={{ headerShown: false }} />
+              <Stack.Screen name="view-pet" options={{ headerShown: false }} />
+              <Stack.Screen name="edit-pet" options={{ headerShown: false }} />
               <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
             </Stack>
             <StatusBar style="auto" />
