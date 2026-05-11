@@ -5,14 +5,13 @@ export enum NotificationChannelPreference {
 }
 
 export enum OnboardingPetType {
-  Dog = 0,
-  Cat = 1,
-  Other = 2,
+  Cat = 0,
+  Dog = 1,
 }
 
 export enum OnboardingPetSex {
-  Male = 0,
-  Female = 1,
+  Male = 1,
+  Female = 2,
 }
 
 export enum OnboardingPetSize {
@@ -22,9 +21,10 @@ export enum OnboardingPetSize {
 }
 
 export enum OnboardingPetAgeCategory {
-  Young = 0,
-  Adult = 1,
-  Senior = 2,
+  Baby = 0,
+  Young = 1,
+  Adult = 2,
+  Senior = 3,
 }
 
 export interface UpdateOnboardingProfileRequest {
