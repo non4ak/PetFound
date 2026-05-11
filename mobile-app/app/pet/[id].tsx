@@ -73,26 +73,50 @@ export default function PetDetailsScreen() {
     router.back();
   };
 
-  const handlePickImage = async () => {
-    const { status } =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission needed",
-        "Please allow access to your photo library.",
-      );
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      quality: 0.8,
-    });
-
-    if (!result.canceled) {
-      setSelectedImage(result.assets[0]);
-    }
+  const handlePickImage = () => {
+    Alert.alert("Add photo", "Choose how you want to add a photo.", [
+      {
+        text: "Take photo",
+        onPress: async () => {
+          const { granted } =
+            await ImagePicker.requestCameraPermissionsAsync();
+          if (!granted) {
+            Alert.alert(
+              "Permission needed",
+              "Please allow camera access in your device settings.",
+            );
+            return;
+          }
+          const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ["images"],
+            allowsEditing: true,
+            quality: 0.8,
+          });
+          if (!result.canceled) setSelectedImage(result.assets[0]);
+        },
+      },
+      {
+        text: "Choose from gallery",
+        onPress: async () => {
+          const { granted } =
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (!granted) {
+            Alert.alert(
+              "Permission needed",
+              "Please allow photo library access in your device settings.",
+            );
+            return;
+          }
+          const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ["images"],
+            allowsEditing: true,
+            quality: 0.8,
+          });
+          if (!result.canceled) setSelectedImage(result.assets[0]);
+        },
+      },
+      { text: "Cancel", style: "cancel" },
+    ]);
   };
 
   const handleSubmitComment = async () => {
