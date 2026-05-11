@@ -9,7 +9,7 @@ export type LostPetDetails = AnnouncementDetails;
 
 export interface RegisteredPetCard {
   breed: string;
-  id: string;
+  id: number;
   imageUrl: string;
   isChipped: boolean;
   petName: string;
@@ -20,5 +20,5 @@ export interface RegisteredPetCard {
 
 export interface LostPetDraft {
   details: LostPetDetails;
-  selectedPetId: string | null;
+  selectedPetId: number | null;
 }
