@@ -3703,3 +3703,35 @@ WHERE NOT (c."IsDeleted") AND c."CommentedAt" >= @__fromDay_0 AND c."CommentedAt
 2026-05-10 09:08:51.136 -04:00 [INF] Executed endpoint 'Api.Controllers.AdminStatisticsController.GetTimeseriesAsync (Api)'
 2026-05-10 09:08:51.160 -04:00 [INF] Request finished HTTP/1.1 GET http://localhost:5148/admin/statistics/timeseries - 200 null application/json; charset=utf-8 723.2751ms
 2026-05-10 09:10:16.126 -04:00 [INF] Application is shutting down...
+2026-05-11 15:00:23.942 -04:00 [INF] Executed DbCommand (51ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-11 15:00:24.498 -04:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2026-05-11 15:00:24.539 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-05-11 15:00:24.549 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-11 15:00:24.566 -04:00 [INF] No migrations were applied. The database is already up to date.
+2026-05-11 15:00:25.012 -04:00 [INF] Executed DbCommand (19ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-05-11 15:00:25.123 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedName_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConcurrencyStamp", a."Name", a."NormalizedName"
+FROM "AspNetRoles" AS a
+WHERE a."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2026-05-11 15:00:25.299 -04:00 [INF] User profile is available. Using 'C:\Users\Ivan\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-11 15:00:25.433 -04:00 [INF] Now listening on: http://localhost:5148
+2026-05-11 15:00:25.439 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-11 15:00:25.444 -04:00 [INF] Hosting environment: Development
+2026-05-11 15:00:25.450 -04:00 [INF] Content root path: C:\Study\ThirdSec\Course\lostpet\backend-app\Lostpet\Api
