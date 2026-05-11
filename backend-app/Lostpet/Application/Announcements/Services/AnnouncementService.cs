@@ -134,13 +134,29 @@ public class AnnouncementService : IAnnouncementService
         });
     }
 
-    public async Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
+    public Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
     {
         var query = _context.Announcements
             .AsNoTracking()
             .Include(a => a.Pet)
             .AsQueryable();
 
+        return BuildPagedAnnouncementsAsync(query, pageNumber, pageSize, queryModel);
+    }
+
+    public Task<Result<IPagedList<AnnouncementResponse>>> GetMyPagedAsync(int userId, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
+    {
+        var query = _context.Announcements
+            .AsNoTracking()
+            .Include(a => a.Pet)
+            .Where(a => a.ReporterUserId == userId)
+            .AsQueryable();
+
+        return BuildPagedAnnouncementsAsync(query, pageNumber, pageSize, queryModel);
+    }
+
+    private async Task<Result<IPagedList<AnnouncementResponse>>> BuildPagedAnnouncementsAsync(IQueryable<Announcement> query, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
+    {
         if (!string.IsNullOrWhiteSpace(queryModel.Search))
         {
             var search = queryModel.Search.Trim().ToLower();

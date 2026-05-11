@@ -99,6 +99,24 @@ public class AnnouncementsController : ControllerBase
         );
     }
 
+    [HttpGet("mine")]
+    public async Task<IActionResult> GetMineAsync([FromQuery] AnnouncementListQueryModel query, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
+    {
+        var userIdResult = TryGetCurrentUserId();
+        if (userIdResult is null)
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+        }
+
+        var result = await _announcementService.GetMyPagedAsync(userIdResult.Value, pageNumber, pageSize, query);
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: true,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateAnnouncementModel model)
     {

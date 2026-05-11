@@ -11,6 +11,8 @@ public interface IAnnouncementService
 
     Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int pageNumber, int pageSize, AnnouncementListQueryModel queryModel);
 
+    Task<Result<IPagedList<AnnouncementResponse>>> GetMyPagedAsync(int userId, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel);
+
     Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int id);
 
     Task<Result<bool>> UpdateAsync(int userId, int id, UpdateAnnouncementModel model);
