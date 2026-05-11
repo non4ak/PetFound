@@ -19,7 +19,8 @@ public class EnumMetadataService : IEnumMetadataService
             AnnouncementPetStatuses = MapEnum<AnnouncementPetStatus>(),
             NotificationChannelPreferences = MapEnum<NotificationChannelPreference>(),
             NotificationTypes = MapEnum<NotificationType>(),
-            MatchResultStatuses = MapEnum<MatchResultStatus>()
+            MatchResultStatuses = MapEnum<MatchResultStatus>(),
+            GeotagCategories = MapEnum<GeotagCategory>()
         };
 
         return Task.FromResult(Result<EnumsResponse>.Success(response));

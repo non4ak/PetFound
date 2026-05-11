@@ -17,6 +17,8 @@ public class EnumsResponse
     public List<EnumOptionResponse> NotificationTypes { get; set; } = new();
 
     public List<EnumOptionResponse> MatchResultStatuses { get; set; } = new();
+
+    public List<EnumOptionResponse> GeotagCategories { get; set; } = new();
 }
 
 public class EnumOptionResponse
