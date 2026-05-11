@@ -12,9 +12,21 @@ public class AnnouncementResponse
 
     public string PetStatusLabel { get; set; } = string.Empty;
 
+    public string PetName { get; set; } = string.Empty;
+
     public PetType PetType { get; set; }
 
     public string PetTypeLabel { get; set; } = string.Empty;
+
+    public string? Breed { get; set; }
+
+    public PetSex PetSex { get; set; }
+
+    public string PetSexLabel { get; set; } = string.Empty;
+
+    public PetSize PetSize { get; set; }
+
+    public string PetSizeLabel { get; set; } = string.Empty;
 
     public string? PetPhotoUrl { get; set; }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -12,9 +12,10 @@ import { useLostPetFlow } from "@/contexts/LostPetFlowContext";
 import type { RegisteredPetCard } from "@/types/lost-pet";
 
 function getPetMetaText(pet: RegisteredPetCard): string {
-  return `${pet.breed} · ${pet.petSex === 0 ? "Male" : "Female"} · ${
-    pet.petSize === 0 ? "Small" : pet.petSize === 1 ? "Medium" : "Large"
-  }`;
+  const sexLabel = pet.petSex === 1 ? "Male" : pet.petSex === 2 ? "Female" : null;
+  const sizeLabel =
+    pet.petSize === 0 ? "Small" : pet.petSize === 1 ? "Medium" : "Large";
+  return [pet.breed, sexLabel, sizeLabel].filter(Boolean).join(" · ");
 }
 
 function RegisteredPetOption({
@@ -72,7 +73,7 @@ function RegisteredPetOption({
 
 export default function LostPetSelectPetScreen() {
   const router = useRouter();
-  const { registeredPets, selectedPetId, selectPet } = useLostPetFlow();
+  const { isLoadingPets, registeredPets, selectedPetId, selectPet } = useLostPetFlow();
 
   return (
     <AppScreenScaffold
@@ -112,16 +113,29 @@ export default function LostPetSelectPetScreen() {
         subtitle="Select from your registered pets"
       />
 
-      <View className="gap-3">
-        {registeredPets.map((pet: RegisteredPetCard) => (
-          <RegisteredPetOption
-            key={pet.id}
-            isSelected={pet.id === selectedPetId}
-            onPress={() => selectPet(pet.id)}
-            pet={pet}
-          />
-        ))}
-      </View>
+      {isLoadingPets ? (
+        <View className="py-8 items-center">
+          <ActivityIndicator size="large" color="#D89F35" />
+        </View>
+      ) : registeredPets.length === 0 ? (
+        <View className="py-8 items-center gap-2">
+          <Ionicons name="paw-outline" size={40} color="#C4C4C4" />
+          <Typography variant="body-small" className="text-center text-secondary-text">
+            You have no registered pets yet.{"\n"}Add one below.
+          </Typography>
+        </View>
+      ) : (
+        <View className="gap-3">
+          {registeredPets.map((pet: RegisteredPetCard) => (
+            <RegisteredPetOption
+              key={pet.id}
+              isSelected={pet.id === selectedPetId}
+              onPress={() => selectPet(pet.id)}
+              pet={pet}
+            />
+          ))}
+        </View>
+      )}
 
       <View className="mt-5 border-t border-[#E5E7EB] pt-5">
         <TouchableOpacity

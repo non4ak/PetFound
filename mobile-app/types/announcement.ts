@@ -34,6 +34,7 @@ export interface CreateAnnouncementRequest {
   nearLandmark: string;
   petAgeCategory?: OnboardingPetAgeCategory;
   petDetails: string;
+  petId?: number;
   petName?: string;
   petPhotoUrl?: string;
   petSex?: OnboardingPetSex;
@@ -91,7 +92,7 @@ export type AnnouncementQueryFilter = {
   isActive?: boolean;
   sortBy?: string;
   sortDirection?: 'asc' | 'desc';
-  page?: number;
+  pageNumber?: number;
   pageSize?: number;
 };
 
@@ -100,17 +101,23 @@ export type Announcement = {
   petId: number;
   petStatus: number;
   petStatusLabel: string;
+  petName: string;
   petType: number;
   petTypeLabel: string;
-  petPhotoUrl: string;
+  breed: string | null;
+  petSex: number;
+  petSexLabel: string;
+  petSize: number;
+  petSizeLabel: string;
+  petPhotoUrl: string | null;
   country: string;
   city: string;
+  nearLandmark: string;
   lastDateWhenSeen: string;
   approximateTime: string;
   petDetails: string;
   isPhonePublic: boolean;
   isTelegramActive: boolean;
-  nearLandmark: string;
   lastSeenLatitude: number;
   lastSeenLongitude: number;
   isActive: boolean;
