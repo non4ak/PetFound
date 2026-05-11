@@ -34,6 +34,7 @@ export interface CreateAnnouncementRequest {
   nearLandmark: string;
   petAgeCategory?: OnboardingPetAgeCategory;
   petDetails: string;
+  petId?: number;
   petName?: string;
   petPhotoUrl?: string;
   petSex?: OnboardingPetSex;
