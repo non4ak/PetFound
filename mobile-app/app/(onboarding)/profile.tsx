@@ -83,9 +83,6 @@ export default function ProfileOnboardingScreen() {
           autoCorrect={false}
           control={control}
           label="Username"
-          leadingIcon={
-            <Ionicons name="person-outline" size={20} color="#9CA3AF" />
-        ***REMOVED***
           placeholder="@petlover"
           name="userName"
         />

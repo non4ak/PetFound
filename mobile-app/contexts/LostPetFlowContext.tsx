@@ -5,6 +5,7 @@ import {
   OnboardingPetSize,
   OnboardingPetType,
 } from '@/types/onboarding';
+import { formatCurrentAnnouncementDate } from '@/utils/announcementDate';
 import type {
   LostPetDetails,
   RegisteredPetCard,
@@ -49,7 +50,7 @@ function createInitialDetails(): LostPetDetails {
   return {
     city: 'Kharkiv',
     country: 'Ukraine',
-    dateLastSeen: '12/10/2024',
+    dateLastSeen: formatCurrentAnnouncementDate(),
     description:
       'Distinctive markings, collar colour, last known behaviour, and anything else that can help identify your pet.',
     showPhone: true,
