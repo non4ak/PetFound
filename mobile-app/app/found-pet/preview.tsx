@@ -3,6 +3,7 @@ import { Alert, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { AnnouncementPreviewCard } from "@/components/announcement/AnnouncementPreviewCard";
 import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
@@ -20,6 +21,7 @@ import { getPetSexLabel, getPetSizeLabel, getPetTypeLabel } from "@/utils/petLab
 
 export default function FoundPetPreviewScreen() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { details, info, photoUri, resetDraft } = useFoundPetFlow();
   const [isPosting, setIsPosting] = useState<boolean>(false);
 
@@ -58,6 +60,7 @@ export default function FoundPetPreviewScreen() {
     ***REMOVED***;
 
       await createAnnouncementQuery(request);
+      await queryClient.invalidateQueries({ queryKey: ["announcements"] });
       resetDraft();
       router.replace("/(tabs)");
   ***REMOVED*** catch (error: unknown) {
