@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Image, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { AnnouncementPreviewCard } from "@/components/announcement/AnnouncementPreviewCard";
 import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
@@ -19,6 +20,7 @@ import { getPetSexLabel, getPetSizeLabel, getPetTypeLabel } from "@/utils/petLab
 
 export default function LostPetPreviewScreen() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { details, resetDraft, selectedPet } = useLostPetFlow();
   const [isPosting, setIsPosting] = useState<boolean>(false);
 
@@ -44,23 +46,26 @@ export default function LostPetPreviewScreen() {
         approximateTime: details.timeApproximate.trim().length > 0
           ? details.timeApproximate.trim()
           : "Unknown",
-        breed: selectedPet.breed.trim(),
         city: details.city.trim(),
         country: details.country.trim(),
         isPhonePublic: details.showPhone,
         isTelegramActive: details.showTelegram,
         lastDateWhenSeen: toAnnouncementDateTimeOffset(details.dateLastSeen),
         nearLandmark: details.city.trim(),
-        petDetails: details.description.trim(),
+        petDetails: details.description.trim().length > 0
+          ? details.description.trim()
+          : "No additional details provided.",
         petName: selectedPet.petName.trim(),
-        petPhotoUrl: selectedPet.imageUrl.trim(),
-        petSex: selectedPet.petSex,
-        petSize: selectedPet.petSize,
         petStatus: AnnouncementPetStatus.Lost,
         petType: selectedPet.petType,
+        petSex: selectedPet.petSex,
+        petSize: selectedPet.petSize,
+        ...(selectedPet.breed.trim().length > 0 ? { breed: selectedPet.breed.trim() } : {}),
+        ...(selectedPet.imageUrl.trim().length > 0 ? { petPhotoUrl: selectedPet.imageUrl.trim() } : {}),
       };
 
       await createAnnouncementQuery(request);
+      await queryClient.invalidateQueries({ queryKey: ["announcements"] });
       resetDraft();
       router.replace("/(tabs)");
     } catch (error: unknown) {
