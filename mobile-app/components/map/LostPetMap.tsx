@@ -15,18 +15,21 @@ cssInterop(MapView, {
 });
 
 interface LostPetMapProps {
-  markers: readonly PetMapMarkerData[];
-  onMarkerPress: (marker: PetMapMarkerData) => void;
+  markers: (PetMapMarkerData | null)[];
+  onMarkerPress: (id: number) => void;
   userLocationCoordinate: LatLng;
+  mapRef?: React.RefObject<any>;
 }
 
 export function LostPetMap({
   markers,
   onMarkerPress,
   userLocationCoordinate,
+  mapRef,
 }: LostPetMapProps): React.JSX.Element {
   return (
     <MapView
+      ref={mapRef}
       className="flex-1"
       customMapStyle={CUSTOM_MAP_STYLE}
       initialRegion={INITIAL_REGION}
@@ -39,9 +42,18 @@ export function LostPetMap({
     >
       <UserLocationMarker coordinate={userLocationCoordinate} />
 
-      {markers.map((marker: PetMapMarkerData) => (
-        <PetMapMarker key={marker.id} marker={marker} onPress={onMarkerPress} />
-      ))}
+      {markers.map((marker: PetMapMarkerData | null) => {
+        if (!marker) {
+          return null;
+      ***REMOVED***
+        return (
+          <PetMapMarker
+            key={marker.id}
+            marker={marker}
+            onPress={onMarkerPress}
+          />
+        );
+    ***REMOVED***)}
     </MapView>
   );
 }

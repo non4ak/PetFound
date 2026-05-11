@@ -7,38 +7,35 @@ import type { MapFilterChipData } from "../../types/map.types";
 
 interface MapTopOverlayProps {
   filters: readonly MapFilterChipData[];
-  onSearchQueryChange: (value: string) => void;
-  searchQuery: string;
+  onPlaceSelected: (location: { lat: number; lng: number } | null) => void;
   topInset: number;
 }
 
 export function MapTopOverlay({
   filters,
-  onSearchQueryChange,
-  searchQuery,
+  onPlaceSelected,
   topInset,
 }: MapTopOverlayProps): React.JSX.Element {
   return (
     <View
-      className="absolute inset-x-0 top-0"
+      className="absolute inset-x-0 top-0 z-50"
       pointerEvents="box-none"
-      style={{ paddingTop: topInset + 4 }}
     >
-      <MapSearchBar
-        onSearchQueryChange={onSearchQueryChange}
-        searchQuery={searchQuery}
-      />
+      <View pointerEvents="box-none" style={{ marginTop: topInset + 60 }}>
+        <ScrollView
+          contentContainerClassName="gap-2 px-4 pb-2"
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        >
+          {filters.map((chip: MapFilterChipData) => (
+            <MapFilterChip chip={chip} key={chip.id} />
+          ))}
+        </ScrollView>
+      </View>
 
-      <ScrollView
-        className="pt-3"
-        contentContainerClassName="gap-2 px-4 pb-2"
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
-        {filters.map((chip: MapFilterChipData) => (
-          <MapFilterChip chip={chip} key={chip.id} />
-        ))}
-      </ScrollView>
+      <View className="absolute inset-x-0" pointerEvents="box-none" style={{ top: topInset + 4 }}>
+        <MapSearchBar onPlaceSelected={onPlaceSelected} />
+      </View>
     </View>
   );
 }

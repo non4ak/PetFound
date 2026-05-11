@@ -43,19 +43,41 @@ export interface CreateAnnouncementRequest {
 }
 
 export interface AnnouncementResponse {
-  city?: string;
-  country?: string;
-  createdOn: string;
-  id: number;
-  isActive: boolean;
-  lastSeenLatitude?: number;
-  lastSeenLongitude?: number;
-  petId: number;
-  petPhotoUrl?: string;
-  petStatus: AnnouncementPetStatus;
-  petStatusLabel: string;
-  petType: OnboardingPetType;
-  petTypeLabel: string;
+  message: string;
+  data: {
+    id: number;
+    petId: number;
+    petStatus: number;
+    petStatusLabel: string;
+    country: string;
+    city: string;
+    lastDateWhenSeen: string;
+    approximateTime: string;
+    petDetails: string;
+    isPhonePublic: boolean;
+    isTelegramActive: boolean;
+    nearLandmark: string;
+    lastSeenLatitude: number;
+    lastSeenLongitude: number;
+    isActive: boolean;
+    createdOn: string;
+    pet: {
+      id: number;
+      petName: string;
+      petType: number;
+      petTypeLabel: string;
+      petSex: number;
+      petSexLabel: string;
+      petSize: number;
+      petSizeLabel: string;
+      petAgeCategory: number;
+      petAgeCategoryLabel: string;
+      breed: string;
+      chipNumber: string;
+      description: string;
+      petPhotoUrl: string;
+  ***REMOVED***
+***REMOVED***
 }
 
 export type AnnouncementQueryFilter = {
@@ -76,17 +98,23 @@ export type AnnouncementQueryFilter = {
 export type Announcement = {
   id: number;
   petId: number;
-  petStatus: AnnouncementPetStatus;
+  petStatus: number;
   petStatusLabel: string;
-  petType: OnboardingPetType;
+  petType: number;
   petTypeLabel: string;
+  petPhotoUrl: string;
   country: string;
   city: string;
+  lastDateWhenSeen: string;
+  approximateTime: string;
+  petDetails: string;
+  isPhonePublic: boolean;
+  isTelegramActive: boolean;
+  nearLandmark: string;
+  lastSeenLatitude: number;
+  lastSeenLongitude: number;
   isActive: boolean;
   createdOn: string;
-  reporterUserId: number;
-  reporterUserName: string;
-  reporterEmail: string;
 }
 
 export type AnnouncementQueryFilterResponse = {

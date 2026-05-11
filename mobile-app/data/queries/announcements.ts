@@ -9,8 +9,8 @@ import type {
 
 export async function createAnnouncementQuery(
   request: CreateAnnouncementRequest,
-): Promise<AnnouncementResponse> {
-  const response = await axiosClient.post<ApiResponse<AnnouncementResponse>>(
+) {
+  const response = await axiosClient.post(
     "/announcements",
     request,
   );
@@ -23,7 +23,6 @@ export async function getAllAnnouncements(query?: AnnouncementQueryFilter) {
 
   if (query) {
     Object.entries(query).forEach(([key, value]) => {
-      // Exclude undefined, null, and empty strings
       if (value !== undefined && value !== null && value !== "") {
         params[key] = value;
     ***REMOVED***
@@ -34,7 +33,16 @@ export async function getAllAnnouncements(query?: AnnouncementQueryFilter) {
     `/announcements`,
     { params }
   );
-  return response.data;
+  return response.data.data;
 }
 
+export async function getAnnouncementById(
+  id: number,
+): Promise<AnnouncementResponse> {
+  const response = await axiosClient.get<AnnouncementResponse>(
+    `/announcements/${id}`,
+  );
+
+  return response.data;
+}
 
