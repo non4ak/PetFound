@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Typography } from "@/components/ui/Typography";
@@ -10,29 +10,55 @@ interface FeedCardProps {
   onPress: () => void;
 }
 
-const STATUS_STYLES: Record<number, { bgClass: string; label: string; textClass: string }> = {
-  0: { bgClass: "bg-[#FFDCE1]", label: "LOST", textClass: "text-[#D95068]" },
-  1: { bgClass: "bg-[#D4EDDA]", label: "FOUND", textClass: "text-[#28A745]" },
+const STATUS_STYLES: Record<number, { bg: string; text: string; label: string }> = {
+  0: { bg: "bg-[#FFE1E2]", text: "text-[#FF4853]", label: "LOST" },
+  1: { bg: "bg-[#D2DBFF]", text: "text-[#5330FF]", label: "FOUND" },
 };
 
-function formatDate(dateStr: string): string {
+const PET_EMOJI: Record<number, string> = {
+  0: "🐱",
+  1: "🐕",
+};
+
+function formatDate(dateStr: string, approxTime?: string): string {
   if (!dateStr) return "";
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return dateStr;
-  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  const base = `${day}/${month}/${year}`;
+  return approxTime?.trim() ? `${base}, ${approxTime.trim()}` : base;
 }
 
 export function FeedCard({ item, onPress }: FeedCardProps) {
   const status = STATUS_STYLES[item.petStatus] ?? STATUS_STYLES[0];
+  const emoji = PET_EMOJI[item.petType] ?? "🐾";
+
+  const subtitle = [item.breed, item.petSexLabel, item.petSizeLabel]
+    .filter((s) => s && s.trim().length > 0 && s !== "Unknown")
+    .join(" · ");
+
+  const location = [item.nearLandmark, item.city]
+    .filter((s) => s && s.trim().length > 0)
+    .join(", ");
 
   return (
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={onPress}
-      className="mb-3 rounded-[16px] border border-[#E6EAF0] bg-white p-4"
+      className="mb-3 rounded-[8px] bg-white p-4"
+      style={{
+        shadowColor: "#F2B84C",
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+        elevation: 3,
+      }}
     >
       <View className="flex-row gap-3">
-        <View className="h-20 w-20 overflow-hidden rounded-[12px] border-2 border-primary bg-[#F5F5F5]">
+        {/* Pet photo */}
+        <View className="h-[100px] w-[100px] items-center justify-center overflow-hidden rounded-[8px] border-2 border-primary bg-background">
           {item.petPhotoUrl ? (
             <Image
               source={{ uri: item.petPhotoUrl }}
@@ -40,60 +66,61 @@ export function FeedCard({ item, onPress }: FeedCardProps) {
               resizeMode="cover"
             />
           ) : (
-            <View className="flex-1 items-center justify-center">
-              <Ionicons name="paw-outline" size={28} color="#C4C4C4" />
-            </View>
+            <Text style={{ fontSize: 48 }}>{emoji}</Text>
           )}
         </View>
 
-        <View className="flex-1 justify-between">
-          <View className="flex-row items-start justify-between gap-2">
+        {/* Info */}
+        <View className="flex-1 justify-center gap-1">
+          <Typography
+            variant="body-medium"
+            className="font-semibold text-[20px] text-heading-text"
+            numberOfLines={1}
+          >
+            {item.petName}
+          </Typography>
+
+          {subtitle.length > 0 && (
             <Typography
-              variant="body-medium"
-              className="flex-1 font-semibold text-heading-text"
+              variant="body-small"
+              className="text-secondary-text"
               numberOfLines={1}
             >
-              {item.petTypeLabel}
+              {subtitle}
             </Typography>
-            <View className={`rounded-full px-3 py-0.5 ${status.bgClass}`}>
-              <Typography
-                variant="body-small"
-                className={`text-[13px] font-semibold ${status.textClass}`}
-              >
-                {status.label}
-              </Typography>
-            </View>
-          </View>
+          )}
 
           <View className="mt-1 flex-row items-center gap-1">
             <Ionicons name="location-outline" size={14} color="#8D8D8D" />
             <Typography
               variant="body-small"
-              className="text-[14px] text-secondary-text"
+              className="flex-1 text-secondary-text"
               numberOfLines={1}
             >
-              {item.city}, {item.country}
+              {location}
             </Typography>
           </View>
 
-          <View className="mt-1 flex-row items-center gap-1">
-            <Ionicons name="calendar-outline" size={14} color="#8D8D8D" />
-            <Typography variant="body-small" className="text-[14px] text-secondary-text">
-              {formatDate(item.lastDateWhenSeen)}
-            </Typography>
-          </View>
+          <Typography variant="body-small" className="text-secondary-text">
+            {formatDate(item.lastDateWhenSeen, item.approximateTime)}
+          </Typography>
         </View>
       </View>
 
-      {item.petDetails?.trim().length > 0 && (
-        <Typography
-          variant="body-small"
-          className="mt-3 text-[14px] text-secondary-text"
-          numberOfLines={2}
-        >
-          {item.petDetails}
+      {/* Bottom row */}
+      <View className="mt-3 flex-row items-center justify-between">
+        <Typography variant="body-small" className="font-bold text-secondary-text">
+          Comments (0)
         </Typography>
-      )}
+        <View className={`rounded-[8px] px-4 py-1 ${status.bg}`}>
+          <Typography
+            variant="body-small"
+            className={`font-bold ${status.text}`}
+          >
+            {status.label}
+          </Typography>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 }
