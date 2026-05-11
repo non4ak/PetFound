@@ -91,7 +91,7 @@ export type AnnouncementQueryFilter = {
   isActive?: boolean;
   sortBy?: string;
   sortDirection?: 'asc' | 'desc';
-  page?: number;
+  pageNumber?: number;
   pageSize?: number;
 };
 
