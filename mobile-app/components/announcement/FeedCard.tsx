@@ -35,6 +35,8 @@ export function FeedCard({ item, onPress }: FeedCardProps) {
   const status = STATUS_STYLES[item.petStatus] ?? STATUS_STYLES[0];
   const emoji = PET_EMOJI[item.petType] ?? "🐾";
 
+  const title = item.petName?.trim().length > 0 ? item.petName : item.petTypeLabel;
+
   const subtitle = [item.breed, item.petSexLabel, item.petSizeLabel]
     .filter((s) => s && s.trim().length > 0 && s !== "Unknown")
     .join(" · ");
@@ -77,7 +79,7 @@ export function FeedCard({ item, onPress }: FeedCardProps) {
             className="font-semibold text-[20px] text-heading-text"
             numberOfLines={1}
           >
-            {item.petName}
+            {title}
           </Typography>
 
           {subtitle.length > 0 && (
