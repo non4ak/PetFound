@@ -27,3 +27,13 @@ obj/
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code
+CLAUDE.md
+diagrams/
+
+# Environment variables (contain secrets)
+.env
+.env.local
+**/.env
+**/.env.local

@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { TouchableOpacity, View } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import { PetAdding } from "@/components/common/PetAdding";
 import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
-import { useCreatePetMutation } from "@/data/hooks/pets";
+import { useMyPetsQuery, useUpdatePetMutation } from "@/data/hooks/pets";
 import {
   OnboardingPetAgeCategory,
   OnboardingPetSex,
@@ -21,10 +21,16 @@ import {
   type OnboardingPetFormValues,
 } from "@/utils/validations/onboardingSchema";
 
-export default function CreatePetScreen() {
+export default function EditPetScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const petId = Number(id);
   const router = useRouter();
-  const createPetMutation = useCreatePetMutation();
-  const { control, handleSubmit, watch } = useForm<OnboardingPetFormValues>({
+  const petsQuery = useMyPetsQuery();
+  const updatePetMutation = useUpdatePetMutation();
+
+  const pet = petsQuery.data?.find((p) => p.id === petId);
+
+  const { control, handleSubmit, watch, reset } = useForm<OnboardingPetFormValues>({
     defaultValues: {
       breed: "",
       chipNumber: "",
@@ -39,25 +45,46 @@ export default function CreatePetScreen() {
     },
     resolver: zodResolver(onboardingPetSchema),
   });
-  const hasMicrochip: boolean = watch("hasMicrochip");
 
-  const handleCreatePetPress = async (values: OnboardingPetFormValues): Promise<void> => {
-    await createPetMutation.mutateAsync({
-      petName: values.petName,
-      petType: values.petType,
-      petSex: values.petSex,
-      petSize: values.petSize,
-      petAgeCategory: values.petAgeCategory,
-      breed: values.breed,
-      ...(values.hasMicrochip && values.chipNumber.length > 0
-        ? { chipNumber: values.chipNumber }
-        : {}),
-      ...(values.description !== undefined && values.description.trim().length > 0
-        ? { description: values.description }
-        : {}),
-      ...(values.petPhotoUrl.trim().length > 0
-        ? { petPhotoUrl: values.petPhotoUrl }
-        : {}),
+  useEffect(() => {
+    if (pet === undefined) return;
+
+    reset({
+      breed: pet.breed ?? "",
+      chipNumber: pet.chipNumber ?? "",
+      description: pet.description ?? "",
+      hasMicrochip: pet.chipNumber !== null && pet.chipNumber.length > 0,
+      petAgeCategory: pet.petAgeCategory,
+      petName: pet.petName,
+      petPhotoUrl: pet.petPhotoUrl ?? "",
+      petSex: pet.petSex,
+      petSize: pet.petSize,
+      petType: pet.petType,
+    });
+  }, [pet, reset]);
+
+  const hasMicrochip = watch("hasMicrochip");
+
+  const handleSavePress = async (values: OnboardingPetFormValues): Promise<void> => {
+    await updatePetMutation.mutateAsync({
+      id: petId,
+      data: {
+        petName: values.petName,
+        petType: values.petType,
+        petSex: values.petSex,
+        petSize: values.petSize,
+        petAgeCategory: values.petAgeCategory,
+        breed: values.breed,
+        ...(values.hasMicrochip && values.chipNumber.length > 0
+          ? { chipNumber: values.chipNumber }
+          : {}),
+        ...(values.description !== undefined && values.description.trim().length > 0
+          ? { description: values.description }
+          : {}),
+        ...(values.petPhotoUrl.trim().length > 0
+          ? { petPhotoUrl: values.petPhotoUrl }
+          : {}),
+      },
     });
     router.back();
   };
@@ -66,10 +93,10 @@ export default function CreatePetScreen() {
     <AppScreenScaffold
       footer={
         <Button
-          disabled={createPetMutation.isPending}
+          disabled={updatePetMutation.isPending}
           fullWidth
-          label="Create pet"
-          onPress={handleSubmit(handleCreatePetPress)}
+          label="Save"
+          onPress={handleSubmit(handleSavePress)}
           size="lg"
           variant="primary"
         />
@@ -88,11 +115,7 @@ export default function CreatePetScreen() {
     >
       <View className="gap-2 mb-8 px-6">
         <Typography variant="title-large" className="text-heading-text">
-          Your pet
-        </Typography>
-        <Typography variant="body-small" className="text-[#9CA3AF]">
-          If your pet goes missing, we&apos;ll use this to find matches
-          instantly.
+          Edit pet
         </Typography>
       </View>
       <View className="p-5">

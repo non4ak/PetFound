@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Image, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { AnnouncementPreviewCard } from "@/components/announcement/AnnouncementPreviewCard";
 import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
@@ -19,6 +20,7 @@ import { getPetSexLabel, getPetSizeLabel, getPetTypeLabel } from "@/utils/petLab
 
 export default function LostPetPreviewScreen() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { details, resetDraft, selectedPet } = useLostPetFlow();
   const [isPosting, setIsPosting] = useState<boolean>(false);
 
@@ -41,26 +43,24 @@ export default function LostPetPreviewScreen() {
 
     try {
       const request: CreateAnnouncementRequest = {
+        petId: selectedPet.id,
+        petStatus: AnnouncementPetStatus.Lost,
         approximateTime: details.timeApproximate.trim().length > 0
           ? details.timeApproximate.trim()
           : "Unknown",
-        breed: selectedPet.breed.trim(),
         city: details.city.trim(),
         country: details.country.trim(),
         isPhonePublic: details.showPhone,
         isTelegramActive: details.showTelegram,
         lastDateWhenSeen: toAnnouncementDateTimeOffset(details.dateLastSeen),
         nearLandmark: details.city.trim(),
-        petDetails: details.description.trim(),
-        petName: selectedPet.petName.trim(),
-        petPhotoUrl: selectedPet.imageUrl.trim(),
-        petSex: selectedPet.petSex,
-        petSize: selectedPet.petSize,
-        petStatus: AnnouncementPetStatus.Lost,
-        petType: selectedPet.petType,
+        petDetails: details.description.trim().length > 0
+          ? details.description.trim()
+          : "No additional details provided.",
       };
 
       await createAnnouncementQuery(request);
+      await queryClient.invalidateQueries({ queryKey: ["announcements"] });
       resetDraft();
       router.replace("/(tabs)");
     } catch (error: unknown) {
@@ -74,7 +74,7 @@ export default function LostPetPreviewScreen() {
   };
 
   const badges: string[] = [getPetTypeLabel(selectedPet.petType)];
-  badges.push(selectedPet.breed);
+  if (selectedPet.breed.trim().length > 0) badges.push(selectedPet.breed);
   const sexLabel = getPetSexLabel(selectedPet.petSex);
   if (sexLabel !== null) badges.push(sexLabel);
   const sizeLabel = getPetSizeLabel(selectedPet.petSize);
