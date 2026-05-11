@@ -1,19 +1,32 @@
-import React, { startTransition } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import React, { startTransition } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  type ImageSourcePropType,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Typography } from '@/components/ui/Typography';
-import { useAuth } from '@/contexts/AuthContext';
-import { useOnboarding } from '@/contexts/OnboardingContext';
-import { useRegisterMutation } from '@/data/hooks/auth';
-import { getApiErrorMessage } from '@/utils/apiError';
-import { signUpSchema, type SignUpFormValues } from '@/utils/validations/authSchema';
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Typography } from "@/components/ui/Typography";
+import { useAuth } from "@/contexts/AuthContext";
+import { useOnboarding } from "@/contexts/OnboardingContext";
+import { useRegisterMutation } from "@/data/hooks/auth";
+import { getApiErrorMessage } from "@/utils/apiError";
+import {
+  signUpSchema,
+  type SignUpFormValues,
+} from "@/utils/validations/authSchema";
+
+const GOOGLE_LOGO_SOURCE: ImageSourcePropType = require("@/assets/images/google-logo.png");
 
 export default function SignUpScreen() {
   const auth = useAuth();
@@ -27,10 +40,10 @@ export default function SignUpScreen() {
     setError,
 ***REMOVED*** = useForm<SignUpFormValues>({
     defaultValues: {
-      confirmPassword: '',
-      email: '',
-      password: '',
-      username: '',
+      confirmPassword: "",
+      email: "",
+      password: "",
+      username: "",
   ***REMOVED***,
     resolver: zodResolver(signUpSchema),
 ***REMOVED***);
@@ -50,11 +63,14 @@ export default function SignUpScreen() {
     ***REMOVED***);
 
       startTransition(() => {
-        router.replace('/(onboarding)/confirm-email');
+        router.replace("/(onboarding)/confirm-email");
     ***REMOVED***);
   ***REMOVED*** catch (error) {
-      setError('root', {
-        message: getApiErrorMessage(error, 'Unable to create your account right now.'),
+      setError("root", {
+        message: getApiErrorMessage(
+          error,
+          "Unable to create your account right now.",
+        ),
     ***REMOVED***);
   ***REMOVED***
 ***REMOVED***;
@@ -62,7 +78,7 @@ export default function SignUpScreen() {
   return (
     <SafeAreaView className="flex-1 bg-alt-bg">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <ScrollView
@@ -80,7 +96,7 @@ export default function SignUpScreen() {
 
           <View className="mb-8">
             <Typography variant="title-large">
-              Create your{'\n'}account
+              Create your{"\n"}account
             </Typography>
             <Typography variant="body-regular" className="mt-2">
               Join our community and help reunite lost pets with their families.
@@ -97,7 +113,6 @@ export default function SignUpScreen() {
                   autoCorrect={false}
                   errorText={errors.username?.message}
                   label="Username"
-                  leadingIcon={<Ionicons name="person-outline" size={20} color="#9CA3AF" />}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   placeholder="Choose a username"
@@ -116,7 +131,6 @@ export default function SignUpScreen() {
                   errorText={errors.email?.message}
                   keyboardType="email-address"
                   label="Email"
-                  leadingIcon={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   placeholder="Enter your email"
@@ -134,7 +148,6 @@ export default function SignUpScreen() {
                   helperText="Use 6+ chars with uppercase, lowercase, and a number"
                   isPassword
                   label="Password"
-                  leadingIcon={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   placeholder="Create a password"
@@ -151,7 +164,6 @@ export default function SignUpScreen() {
                   errorText={errors.confirmPassword?.message}
                   isPassword
                   label="Confirm Password"
-                  leadingIcon={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   placeholder="Confirm your password"
@@ -166,7 +178,11 @@ export default function SignUpScreen() {
               disabled={registerMutation.isPending}
               errorText={errors.root?.message}
               fullWidth
-              label={registerMutation.isPending ? 'Creating Account...' : 'Create Account'}
+              label={
+                registerMutation.isPending
+                  ? "Creating Account..."
+                  : "Create Account"
+            ***REMOVED***
               onPress={handleSubmit(handleSignUp)}
               size="lg"
               variant="primary"
@@ -186,15 +202,13 @@ export default function SignUpScreen() {
               disabled
               fullWidth
               label="Continue with Google"
-              leadingIcon={<Ionicons name="logo-google" size={20} color="#0F172A" />}
-              size="md"
-              variant="outline"
-            />
-            <Button
-              disabled
-              fullWidth
-              label="Continue with Apple"
-              leadingIcon={<Ionicons name="logo-apple" size={20} color="#0F172A" />}
+              leadingIcon={
+                <Image
+                  resizeMode="contain"
+                  source={GOOGLE_LOGO_SOURCE}
+                  style={{ height: 20, width: 20 }}
+                />
+            ***REMOVED***
               size="md"
               variant="outline"
             />
@@ -202,10 +216,13 @@ export default function SignUpScreen() {
 
           <View className="mt-8 flex-row items-center justify-center">
             <Typography variant="body-small" className="text-neutral-400">
-              Already have an account?{' '}
+              Already have an account?{" "}
             </Typography>
-            <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
-              <Typography variant="body-small" className="font-bold text-primary">
+            <TouchableOpacity onPress={() => router.replace("/(auth)/login")}>
+              <Typography
+                variant="body-small"
+                className="font-bold text-primary"
+              >
                 Log In
               </Typography>
             </TouchableOpacity>

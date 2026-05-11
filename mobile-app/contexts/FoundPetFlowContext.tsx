@@ -9,6 +9,7 @@ import type {
   FoundPetDetails,
   FoundPetInfo,
 } from "@/types/found-pet";
+import { formatCurrentAnnouncementDate } from "@/utils/announcementDate";
 
 interface FoundPetFlowContextValue {
   details: FoundPetDetails;
@@ -36,7 +37,7 @@ function createInitialDetails(): FoundPetDetails {
   return {
     city: "Kharkiv",
     country: "Ukraine",
-    dateLastSeen: "",
+    dateLastSeen: formatCurrentAnnouncementDate(),
     description: "",
     showPhone: true,
     showTelegram: true,
