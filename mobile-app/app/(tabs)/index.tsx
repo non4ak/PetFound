@@ -52,7 +52,7 @@ export default function HomeScreen() {
   const [showFilters, setShowFilters] = useState(false);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [petTypeFilter, setPetTypeFilter] = useState<PetTypeFilter>("all");
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
   const [allItems, setAllItems] = useState<Announcement[]>([]);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
@@ -62,7 +62,7 @@ export default function HomeScreen() {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
       setDebouncedSearch(searchText);
-      setPageNumber(1);
+      setPageNumber(0);
       setAllItems([]);
   ***REMOVED***, 400);
     return () => {
@@ -84,7 +84,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!data) return;
-    if (data.currentPage === 1) {
+    if (data.currentPage === 0) {
       setAllItems(data.items ?? []);
   ***REMOVED*** else {
       setAllItems((prev) => [...prev, ...(data.items ?? [])]);
@@ -96,7 +96,7 @@ export default function HomeScreen() {
     (newStatus: StatusFilter, newPetType: PetTypeFilter) => {
       setStatusFilter(newStatus);
       setPetTypeFilter(newPetType);
-      setPageNumber(1);
+      setPageNumber(0);
       setAllItems([]);
   ***REMOVED***,
     [],
@@ -108,7 +108,7 @@ export default function HomeScreen() {
   const handleLoadMore = () => {
     if (isFetching || isFetchingMore) return;
     if (!data) return;
-    if (pageNumber >= data.totalPages) return;
+    if (pageNumber >= data.totalPages - 1) return;
     setIsFetchingMore(true);
     setPageNumber((p) => p + 1);
 ***REMOVED***;
@@ -257,7 +257,7 @@ export default function HomeScreen() {
         )}
 
         {/* Feed list */}
-        {isFetching && pageNumber === 1 ? (
+        {isFetching && pageNumber === 0 && allItems.length === 0 ? (
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size="large" color="#F2C94C" />
           </View>
