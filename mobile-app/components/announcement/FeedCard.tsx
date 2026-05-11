@@ -112,7 +112,7 @@ export function FeedCard({ item, onPress }: FeedCardProps) {
       {/* Bottom row */}
       <View className="mt-3 flex-row items-center justify-between">
         <Typography variant="body-small" className="font-bold text-secondary-text">
-          Comments (0)
+          Comments ({item.commentsCount ?? 0})
         </Typography>
         <View className={`rounded-[8px] px-4 py-1 ${status.bg}`}>
           <Typography

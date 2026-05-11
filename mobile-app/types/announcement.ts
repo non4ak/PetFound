@@ -122,6 +122,7 @@ export type Announcement = {
   lastSeenLongitude: number;
   isActive: boolean;
   createdOn: string;
+  commentsCount: number;
 }
 
 export type AnnouncementQueryFilterResponse = {
