@@ -10,9 +10,11 @@ import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
 import { useLogoutMutation } from "@/data/hooks/auth";
+import { useMyPetsQuery } from "@/data/hooks/pets";
 import { useProfileQuery } from "@/data/hooks/profile";
 import { useAuth } from "@/contexts/AuthContext";
 import { isUnauthorizedApiError } from "@/utils/apiError";
+import type { Pet } from "@/types/pet";
 
 interface ContactInfoRowProps {
   isPublic: boolean;
@@ -64,7 +66,9 @@ export default function ProfileScreen() {
   const router = useRouter();
   const logoutMutation = useLogoutMutation();
   const profileQuery = useProfileQuery();
+  const petsQuery = useMyPetsQuery();
   const profile = profileQuery.data;
+  const pets = petsQuery.data ?? [];
 
   const handleLogoutPress = async (): Promise<void> => {
     try {
@@ -172,36 +176,52 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           }
         >
-          <View className="pt-3">
-            <TouchableOpacity
-              activeOpacity={0.85}
-              className="flex-row items-center rounded-[12px] border border-[#BFC9D6] bg-[#EEF4FB] px-4 py-4"
-            >
-              <View className="h-10 w-10 items-center justify-center rounded-[8px] border border-primary bg-[#FFF5E3]">
-                <Ionicons name="paw-outline" size={18} color="#D89F35" />
-              </View>
+          <View className="pt-3 gap-3">
+            {pets.length === 0 ? (
+              <Typography variant="body-small" className="text-secondary-text py-2">
+                No pets added yet.
+              </Typography>
+            ) : (
+              pets.map((pet: Pet) => (
+                <TouchableOpacity
+                  key={pet.id}
+                  activeOpacity={0.85}
+                  className="flex-row items-center rounded-[12px] border border-[#BFC9D6] bg-[#EEF4FB] px-4 py-4"
+                  onPress={() => router.push(`/view-pet/${pet.id}`)}
+                >
+                  <View className="h-10 w-10 items-center justify-center rounded-[8px] border border-primary bg-[#FFF5E3]">
+                    <Ionicons name="paw-outline" size={18} color="#D89F35" />
+                  </View>
 
-              <View className="ml-4 flex-1">
-                <Typography
-                  variant="body-medium"
-                  className="font-semibold text-heading-text"
-                >
-                  Buddy
-                </Typography>
-                <Typography
-                  variant="body-small"
-                  className="mt-0.5 text-secondary-text"
-                >
-                  Labrador · Male · Large
-                </Typography>
-                <Typography
-                  variant="body-small"
-                  className="mt-0.5 font-semibold text-primary"
-                >
-                  Chipped
-                </Typography>
-              </View>
-            </TouchableOpacity>
+                  <View className="ml-4 flex-1">
+                    <Typography
+                      variant="body-medium"
+                      className="font-semibold text-heading-text"
+                    >
+                      {pet.petName}
+                    </Typography>
+                    <Typography
+                      variant="body-small"
+                      className="mt-0.5 text-secondary-text"
+                    >
+                      {[pet.breed ?? pet.petTypeLabel, pet.petSexLabel, pet.petSizeLabel]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </Typography>
+                    {pet.chipNumber !== null && pet.chipNumber.length > 0 && (
+                      <Typography
+                        variant="body-small"
+                        className="mt-0.5 font-semibold text-primary"
+                      >
+                        Chipped
+                      </Typography>
+                    )}
+                  </View>
+
+                  <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+                </TouchableOpacity>
+              ))
+            )}
           </View>
         </ProfileSectionCard>
       </View>
