@@ -51,6 +51,34 @@ public class AuthController : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpPost("google")]
+    public async Task<IActionResult> LoginWithGoogleAsync([FromBody] GoogleLoginModel model)
+    {
+        var result = await _authService.LoginWithGoogleTokenAsync(model.IdToken);
+
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: true,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
+    [AllowAnonymous]
+    [HttpPost("google/mobile")]
+    public async Task<IActionResult> LoginWithGoogleMobileAsync([FromBody] GoogleLoginModel model)
+    {
+        var result = await _authService.LoginWithGoogleTokenMobileAsync(model.IdToken);
+
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: true,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
+    [AllowAnonymous]
     [HttpGet("refresh")]
     public async Task<IActionResult> RefreshToken()
     {

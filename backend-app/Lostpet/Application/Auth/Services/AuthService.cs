@@ -10,11 +10,13 @@ using Infrastructure.Common.Errors.Auth;
 using Infrastructure.Common.Errors.Common;
 using Infrastructure.Common.Errors.Repository;
 using Infrastructure.Common.Errors.User;
+using Infrastructure.Common.Google;
 using Infrastructure.Common.JWT;
 using Infrastructure.Common.ResultPattern;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 namespace Application.Auth.Services;
 
 public class AuthService : IAuthService
@@ -26,6 +28,7 @@ public class AuthService : IAuthService
     private readonly ApplicationDbContext _context;
     private readonly IEmailService _emailService;
     private readonly ICookieService _cookieService;
+    private readonly IConfiguration _configuration;
 
     public AuthService(
         SignInManager<ApplicationUser> signInManager,
@@ -34,7 +37,8 @@ public class AuthService : IAuthService
         IRoleService roleService,
         ApplicationDbContext context,
         IEmailService emailService,
-        ICookieService cookieService
+        ICookieService cookieService,
+        IConfiguration configuration
     )
     {
         _signInManager = signInManager;
@@ -44,6 +48,7 @@ public class AuthService : IAuthService
         _emailService = emailService;
         _cookieService = cookieService;
         _context = context;
+        _configuration = configuration;
     }
 
     public async Task<Result<int>> GetIdByEmail(string email)
@@ -529,5 +534,235 @@ public class AuthService : IAuthService
         }
 
         return Result<bool>.Failure(PasswordErrors.PasswordNotChangedError());
+    }
+
+    public async Task<Result<LoginResponse>> LoginWithGoogleTokenAsync(string idToken)
+    {
+        try
+        {
+            var payload = await Google.Apis.Auth.GoogleJsonWebSignature.ValidateAsync(idToken, GetGoogleValidationSettings());
+
+            var userInfo = new GoogleUserInfo
+            {
+                Sub = payload.Subject,
+                Email = payload.Email,
+                EmailVerified = payload.EmailVerified,
+                Name = payload.Name,
+                Picture = payload.Picture,
+                FirstName = payload.GivenName,
+                LastName = payload.FamilyName
+            };
+
+            var loginResult = await LoginWithGoogleAsync(userInfo);
+            if (!loginResult.IsSuccess)
+            {
+                return Result<LoginResponse>.Failure(loginResult.Error);
+            }
+
+            var user = await _userManager.FindByEmailAsync(userInfo.Email);
+            if (user is null)
+            {
+                return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var accessToken = _tokenService.GenerateAuthToken(user, roles);
+
+            var refreshToken = await _context.RefreshTokens
+                .Where(r => r.UserId == user.Id)
+                .OrderByDescending(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            if (refreshToken is null)
+            {
+                return Result<LoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
+            }
+
+            _cookieService.SetAuthCookies(accessToken, refreshToken.Token);
+
+            var role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User;
+
+            return Result<LoginResponse>.Success(new LoginResponse
+            {
+                UserName = user.UserName!,
+                Email = user.Email!,
+                Role = role
+            });
+        }
+        catch (Exception ex)
+        {
+            return Result<LoginResponse>.Failure(GoogleAuthErrors.InvalidGoogleToken(ex.Message));
+        }
+    }
+
+    public async Task<Result<MobileLoginResponse>> LoginWithGoogleTokenMobileAsync(string idToken)
+    {
+        try
+        {
+            var payload = await Google.Apis.Auth.GoogleJsonWebSignature.ValidateAsync(idToken, GetGoogleValidationSettings());
+
+            var userInfo = new GoogleUserInfo
+            {
+                Sub = payload.Subject,
+                Email = payload.Email,
+                EmailVerified = payload.EmailVerified,
+                Name = payload.Name,
+                Picture = payload.Picture,
+                FirstName = payload.GivenName,
+                LastName = payload.FamilyName
+            };
+
+            var loginResult = await LoginWithGoogleAsync(userInfo);
+            if (!loginResult.IsSuccess)
+            {
+                return Result<MobileLoginResponse>.Failure(loginResult.Error);
+            }
+
+            var user = await _userManager.FindByEmailAsync(userInfo.Email);
+            if (user is null)
+            {
+                return Result<MobileLoginResponse>.Failure(UserErrors.UserNotFoundError());
+            }
+
+            var refreshToken = await _context.RefreshTokens
+                .Where(r => r.UserId == user.Id)
+                .OrderByDescending(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            if (refreshToken is null)
+            {
+                return Result<MobileLoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var accessToken = _tokenService.GenerateAuthToken(user, roles);
+
+            return Result<MobileLoginResponse>.Success(new MobileLoginResponse
+            {
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                Role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token
+            });
+        }
+        catch (Exception ex)
+        {
+            return Result<MobileLoginResponse>.Failure(GoogleAuthErrors.InvalidGoogleToken(ex.Message));
+        }
+    }
+
+    private Google.Apis.Auth.GoogleJsonWebSignature.ValidationSettings GetGoogleValidationSettings()
+    {
+        var audiences = new List<string>();
+        var web = _configuration["GoogleAuth:WebClientId"];
+        var android = _configuration["GoogleAuth:AndroidClientId"];
+
+        if (!string.IsNullOrWhiteSpace(web)) audiences.Add(web);
+        if (!string.IsNullOrWhiteSpace(android)) audiences.Add(android);
+
+        return new Google.Apis.Auth.GoogleJsonWebSignature.ValidationSettings
+        {
+            Audience = audiences
+        };
+    }
+
+    private async Task<Result> LoginWithGoogleAsync(GoogleUserInfo userInfo)
+    {
+        const string loginProvider = "Google";
+
+        var user = await _userManager.FindByLoginAsync(loginProvider, userInfo.Sub);
+        if (user is null)
+        {
+            var emailUser = await _userManager.FindByEmailAsync(userInfo.Email);
+
+            if (emailUser is null)
+            {
+                await using var tx = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    var newUser = new ApplicationUser
+                    {
+                        UserName = userInfo.Email,
+                        Email = userInfo.Email,
+                        EmailConfirmed = true,
+                        RegisteredAt = DateTimeOffset.UtcNow,
+                        IsOnboardingCompleted = false,
+                        UserPhotoUrl = userInfo.Picture
+                    };
+
+                    var userResult = await _userManager.CreateAsync(newUser);
+                    if (!userResult.Succeeded)
+                    {
+                        await tx.RollbackAsync();
+                        return Result.Failure(UserErrors.UserNotCreatedError(userResult.Errors.First().Description));
+                    }
+
+                    var rolesResult = await _roleService.AddToRolesAsync(newUser, UserRoles.User);
+                    if (!rolesResult)
+                    {
+                        await tx.RollbackAsync();
+                        return Result.Failure(UserErrors.UserNotAssignedToRole());
+                    }
+
+                    var loginInfo = new UserLoginInfo(loginProvider, userInfo.Sub, loginProvider);
+                    var addLoginResult = await _userManager.AddLoginAsync(newUser, loginInfo);
+                    if (!addLoginResult.Succeeded)
+                    {
+                        await tx.RollbackAsync();
+                        return Result.Failure(GoogleAuthErrors.UserNotAssignedExternalLoginError());
+                    }
+
+                    await tx.CommitAsync();
+                    user = newUser;
+                }
+                catch
+                {
+                    await tx.RollbackAsync();
+                    throw;
+                }
+            }
+            else
+            {
+                var loginInfo = new UserLoginInfo(loginProvider, userInfo.Sub, loginProvider);
+                var addLoginResult = await _userManager.AddLoginAsync(emailUser, loginInfo);
+                if (!addLoginResult.Succeeded)
+                {
+                    return Result.Failure(GoogleAuthErrors.UserNotAssignedExternalLoginError());
+                }
+
+                user = emailUser;
+            }
+        }
+
+        if (await _userManager.IsLockedOutAsync(user))
+        {
+            return Result.Failure(UserErrors.UserLockedOut());
+        }
+
+        await using var refreshTx = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var existing = await _context.RefreshTokens.Where(r => r.UserId == user.Id).ToListAsync();
+            _context.RefreshTokens.RemoveRange(existing);
+
+            var refreshTokenDto = _tokenService.GenerateRefreshToken();
+            var refreshTokenEntity = new RefreshToken
+            {
+                User = user,
+                Token = refreshTokenDto.Bytes,
+                ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays)
+            };
+            _context.RefreshTokens.Add(refreshTokenEntity);
+            await _context.SaveChangesAsync();
+            await refreshTx.CommitAsync();
+        }
+        catch (DbUpdateException)
+        {
+            await refreshTx.RollbackAsync();
+            return Result.Failure(RepositoryErrors<RefreshToken>.AddError);
+        }
+
+        return Result.Success();
     }
 }

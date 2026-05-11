@@ -16,6 +16,10 @@ public interface IAuthService
 
     public Task<Result<MobileLoginResponse>> LoginMobileAsync(LoginModel loginModel);
 
+    public Task<Result<LoginResponse>> LoginWithGoogleTokenAsync(string idToken);
+
+    public Task<Result<MobileLoginResponse>> LoginWithGoogleTokenMobileAsync(string idToken);
+
     public Task<Result<UserProfileResponse>> GetUserProfile(string? email);
 
     public Task<Result<bool>> UpdateUserProfile(int userId, UpdateProfileModel model);
