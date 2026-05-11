@@ -7,13 +7,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { PreviewBadge } from "@/components/announcement/PreviewBadge";
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
-import { EXAMPLE_MARKERS } from "@/constants/map.data";
-import type { PetMapMarkerData, PetMapMarkerType } from "@/types/map.types";
+import type { PetMapMarkerType } from "@/types/map.types";
+import { useGetAnnouncementById } from "@/data/hooks/announcements";
 
-const STATUS_STYLES: Record<
-  PetMapMarkerType,
-  { readonly backgroundColor: string; readonly label: string; readonly textColor: string }
-> = {
+const STATUS_STYLES = {
   found: {
     backgroundColor: "#D4EDDA",
     label: "FOUND",
@@ -26,28 +23,22 @@ const STATUS_STYLES: Record<
   },
 };
 
-function findMarkerById(id: string): PetMapMarkerData | null {
-  const marker = EXAMPLE_MARKERS.find(
-    (item: PetMapMarkerData) => item.id === id,
+export default function PetDetailsScreen() {
+  const router = useRouter();
+  const { id } = useLocalSearchParams<{ id: string }>();
+
+  const { data: announcementData, isLoading } = useGetAnnouncementById(
+    Number(id),
   );
 
-  if (marker === undefined) {
-    return null;
-  }
-
-  return marker;
-}
-
-export default function PetDetailsScreen(): React.JSX.Element {
-  const router = useRouter();
-  const params = useLocalSearchParams<{ id: string }>();
-  const marker = findMarkerById(params.id);
+  const announcement = announcementData?.data;
+  const petInfo = announcementData?.data?.pet;
 
   const handleBackPress = (): void => {
     router.back();
   };
 
-  if (marker === null) {
+  if (announcementData?.data === null) {
     return (
       <SafeAreaView className="flex-1 bg-[#FFF5E2] px-6">
         <TouchableOpacity
@@ -68,7 +59,8 @@ export default function PetDetailsScreen(): React.JSX.Element {
     );
   }
 
-  const status = STATUS_STYLES[marker.type];
+  const status =
+    STATUS_STYLES[announcement?.petStatus === 0 ? "lost" : "found"];
 
   return (
     <SafeAreaView className="flex-1 bg-[#FFF5E2]">
@@ -97,7 +89,11 @@ export default function PetDetailsScreen(): React.JSX.Element {
           <Image
             className="h-[160px] w-full rounded-[8px]"
             resizeMode="cover"
-            source={{ uri: marker.imageUri }}
+            source={{
+              uri: petInfo?.petPhotoUrl?.startsWith("http")
+                ? petInfo.petPhotoUrl
+                : "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop",
+            }}
           />
 
           <View className="mt-4 flex-row items-center justify-between">
@@ -105,7 +101,7 @@ export default function PetDetailsScreen(): React.JSX.Element {
               className="font-semibold text-heading-text"
               variant="title-small"
             >
-              {marker.title}
+              {petInfo?.petName}
             </Typography>
             <View
               className="rounded-[6px] px-6 py-1"
@@ -122,20 +118,33 @@ export default function PetDetailsScreen(): React.JSX.Element {
           </View>
 
           <View className="mt-3 flex-row flex-wrap gap-2">
-            {marker.badges.map((badge: string) => (
-              <PreviewBadge key={badge} label={badge} />
-            ))}
+            {petInfo?.petTypeLabel && (
+              <PreviewBadge label={petInfo?.petTypeLabel} />
+            )}
+            {petInfo?.petSexLabel && petInfo?.petSexLabel !== "Unknown" && (
+              <PreviewBadge label={petInfo?.petSexLabel} />
+            )}
+            {petInfo?.petSizeLabel && petInfo?.petSizeLabel !== "Unknown" && (
+              <PreviewBadge label={petInfo?.petSizeLabel} />
+            )}
+            {petInfo?.petAgeCategoryLabel &&
+              petInfo?.petAgeCategoryLabel !== "Unknown" && (
+                <PreviewBadge label={petInfo?.petAgeCategoryLabel} />
+              )}
           </View>
 
           <View className="mt-5 flex-row items-center justify-between">
             <View className="flex-1 flex-row items-center gap-2">
               <Ionicons color="#111827" name="location-outline" size={17} />
               <Typography className="text-heading-text" variant="body-small">
-                {marker.location}
+                {null}
               </Typography>
             </View>
             <TouchableOpacity>
-              <Typography className="font-medium text-primary" variant="body-small">
+              <Typography
+                className="font-medium text-primary"
+                variant="body-small"
+              >
                 Open map
               </Typography>
             </TouchableOpacity>
@@ -144,37 +153,56 @@ export default function PetDetailsScreen(): React.JSX.Element {
           <View className="mt-3 flex-row items-center gap-2">
             <Ionicons color="#111827" name="calendar-outline" size={17} />
             <Typography className="text-heading-text" variant="body-small">
-              {marker.dateLabel}
+              {announcement?.lastDateWhenSeen
+                ? `${new Date(announcement.lastDateWhenSeen).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}${announcement.approximateTime ? `, approx. ${announcement.approximateTime}` : ""}`
+                : "Unknown date"}
             </Typography>
           </View>
 
           <View className="mt-6 flex-row items-center gap-3">
             <View className="h-px flex-1 bg-[#BFC9D6]" />
-            <Typography className="text-[12px] text-secondary-text" variant="body-small">
+            <Typography
+              className="text-[12px] text-secondary-text"
+              variant="body-small"
+            >
               pet details
             </Typography>
             <View className="h-px flex-1 bg-[#BFC9D6]" />
           </View>
 
-          <Typography className="mt-3 text-[13px] text-heading-text" variant="body-small">
-            {marker.petDetails}
+          <Typography
+            className="mt-3 text-[13px] text-heading-text"
+            variant="body-small"
+          >
+            {petInfo?.description}
           </Typography>
 
           <View className="mt-6 flex-row items-center gap-3">
             <View className="h-px flex-1 bg-[#BFC9D6]" />
-            <Typography className="text-[12px] text-secondary-text" variant="body-small">
+            <Typography
+              className="text-[12px] text-secondary-text"
+              variant="body-small"
+            >
               announcement description
             </Typography>
             <View className="h-px flex-1 bg-[#BFC9D6]" />
           </View>
 
-          <Typography className="mt-3 text-[13px] text-heading-text" variant="body-small">
-            {marker.description}
+          <Typography
+            className="mt-3 text-[13px] text-heading-text"
+            variant="body-small"
+          >
+            {announcement?.petDetails}
           </Typography>
 
           <View className="mt-5 flex-row gap-3">
             <View className="flex-1">
-              <Button fullWidth label="Phone number" size="sm" variant="outline" />
+              <Button
+                fullWidth
+                label="Phone number"
+                size="sm"
+                variant="outline"
+              />
             </View>
             <View className="flex-1">
               <Button fullWidth label="Telegram" size="sm" variant="outline" />
@@ -183,7 +211,10 @@ export default function PetDetailsScreen(): React.JSX.Element {
         </View>
 
         <View className="border-t border-[#F4E8D0] bg-white px-4 py-5">
-          <Typography className="font-semibold text-heading-text" variant="body-small">
+          <Typography
+            className="font-semibold text-heading-text"
+            variant="body-small"
+          >
             Comments (0)
           </Typography>
         </View>

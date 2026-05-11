@@ -1,21 +1,14 @@
 import type { ComponentProps } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import type { LatLng } from "react-native-maps";
 
 export type PetMapMarkerType = "found" | "lost";
 
 export interface PetMapMarkerData {
-  badges: readonly string[];
-  coordinate: LatLng;
-  dateLabel: string;
-  description: string;
-  id: string;
+  id: number;
+  latitude: number;
+  longitude: number;
+  petId: number;
   imageUri: string;
-  lostDate: string;
-  location: string;
-  petDetails: string;
-  timeApproximate: string;
-  title: string;
   type: PetMapMarkerType;
 }
 
