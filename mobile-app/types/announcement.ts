@@ -34,6 +34,7 @@ export interface CreateAnnouncementRequest {
   nearLandmark: string;
   petAgeCategory?: OnboardingPetAgeCategory;
   petDetails: string;
+  petId?: number;
   petName?: string;
   petPhotoUrl?: string;
   petSex?: OnboardingPetSex;
@@ -43,17 +44,93 @@ export interface CreateAnnouncementRequest {
 }
 
 export interface AnnouncementResponse {
+  message: string;
+  data: {
+    id: number;
+    petId: number;
+    petStatus: number;
+    petStatusLabel: string;
+    country: string;
+    city: string;
+    lastDateWhenSeen: string;
+    approximateTime: string;
+    petDetails: string;
+    isPhonePublic: boolean;
+    isTelegramActive: boolean;
+    nearLandmark: string;
+    lastSeenLatitude: number;
+    lastSeenLongitude: number;
+    isActive: boolean;
+    createdOn: string;
+    pet: {
+      id: number;
+      petName: string;
+      petType: number;
+      petTypeLabel: string;
+      petSex: number;
+      petSexLabel: string;
+      petSize: number;
+      petSizeLabel: string;
+      petAgeCategory: number;
+      petAgeCategoryLabel: string;
+      breed: string;
+      chipNumber: string;
+      description: string;
+      petPhotoUrl: string;
+  ***REMOVED***
+***REMOVED***
+}
+
+export type AnnouncementQueryFilter = {
+  search?: string;
+  petStatus?: number;
+  petType?: number;
   city?: string;
   country?: string;
-  createdOn: string;
+  createdFrom?: string;
+  createdTo?: string;
+  isActive?: boolean;
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
+  pageNumber?: number;
+  pageSize?: number;
+};
+
+export type Announcement = {
   id: number;
-  isActive: boolean;
-  lastSeenLatitude?: number;
-  lastSeenLongitude?: number;
   petId: number;
-  petPhotoUrl?: string;
-  petStatus: AnnouncementPetStatus;
+  petStatus: number;
   petStatusLabel: string;
-  petType: OnboardingPetType;
+  petName: string;
+  petType: number;
   petTypeLabel: string;
+  breed: string | null;
+  petSex: number;
+  petSexLabel: string;
+  petSize: number;
+  petSizeLabel: string;
+  petPhotoUrl: string | null;
+  country: string;
+  city: string;
+  nearLandmark: string;
+  lastDateWhenSeen: string;
+  approximateTime: string;
+  petDetails: string;
+  isPhonePublic: boolean;
+  isTelegramActive: boolean;
+  lastSeenLatitude: number;
+  lastSeenLongitude: number;
+  isActive: boolean;
+  createdOn: string;
+}
+
+export type AnnouncementQueryFilterResponse = {
+  message: string;
+  data: {
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    totalCount: number;
+    items: Announcement[]
+***REMOVED***
 }
