@@ -53,5 +53,7 @@ public class AnnouncementResponse
     public bool IsActive { get; set; }
 
     public DateTimeOffset CreatedOn { get; set; }
+
+    public int CommentsCount { get; set; }
 }
 

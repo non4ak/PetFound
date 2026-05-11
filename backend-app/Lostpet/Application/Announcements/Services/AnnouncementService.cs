@@ -207,7 +207,15 @@ public class AnnouncementService : IAnnouncementService
         query = ApplySorting(query, queryModel.SortBy, queryModel.SortDirection);
 
         var pagedEntities = await PagedList<Announcement>.CreateAsync(query, pageNumber, pageSize);
-        var items = pagedEntities.Items.Select(MapAnnouncementResponse);
+
+        var announcementIds = pagedEntities.Items.Select(a => a.Id).ToList();
+        var commentCounts = await _context.Comments
+            .Where(c => announcementIds.Contains(c.AnnouncementId) && c.ParentCommentId == null && !c.IsDeleted)
+            .GroupBy(c => c.AnnouncementId)
+            .Select(g => new { AnnouncementId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.AnnouncementId, x => x.Count);
+
+        var items = pagedEntities.Items.Select(a => MapAnnouncementResponse(a, commentCounts.GetValueOrDefault(a.Id, 0)));
 
         IPagedList<AnnouncementResponse> paged = new PagedList<AnnouncementResponse>(
             currentPage: items,
@@ -373,7 +381,7 @@ public class AnnouncementService : IAnnouncementService
       ***REMOVED***;
   ***REMOVED***
 
-    private static AnnouncementResponse MapAnnouncementResponse(Announcement a)
+    private static AnnouncementResponse MapAnnouncementResponse(Announcement a, int commentsCount = 0)
     {
         return new AnnouncementResponse
         {
@@ -401,7 +409,8 @@ public class AnnouncementService : IAnnouncementService
             LastSeenLatitude = a.LastSeenLatitude,
             LastSeenLongitude = a.LastSeenLongitude,
             IsActive = a.IsActive,
-            CreatedOn = a.CreatedOn
+            CreatedOn = a.CreatedOn,
+            CommentsCount = commentsCount
       ***REMOVED***;
   ***REMOVED***
 }
