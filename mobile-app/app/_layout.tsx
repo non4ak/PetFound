@@ -1,17 +1,21 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-import '@/global.css';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
+import "@/global.css";
 
-import { AuthProvider } from '@/contexts/AuthContext';
-import { OnboardingProvider } from '@/contexts/OnboardingContext';
-import { queryClient } from '@/data/query-client';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { AuthProvider } from "@/contexts/AuthContext";
+import { OnboardingProvider } from "@/contexts/OnboardingContext";
+import { queryClient } from "@/data/query-client";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 
 export const unstable_settings = {
-  initialRouteName: '(auth)',
+  initialRouteName: "(auth)",
 };
 
 export default function RootLayout() {
@@ -21,23 +25,43 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <OnboardingProvider>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(onboarding)"
+                options={{ headerShown: false }}
+              />
               <Stack.Screen
                 name="create-announcement"
-                options={{ headerShown: false, presentation: 'modal' }}
+                options={{ headerShown: false, presentation: "modal" }}
               />
               <Stack.Screen name="lost-pet" options={{ headerShown: false }} />
               <Stack.Screen name="found-pet" options={{ headerShown: false }} />
-              <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
-              <Stack.Screen name="create-pet" options={{ headerShown: false }} />
-              <Stack.Screen name="view-pet" options={{ headerShown: false }} />
-              <Stack.Screen name="edit-pet" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="edit-profile"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="create-pet"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="view-pet"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="edit-pet"
+                options={{ headerShown: false }}
+              />
               <Stack.Screen name="pet/[id]" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+              <Stack.Screen
+                name="modal"
+                options={{ presentation: "modal", title: "Modal" }}
+              />
             </Stack>
             <StatusBar style="auto" />
           </ThemeProvider>

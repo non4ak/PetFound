@@ -2,12 +2,17 @@ import { ExpoConfig, ConfigContext } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
-    name: "mobile-app",
-    slug: "mobile-app",
+    name: "Pet Found",
+    slug: "pet-found",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
-    scheme: "mobileapp",
+    scheme: "petfound",
+    splash: {
+        image: "./assets/images/splash-logo.png",
+        resizeMode: "contain",
+        backgroundColor: "#FFF5E2",
+    },
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
     ios: {
@@ -48,12 +53,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         [
             "expo-splash-screen",
             {
-                image: "./assets/images/splash-icon.png",
-                imageWidth: 200,
+                image: "./assets/images/splash-logo.png",
+                imageWidth: 128,
                 resizeMode: "contain",
-                backgroundColor: "#ffffff",
+                backgroundColor: "#FFF5E2",
                 dark: {
-                    backgroundColor: "#000000",
+                    backgroundColor: "#FFF5E2",
                 },
             },
         ],
