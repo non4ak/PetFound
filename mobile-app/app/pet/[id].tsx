@@ -73,26 +73,50 @@ export default function PetDetailsScreen() {
     router.back();
 ***REMOVED***;
 
-  const handlePickImage = async () => {
-    const { status } =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission needed",
-        "Please allow access to your photo library.",
-      );
-      return;
-  ***REMOVED***
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      quality: 0.8,
-  ***REMOVED***);
-
-    if (!result.canceled) {
-      setSelectedImage(result.assets[0]);
-  ***REMOVED***
+  const handlePickImage = () => {
+    Alert.alert("Add photo", "Choose how you want to add a photo.", [
+      {
+        text: "Take photo",
+        onPress: async () => {
+          const { granted } =
+            await ImagePicker.requestCameraPermissionsAsync();
+          if (!granted) {
+            Alert.alert(
+              "Permission needed",
+              "Please allow camera access in your device settings.",
+            );
+            return;
+        ***REMOVED***
+          const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ["images"],
+            allowsEditing: true,
+            quality: 0.8,
+        ***REMOVED***);
+          if (!result.canceled) setSelectedImage(result.assets[0]);
+      ***REMOVED***,
+    ***REMOVED***,
+      {
+        text: "Choose from gallery",
+        onPress: async () => {
+          const { granted } =
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (!granted) {
+            Alert.alert(
+              "Permission needed",
+              "Please allow photo library access in your device settings.",
+            );
+            return;
+        ***REMOVED***
+          const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ["images"],
+            allowsEditing: true,
+            quality: 0.8,
+        ***REMOVED***);
+          if (!result.canceled) setSelectedImage(result.assets[0]);
+      ***REMOVED***,
+    ***REMOVED***,
+      { text: "Cancel", style: "cancel" },
+    ]);
 ***REMOVED***;
 
   const handleSubmitComment = async () => {
