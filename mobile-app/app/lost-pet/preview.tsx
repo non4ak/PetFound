@@ -43,6 +43,8 @@ export default function LostPetPreviewScreen() {
 
     try {
       const request: CreateAnnouncementRequest = {
+        petId: selectedPet.id,
+        petStatus: AnnouncementPetStatus.Lost,
         approximateTime: details.timeApproximate.trim().length > 0
           ? details.timeApproximate.trim()
           : "Unknown",
@@ -55,13 +57,6 @@ export default function LostPetPreviewScreen() {
         petDetails: details.description.trim().length > 0
           ? details.description.trim()
           : "No additional details provided.",
-        petName: selectedPet.petName.trim(),
-        petStatus: AnnouncementPetStatus.Lost,
-        petType: selectedPet.petType,
-        petSex: selectedPet.petSex,
-        petSize: selectedPet.petSize,
-        ...(selectedPet.breed.trim().length > 0 ? { breed: selectedPet.breed.trim() } : {}),
-        ...(selectedPet.imageUrl.trim().length > 0 ? { petPhotoUrl: selectedPet.imageUrl.trim() } : {}),
       };
 
       await createAnnouncementQuery(request);
@@ -79,7 +74,7 @@ export default function LostPetPreviewScreen() {
   };
 
   const badges: string[] = [getPetTypeLabel(selectedPet.petType)];
-  badges.push(selectedPet.breed);
+  if (selectedPet.breed.trim().length > 0) badges.push(selectedPet.breed);
   const sexLabel = getPetSexLabel(selectedPet.petSex);
   if (sexLabel !== null) badges.push(sexLabel);
   const sizeLabel = getPetSizeLabel(selectedPet.petSize);
