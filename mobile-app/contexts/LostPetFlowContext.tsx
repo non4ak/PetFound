@@ -1,11 +1,8 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
-import {
-  OnboardingPetSex,
-  OnboardingPetSize,
-  OnboardingPetType,
-} from '@/types/onboarding';
+import { useMyPetsQuery } from '@/data/hooks/pets';
 import { formatCurrentAnnouncementDate } from '@/utils/announcementDate';
+import type { Pet } from '@/types/pet';
 import type {
   LostPetDetails,
   RegisteredPetCard,
@@ -13,69 +10,66 @@ import type {
 
 interface LostPetFlowContextValue {
   details: LostPetDetails;
+  isLoadingPets: boolean;
   registeredPets: RegisteredPetCard[];
   resetDraft: () => void;
   selectedPet: RegisteredPetCard | null;
-  selectedPetId: string | null;
-  selectPet: (petId: string) => void;
+  selectedPetId: number | null;
+  selectPet: (petId: number) => void;
   updateDetails: (nextDetails: LostPetDetails) => void;
 }
 
-const REGISTERED_PETS: RegisteredPetCard[] = [
-  {
-    breed: 'Labrador',
-    id: 'buddy',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80',
-    isChipped: true,
-    petName: 'Buddy',
-    petSex: OnboardingPetSex.Male,
-    petSize: OnboardingPetSize.Large,
-    petType: OnboardingPetType.Dog,
-  },
-  {
-    breed: 'Mixed',
-    id: 'cat',
-    imageUrl:
-      'https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=1200&q=80',
-    isChipped: false,
-    petName: 'Cat',
-    petSex: OnboardingPetSex.Female,
-    petSize: OnboardingPetSize.Small,
-    petType: OnboardingPetType.Cat,
-  },
-];
+function petToRegisteredCard(pet: Pet): RegisteredPetCard {
+  return {
+    breed: pet.breed ?? '',
+    id: pet.id,
+    imageUrl: pet.petPhotoUrl ?? '',
+    isChipped: !!pet.chipNumber && pet.chipNumber.length > 0,
+    petName: pet.petName,
+    petSex: pet.petSex,
+    petSize: pet.petSize,
+    petType: pet.petType,
+  };
+}
 
 function createInitialDetails(): LostPetDetails {
   return {
-    city: 'Kharkiv',
-    country: 'Ukraine',
+    city: '',
+    country: '',
     dateLastSeen: formatCurrentAnnouncementDate(),
-    description:
-      'Distinctive markings, collar colour, last known behaviour, and anything else that can help identify your pet.',
+    description: '',
     showPhone: true,
     showTelegram: true,
-    timeApproximate: '14:00',
+    timeApproximate: '',
   };
 }
 
 const LostPetFlowContext = createContext<LostPetFlowContextValue | null>(null);
 
 export function LostPetFlowProvider({ children }: { children: ReactNode }) {
+  const { data: pets, isLoading } = useMyPetsQuery();
+  const registeredPets = (pets ?? []).map(petToRegisteredCard);
+
   const [details, setDetails] = useState<LostPetDetails>(createInitialDetails());
-  const [selectedPetId, setSelectedPetId] = useState<string | null>(REGISTERED_PETS[0]?.id ?? null);
+  const [selectedPetId, setSelectedPetId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (selectedPetId === null && registeredPets.length > 0) {
+      setSelectedPetId(registeredPets[0].id);
+    }
+  }, [registeredPets.length]);
 
   const resetDraft = (): void => {
     setDetails(createInitialDetails());
-    setSelectedPetId(REGISTERED_PETS[0]?.id ?? null);
+    setSelectedPetId(registeredPets[0]?.id ?? null);
   };
 
-  const selectedPet: RegisteredPetCard | null =
-    REGISTERED_PETS.find((pet: RegisteredPetCard) => pet.id === selectedPetId) ?? null;
+  const selectedPet = registeredPets.find((p) => p.id === selectedPetId) ?? null;
 
   const value: LostPetFlowContextValue = {
     details,
-    registeredPets: REGISTERED_PETS,
+    isLoadingPets: isLoading,
+    registeredPets,
     resetDraft,
     selectedPet,
     selectedPetId,
