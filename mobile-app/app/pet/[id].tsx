@@ -137,7 +137,9 @@ export default function PetDetailsScreen() {
             <View className="flex-1 flex-row items-center gap-2">
               <Ionicons color="#111827" name="location-outline" size={17} />
               <Typography className="text-heading-text" variant="body-small">
-                {null}
+                {[announcement?.nearLandmark, announcement?.city, announcement?.country]
+                  .filter(Boolean)
+                  .join(", ")}
               </Typography>
             </View>
             <TouchableOpacity>
