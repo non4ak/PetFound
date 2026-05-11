@@ -136,7 +136,7 @@ export default function PetDetailsScreen() {
           <View className="mt-5 flex-row items-center justify-between">
             <View className="flex-1 flex-row items-center gap-2">
               <Ionicons color="#111827" name="location-outline" size={17} />
-              <Typography className="text-heading-text" variant="body-small">
+              <Typography className="flex-1 text-heading-text" variant="body-small" numberOfLines={2}>
                 {[announcement?.nearLandmark, announcement?.city, announcement?.country]
                   .filter(Boolean)
                   .join(", ")}
