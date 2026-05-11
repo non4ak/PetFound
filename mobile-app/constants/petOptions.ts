@@ -10,7 +10,6 @@ import type { SelectChipOption } from "@/components/ui/ControlledSelectChips";
 export const PET_TYPE_OPTIONS: readonly SelectChipOption<OnboardingPetType>[] = [
   { label: "Dog", value: OnboardingPetType.Dog },
   { label: "Cat", value: OnboardingPetType.Cat },
-  { label: "Other", value: OnboardingPetType.Other },
 ];
 
 export const PET_SEX_OPTIONS: readonly SelectChipOption<OnboardingPetSex>[] = [
@@ -25,6 +24,7 @@ export const PET_SIZE_OPTIONS: readonly SelectChipOption<OnboardingPetSize>[] = 
 ];
 
 export const PET_AGE_OPTIONS: readonly SelectChipOption<OnboardingPetAgeCategory>[] = [
+  { label: "Baby", value: OnboardingPetAgeCategory.Baby },
   { label: "Young", value: OnboardingPetAgeCategory.Young },
   { label: "Adult", value: OnboardingPetAgeCategory.Adult },
   { label: "Senior", value: OnboardingPetAgeCategory.Senior },

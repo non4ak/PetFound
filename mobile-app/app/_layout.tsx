@@ -50,10 +50,18 @@ export default function RootLayout() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
+                name="view-pet"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="edit-pet"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="pet/[id]" options={{ headerShown: false }} />
+              <Stack.Screen
                 name="modal"
                 options={{ presentation: "modal", title: "Modal" }}
               />
-              <Stack.Screen name="pet/[id]" options={{ headerShown: false }} />
             </Stack>
             <StatusBar style="auto" />
           </ThemeProvider>
