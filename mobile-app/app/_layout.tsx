@@ -59,6 +59,10 @@ export default function RootLayout() {
               />
               <Stack.Screen name="pet/[id]" options={{ headerShown: false }} />
               <Stack.Screen
+                name="my-announcements"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
                 name="modal"
                 options={{ presentation: "modal", title: "Modal" }}
               />

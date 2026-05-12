@@ -163,6 +163,31 @@ export default function ProfileScreen() {
       </View>
 
       <View className="mt-4">
+        <TouchableOpacity
+          activeOpacity={0.85}
+          className="flex-row items-center justify-between rounded-[12px] bg-white px-5 py-4"
+          style={{
+            shadowColor: "#F2B84C",
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0.12,
+            shadowRadius: 8,
+            elevation: 2,
+        ***REMOVED***}
+          onPress={() => router.push("/my-announcements")}
+        >
+          <View className="flex-row items-center gap-3">
+            <View className="h-9 w-9 items-center justify-center rounded-[8px] bg-[#FFF5E3]">
+              <Ionicons name="megaphone-outline" size={18} color="#D89F35" />
+            </View>
+            <Typography variant="body-medium" className="font-semibold text-heading-text">
+              My announcements
+            </Typography>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+        </TouchableOpacity>
+      </View>
+
+      <View className="mt-4">
         <ProfileSectionCard
           title="My pets"
           headerAction={
