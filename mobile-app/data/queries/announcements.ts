@@ -46,3 +46,48 @@ export async function getAnnouncementById(
   return response.data;
 }
 
+export async function getMyAnnouncements(query?: AnnouncementQueryFilter) {
+  const params: Record<string, any> = {};
+
+  if (query) {
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        params[key] = value;
+    ***REMOVED***
+  ***REMOVED***);
+***REMOVED***
+
+  const response = await axiosClient.get<AnnouncementQueryFilterResponse>(
+    `/announcements/mine`,
+    { params },
+  );
+  return response.data.data;
+}
+
+export async function archiveAnnouncementQuery(id: number): Promise<void> {
+  await axiosClient.post(`/announcements/${id}/archive`);
+}
+
+export async function restoreAnnouncementQuery(id: number): Promise<void> {
+  await axiosClient.post(`/announcements/${id}/restore`);
+}
+
+export interface UpdateAnnouncementRequest {
+  country?: string;
+  city?: string;
+  lastDateWhenSeen?: string;
+  approximateTime?: string;
+  petDetails?: string;
+  isPhonePublic: boolean;
+  isTelegramActive: boolean;
+  nearLandmark?: string;
+  petStatus: number;
+}
+
+export async function updateAnnouncementQuery(
+  id: number,
+  request: UpdateAnnouncementRequest,
+): Promise<void> {
+  await axiosClient.put(`/announcements/${id}`, request);
+}
+
