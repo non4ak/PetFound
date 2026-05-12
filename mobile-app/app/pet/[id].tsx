@@ -20,7 +20,11 @@ import * as ImagePicker from "expo-image-picker";
 import { PreviewBadge } from "@/components/announcement/PreviewBadge";
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
-import { useGetAnnouncementById } from "@/data/hooks/announcements";
+import {
+  useArchiveAnnouncement,
+  useGetAnnouncementById,
+  useRestoreAnnouncement,
+} from "@/data/hooks/announcements";
 import { useCreateComment, useGetComments } from "@/data/hooks/comments";
 import { uploadPhotoFromUriQuery } from "@/data/queries/photos";
 import type { Comment } from "@/types/comment";
@@ -52,8 +56,9 @@ function flattenComments(
 
 export default function PetDetailsScreen() {
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, mine } = useLocalSearchParams<{ id: string; mine?: string }>();
   const announcementId = Number(id);
+  const isOwner = mine === "1";
 
   const [commentText, setCommentText] = useState("");
   const [selectedImage, setSelectedImage] =
@@ -68,6 +73,10 @@ export default function PetDetailsScreen() {
     useGetComments(announcementId);
   const { mutateAsync: postComment, isPending: isPosting } =
     useCreateComment(announcementId);
+  const { mutateAsync: archiveAnnouncement, isPending: isArchiving } =
+    useArchiveAnnouncement();
+  const { mutateAsync: restoreAnnouncement, isPending: isRestoring } =
+    useRestoreAnnouncement();
 
   const announcement = announcementData?.data;
   const petInfo = announcementData?.data?.pet;
@@ -76,6 +85,36 @@ export default function PetDetailsScreen() {
 
   const handleBackPress = (): void => {
     router.back();
+  };
+
+  const handleArchivePress = () => {
+    Alert.alert(
+      "Archive announcement",
+      "This will hide your announcement from the feed. You can restore it later.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Archive",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await archiveAnnouncement(announcementId);
+              router.back();
+            } catch {
+              Alert.alert("Error", "Failed to archive. Please try again.");
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  const handleRestorePress = async () => {
+    try {
+      await restoreAnnouncement(announcementId);
+    } catch {
+      Alert.alert("Error", "Failed to restore. Please try again.");
+    }
   };
 
   const handlePickImage = () => {
@@ -218,7 +257,56 @@ export default function PetDetailsScreen() {
         >
           Pet
         </Typography>
-        <View className="h-10 w-10" />
+        {isOwner ? (
+          <View className="flex-row items-center gap-2">
+            {announcement != null && (
+              announcement.isActive ? (
+                <TouchableOpacity
+                  onPress={handleArchivePress}
+                  disabled={isArchiving || isRestoring}
+                  className="h-9 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-white px-3"
+                >
+                  {isArchiving ? (
+                    <ActivityIndicator size="small" color="#94A3B8" />
+                  ) : (
+                    <Typography variant="body-small" className="text-secondary-text">
+                      Archive
+                    </Typography>
+                  )}
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={handleRestorePress}
+                  disabled={isArchiving || isRestoring}
+                  className="h-9 items-center justify-center rounded-[8px] border border-primary bg-white px-3"
+                >
+                  {isRestoring ? (
+                    <ActivityIndicator size="small" color="#D89F35" />
+                  ) : (
+                    <Typography variant="body-small" className="font-semibold text-primary">
+                      Restore
+                    </Typography>
+                  )}
+                </TouchableOpacity>
+              )
+            )}
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/my-announcements/[id]/edit",
+                  params: { id: announcementId },
+                })
+              }
+              className="h-9 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-white px-3"
+            >
+              <Typography variant="body-small" className="text-heading-text">
+                Edit
+              </Typography>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View className="h-10 w-10" />
+        )}
       </View>
 
       <KeyboardAvoidingView

@@ -19,3 +19,22 @@ export async function updatePetQuery(id: number, request: CreatePetRequest): Pro
 export async function deletePetQuery(id: number): Promise<void> {
   await axiosClient.delete(`/users/me/pets/${id}`);
 }
+
+export interface UpdatePetPhotoRequest {
+  petName: string;
+  petType: number;
+  petSex: number;
+  petSize: number;
+  petAgeCategory: number;
+  breed?: string | null;
+  chipNumber?: string | null;
+  description?: string | null;
+  petPhotoUrl: string;
+}
+
+export async function updatePetPhotoQuery(
+  petId: number,
+  request: UpdatePetPhotoRequest,
+): Promise<void> {
+  await axiosClient.put(`/users/me/pets/${petId}`, request);
+}
