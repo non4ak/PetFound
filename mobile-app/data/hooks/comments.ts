@@ -16,6 +16,7 @@ export const useCreateComment = (announcementId: number) => {
     mutationFn: (request: CreateCommentRequest) => createComment(announcementId, request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", announcementId] });
+      queryClient.invalidateQueries({ queryKey: ["announcements"] });
   ***REMOVED***,
 ***REMOVED***);
 };
