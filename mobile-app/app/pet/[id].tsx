@@ -4,8 +4,10 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   ScrollView,
+  StatusBar,
   TextInput,
   TouchableOpacity,
   View,
@@ -57,6 +59,9 @@ export default function PetDetailsScreen() {
   const [selectedImage, setSelectedImage] =
     useState<ImagePicker.ImagePickerAsset | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [fullScreenImageUrl, setFullScreenImageUrl] = useState<string | null>(
+    null,
+  );
 
   const { data: announcementData } = useGetAnnouncementById(announcementId);
   const { data: commentsData, isLoading: isLoadingComments } =
@@ -89,7 +94,7 @@ export default function PetDetailsScreen() {
         ***REMOVED***
           const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ["images"],
-            allowsEditing: true,
+            allowsEditing: false,
             quality: 0.8,
         ***REMOVED***);
           if (!result.canceled) setSelectedImage(result.assets[0]);
@@ -109,7 +114,7 @@ export default function PetDetailsScreen() {
         ***REMOVED***
           const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ["images"],
-            allowsEditing: true,
+            allowsEditing: false,
             quality: 0.8,
         ***REMOVED***);
           if (!result.canceled) setSelectedImage(result.assets[0]);
@@ -178,6 +183,28 @@ export default function PetDetailsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-[#FFF5E2]">
+      <Modal
+        visible={fullScreenImageUrl !== null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setFullScreenImageUrl(null)}
+        statusBarTranslucent
+      >
+        <StatusBar hidden />
+        <View className="flex-1 items-center justify-center bg-black">
+          <Image
+            source={{ uri: fullScreenImageUrl ?? "" }}
+            style={{ width: "100%", height: "100%" }}
+            resizeMode="contain"
+          />
+          <TouchableOpacity
+            onPress={() => setFullScreenImageUrl(null)}
+            className="absolute right-4 top-12 h-10 w-10 items-center justify-center rounded-full bg-black/50"
+          >
+            <Ionicons name="close" size={22} color="white" />
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <View className="mx-6 flex-row items-center justify-between rounded-b-[16px] bg-white px-5 py-4">
         <TouchableOpacity
           className="h-10 w-10 items-center justify-center rounded-full border border-[#CBD5E1] bg-white"
@@ -390,12 +417,17 @@ export default function PetDetailsScreen() {
                       : comment.commentMessage}
                   </Typography>
                   {!comment.isDeleted && comment.imageUrl && (
-                    <Image
-                      source={{ uri: comment.imageUrl }}
-                      className="mt-2 rounded-[8px]"
-                      style={{ width: "100%", height: 160 }}
-                      resizeMode="cover"
-                    />
+                    <TouchableOpacity
+                      activeOpacity={0.85}
+                      onPress={() => setFullScreenImageUrl(comment.imageUrl!)}
+                    >
+                      <Image
+                        source={{ uri: comment.imageUrl }}
+                        className="mt-2 rounded-[8px]"
+                        style={{ width: "100%", height: 200 }}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
                   )}
                 </View>
               ))
