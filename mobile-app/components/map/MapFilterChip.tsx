@@ -6,7 +6,10 @@ import { Typography } from "@/components/ui/Typography";
 import { cn } from "@/utils";
 
 import { mapStyles } from "./map.styles";
-import type { MapFilterChipData } from "../../types/map.types";
+import type {
+  MapFilterChipData,
+  MapFilterChipVariant,
+} from "../../types/map.types";
 import {
   getFilterChipClassName,
   getFilterChipTextColor,
@@ -14,18 +17,31 @@ import {
 
 interface MapFilterChipProps {
   chip: MapFilterChipData;
+  isActive: boolean;
+  onPress: (filterId: string) => void;
 }
 
-export function MapFilterChip({ chip }: MapFilterChipProps): React.JSX.Element {
-  const contentColor: string = getFilterChipTextColor(chip.variant);
+export function MapFilterChip({
+  chip,
+  isActive,
+  onPress,
+}: MapFilterChipProps): React.JSX.Element {
+  const visualVariant: MapFilterChipVariant = isActive ? "accent" : chip.variant;
+  const contentColor: string = getFilterChipTextColor(visualVariant);
+
+  const handlePress = (): void => {
+    onPress(chip.id);
+  };
 
   return (
     <TouchableOpacity
+      accessibilityState={{ selected: isActive }}
       activeOpacity={0.8}
       className={cn(
         "flex-row items-center rounded-full px-4 py-2",
-        getFilterChipClassName(chip.variant),
+        getFilterChipClassName(visualVariant),
       )}
+      onPress={handlePress}
       style={mapStyles.filterChip}
     >
       {chip.leadingIconName ? (

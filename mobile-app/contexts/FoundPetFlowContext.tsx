@@ -39,6 +39,8 @@ function createInitialDetails(): FoundPetDetails {
     country: "Ukraine",
     dateLastSeen: formatCurrentAnnouncementDate(),
     description: "",
+    lastSeenLatitude: null,
+    lastSeenLongitude: null,
     showPhone: true,
     showTelegram: true,
     timeApproximate: "",

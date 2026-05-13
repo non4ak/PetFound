@@ -13,6 +13,11 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { OnboardingProvider } from "@/contexts/OnboardingContext";
 import { queryClient } from "@/data/query-client";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+});
 
 export const unstable_settings = {
   initialRouteName: "(auth)",
@@ -49,14 +54,8 @@ export default function RootLayout() {
                 name="create-pet"
                 options={{ headerShown: false }}
               />
-              <Stack.Screen
-                name="view-pet"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="edit-pet"
-                options={{ headerShown: false }}
-              />
+              <Stack.Screen name="view-pet" options={{ headerShown: false }} />
+              <Stack.Screen name="edit-pet" options={{ headerShown: false }} />
               <Stack.Screen name="pet/[id]" options={{ headerShown: false }} />
               <Stack.Screen
                 name="my-announcements"

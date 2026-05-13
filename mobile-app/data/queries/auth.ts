@@ -2,6 +2,7 @@ import { axiosClient } from '@/api/axios-client';
 import type {
   ApiResponse,
   AuthSession,
+  GoogleLoginRequest,
   LoginRequest,
   MobileAuthResponse,
   RegisterRequest,
@@ -25,6 +26,18 @@ export async function loginQuery(credentials: LoginRequest): Promise<AuthSession
   const response = await axiosClient.post<ApiResponse<MobileAuthResponse>>(
     '/Auth/login/mobile',
     credentials,
+    {
+      skipAuthRefresh: true,
+    },
+  );
+
+  return mapAuthSession(response.data.data);
+}
+
+export async function googleLoginQuery(request: GoogleLoginRequest): Promise<AuthSession> {
+  const response = await axiosClient.post<ApiResponse<MobileAuthResponse>>(
+    '/Auth/google/mobile',
+    request,
     {
       skipAuthRefresh: true,
     },

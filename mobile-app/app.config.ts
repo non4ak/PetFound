@@ -1,70 +1,80 @@
 import { ExpoConfig, ConfigContext } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
-    ...config,
-    name: "Pet Found",
-    slug: "pet-found",
-    version: "1.0.0",
-    orientation: "portrait",
-    icon: "./assets/images/icon.png",
-    scheme: "petfound",
-    splash: {
+  ...config,
+  name: "Pet Found",
+  slug: "pet-found",
+  version: "1.0.0",
+  orientation: "portrait",
+  icon: "./assets/images/icon.png",
+  scheme: "petfound",
+  splash: {
+    image: "./assets/images/splash-logo.png",
+    resizeMode: "contain",
+    backgroundColor: "#FFF5E2",
+  },
+  userInterfaceStyle: "automatic",
+  newArchEnabled: true,
+  ios: {
+    supportsTablet: true,
+    config: {
+      googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+    },
+  },
+  android: {
+    adaptiveIcon: {
+      backgroundColor: "#E6F4FE",
+      foregroundImage: "./assets/images/android-icon-foreground.png",
+      backgroundImage: "./assets/images/android-icon-background.png",
+      monochromeImage: "./assets/images/android-icon-monochrome.png",
+    },
+    edgeToEdgeEnabled: true,
+    package: "com.petfound.app",
+    permissions: ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+    softwareKeyboardLayoutMode: "pan",
+    config: {
+      googleMaps: {
+        apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+      },
+    },
+  },
+  web: {
+    bundler: "metro",
+    output: "static",
+    favicon: "./assets/images/favicon.png",
+  },
+  plugins: [
+    "expo-router",
+    [
+      "expo-location",
+      {
+        locationWhenInUsePermission:
+          "Allow Pet Found to show your location on the map.",
+      },
+    ],
+    [
+      "expo-image-picker",
+      {
+        cameraPermission: "Allow LostPet to take pet photos with your camera.",
+        photosPermission:
+          "Allow LostPet to choose pet photos from your gallery.",
+      },
+    ],
+    [
+      "expo-splash-screen",
+      {
         image: "./assets/images/splash-logo.png",
+        imageWidth: 128,
         resizeMode: "contain",
         backgroundColor: "#FFF5E2",
-    },
-    userInterfaceStyle: "automatic",
-    newArchEnabled: true,
-    ios: {
-        supportsTablet: true,
-        config: {
-            googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+        dark: {
+          backgroundColor: "#FFF5E2",
         },
-    },
-    android: {
-        adaptiveIcon: {
-            backgroundColor: "#E6F4FE",
-            foregroundImage: "./assets/images/android-icon-foreground.png",
-            backgroundImage: "./assets/images/android-icon-background.png",
-            monochromeImage: "./assets/images/android-icon-monochrome.png",
-        },
-        edgeToEdgeEnabled: true,
-        package: "com.anonymous.mobileapp",
-        config: {
-            googleMaps: {
-                apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
-            },
-        },
-    },
-    web: {
-        bundler: "metro",
-        output: "static",
-        favicon: "./assets/images/favicon.png",
-    },
-    plugins: [
-        "expo-router",
-        [
-            "expo-image-picker",
-            {
-                cameraPermission: "Allow LostPet to take pet photos with your camera.",
-                photosPermission: "Allow LostPet to choose pet photos from your gallery.",
-            },
-        ],
-        [
-            "expo-splash-screen",
-            {
-                image: "./assets/images/splash-logo.png",
-                imageWidth: 128,
-                resizeMode: "contain",
-                backgroundColor: "#FFF5E2",
-                dark: {
-                    backgroundColor: "#FFF5E2",
-                },
-            },
-        ],
+      },
     ],
-    experiments: {
-        typedRoutes: true,
-        reactCompiler: true,
-    },
+  ],
+  experiments: {
+    typedRoutes: true,
+    reactCompiler: true,
+  },
 });

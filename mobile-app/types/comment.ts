@@ -9,6 +9,7 @@ export interface Comment {
   parentCommentId: number | null;
   commentMessage: string;
   commentedAt: string;
+  imageUrl?: string | null;
   isDeleted: boolean;
   author: CommentAuthor;
   replies: Comment[];
