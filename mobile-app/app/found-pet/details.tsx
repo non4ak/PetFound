@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { TouchableOpacity, View } from "react-native";
@@ -23,11 +23,38 @@ export default function FoundPetDetailsScreen() {
   const {
     control,
     formState: { errors },
+    getValues,
     handleSubmit,
+    reset,
 ***REMOVED*** = useForm<FoundPetDetailsFormValues>({
     defaultValues: details,
     resolver: zodResolver(foundPetDetailsSchema),
 ***REMOVED***);
+
+  useEffect(() => {
+    reset(details);
+***REMOVED***, [details, reset]);
+
+  const saveCurrentFormValues = (): void => {
+    const values: FoundPetDetailsFormValues = getValues();
+
+    updateDetails({
+      city: values.city.trim(),
+      country: values.country.trim(),
+      dateLastSeen: values.dateLastSeen.trim(),
+      description: values.description.trim(),
+      lastSeenLatitude: details.lastSeenLatitude,
+      lastSeenLongitude: details.lastSeenLongitude,
+      showPhone: values.showPhone,
+      showTelegram: values.showTelegram,
+      timeApproximate: values.timeApproximate.trim(),
+  ***REMOVED***);
+***REMOVED***;
+
+  const handleChooseLocationPress = (): void => {
+    saveCurrentFormValues();
+    router.push("/found-pet/location-picker");
+***REMOVED***;
 
   const handlePreviewPress = (values: FoundPetDetailsFormValues): void => {
     updateDetails({
@@ -35,6 +62,8 @@ export default function FoundPetDetailsScreen() {
       country: values.country.trim(),
       dateLastSeen: values.dateLastSeen.trim(),
       description: values.description.trim(),
+      lastSeenLatitude: details.lastSeenLatitude,
+      lastSeenLongitude: details.lastSeenLongitude,
       showPhone: values.showPhone,
       showTelegram: values.showTelegram,
       timeApproximate: values.timeApproximate.trim(),
@@ -82,6 +111,7 @@ export default function FoundPetDetailsScreen() {
         control={control}
         errors={errors}
         isDescriptionOptional
+        onChooseLocationPress={handleChooseLocationPress}
       />
     </AppScreenScaffold>
   );

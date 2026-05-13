@@ -70,6 +70,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="map"
         options={{
+          tabBarHideOnKeyboard: false,
           title: "Map",
           tabBarIcon: ({ color, focused }) => (
             <Ionicons

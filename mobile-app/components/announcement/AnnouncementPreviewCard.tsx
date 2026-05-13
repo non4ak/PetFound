@@ -12,6 +12,7 @@ interface AnnouncementPreviewCardProps {
   badges: string[];
   children: ReactNode;
   details: AnnouncementDetails;
+  onOpenMapPress: () => void;
   title: string;
   type: AnnouncementType;
 }
@@ -36,6 +37,7 @@ export function AnnouncementPreviewCard({
   badges,
   children,
   details,
+  onOpenMapPress,
   title,
   type,
 }: AnnouncementPreviewCardProps) {
@@ -77,7 +79,7 @@ export function AnnouncementPreviewCard({
             {details.city}, {details.country}
           </Typography>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onOpenMapPress}>
           <Typography variant="body-small" className="text-primary">
             Open map
           </Typography>

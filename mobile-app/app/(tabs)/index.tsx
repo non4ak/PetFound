@@ -40,8 +40,8 @@ const STATUS_MAP: Record<StatusFilter, number | undefined> = {
 
 const PET_TYPE_MAP: Record<PetTypeFilter, number | undefined> = {
   all: undefined,
-  dog: 1,
-  cat: 0,
+  dog: 0,
+  cat: 1,
 };
 
 export default function HomeScreen() {
@@ -61,21 +61,24 @@ export default function HomeScreen() {
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
-      setDebouncedSearch(searchText);
-      setPageNumber(0);
-      setAllItems([]);
+      setDebouncedSearch(searchText.trim());
   ***REMOVED***, 400);
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
   ***REMOVED***;
 ***REMOVED***, [searchText]);
 
+  useEffect(() => {
+    setPageNumber(0);
+    setAllItems([]);
+***REMOVED***, [debouncedSearch]);
+
   const query: AnnouncementQueryFilter = {
     pageNumber,
     pageSize: PAGE_SIZE,
     sortBy: "createdOn",
     sortDirection: "desc",
-    ...(debouncedSearch.trim() ? { search: debouncedSearch.trim() } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(STATUS_MAP[statusFilter] !== undefined ? { petStatus: STATUS_MAP[statusFilter] } : {}),
     ...(PET_TYPE_MAP[petTypeFilter] !== undefined ? { petType: PET_TYPE_MAP[petTypeFilter] } : {}),
 ***REMOVED***;
@@ -84,13 +87,13 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!data) return;
-    if (data.currentPage === 0) {
+    if (pageNumber === 0) {
       setAllItems(data.items ?? []);
   ***REMOVED*** else {
       setAllItems((prev) => [...prev, ...(data.items ?? [])]);
   ***REMOVED***
     setIsFetchingMore(false);
-***REMOVED***, [data]);
+***REMOVED***, [data, pageNumber]);
 
   const handleFilterChange = useCallback(
     (newStatus: StatusFilter, newPetType: PetTypeFilter) => {

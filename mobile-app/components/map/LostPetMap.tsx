@@ -1,9 +1,11 @@
 import React from "react";
-import MapView, { PROVIDER_GOOGLE, type LatLng } from "react-native-maps";
+import MapView, {
+  PROVIDER_GOOGLE,
+  type UserLocationChangeEvent,
+} from "react-native-maps";
 import { cssInterop } from "nativewind";
 
 import { PetMapMarker } from "./PetMapMarker";
-import { UserLocationMarker } from "./UserLocationMarker";
 import {
   CUSTOM_MAP_STYLE,
   INITIAL_REGION,
@@ -15,16 +17,20 @@ cssInterop(MapView, {
 });
 
 interface LostPetMapProps {
-  markers: (PetMapMarkerData | null)[];
+  markers: PetMapMarkerData[];
+  onMapPress: () => void;
   onMarkerPress: (id: number) => void;
-  userLocationCoordinate: LatLng;
-  mapRef?: React.RefObject<any>;
+  onUserLocationChange: (event: UserLocationChangeEvent) => void;
+  showsUserLocation: boolean;
+  mapRef?: React.RefObject<MapView | null>;
 }
 
 export function LostPetMap({
   markers,
+  onMapPress,
   onMarkerPress,
-  userLocationCoordinate,
+  onUserLocationChange,
+  showsUserLocation,
   mapRef,
 }: LostPetMapProps): React.JSX.Element {
   return (
@@ -33,19 +39,18 @@ export function LostPetMap({
       className="flex-1"
       customMapStyle={CUSTOM_MAP_STYLE}
       initialRegion={INITIAL_REGION}
+      onPress={onMapPress}
+      onUserLocationChange={onUserLocationChange}
       provider={PROVIDER_GOOGLE}
       showsBuildings={false}
       showsIndoors={false}
+      showsMyLocationButton={false}
       showsPointsOfInterest={false}
       showsTraffic={false}
+      showsUserLocation={showsUserLocation}
       toolbarEnabled={false}
     >
-      <UserLocationMarker coordinate={userLocationCoordinate} />
-
-      {markers.map((marker: PetMapMarkerData | null) => {
-        if (!marker) {
-          return null;
-      ***REMOVED***
+      {markers.map((marker: PetMapMarkerData) => {
         return (
           <PetMapMarker
             key={marker.id}
