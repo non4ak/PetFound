@@ -2,6 +2,8 @@ import type { ComponentProps } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 export type PetMapMarkerType = "found" | "lost";
+export type PetTypeQueryValue = 0 | 1;
+export type MapFloatingActionId = "my-location";
 
 export interface PetMapMarkerData {
   id: number;
@@ -10,6 +12,11 @@ export interface PetMapMarkerData {
   petId: number;
   imageUri: string;
   type: PetMapMarkerType;
+}
+
+export interface MapPlaceLocation {
+  lat: number;
+  lng: number;
 }
 
 export type MapFilterChipVariant = "accent" | "surface";
@@ -29,5 +36,5 @@ export interface MapFilterChipData {
 export interface FloatingMapActionData {
   accessibilityLabel: string;
   iconName: MaterialIconName;
-  id: string;
+  id: MapFloatingActionId;
 }

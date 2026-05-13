@@ -38,6 +38,8 @@ function createInitialDetails(): LostPetDetails {
     country: '',
     dateLastSeen: formatCurrentAnnouncementDate(),
     description: '',
+    lastSeenLatitude: null,
+    lastSeenLongitude: null,
     showPhone: true,
     showTelegram: true,
     timeApproximate: '',

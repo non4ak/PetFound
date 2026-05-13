@@ -1,11 +1,31 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
 
-import { loginQuery, logoutQuery, registerQuery } from '@/data/queries/auth';
-import type { AuthSession, LoginRequest, RegisterRequest } from '@/types/auth';
+import {
+  googleLoginQuery,
+  loginQuery,
+  logoutQuery,
+  registerQuery,
+} from '@/data/queries/auth';
+import type {
+  AuthSession,
+  GoogleLoginRequest,
+  LoginRequest,
+  RegisterRequest,
+} from '@/types/auth';
 
 export function useLoginMutation(): UseMutationResult<AuthSession, Error, LoginRequest> {
   return useMutation({
     mutationFn: loginQuery,
+***REMOVED***);
+}
+
+export function useGoogleLoginMutation(): UseMutationResult<
+  AuthSession,
+  Error,
+  GoogleLoginRequest
+> {
+  return useMutation({
+    mutationFn: googleLoginQuery,
 ***REMOVED***);
 }
 

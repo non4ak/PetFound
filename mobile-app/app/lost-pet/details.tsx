@@ -23,6 +23,7 @@ export default function LostPetDetailsScreen() {
   const {
     control,
     formState: { errors },
+    getValues,
     handleSubmit,
     reset,
 ***REMOVED*** = useForm<LostPetDetailsFormValues>({
@@ -40,12 +41,35 @@ export default function LostPetDetailsScreen() {
     reset(details);
 ***REMOVED***, [details, reset]);
 
+  const saveCurrentFormValues = (): void => {
+    const values: LostPetDetailsFormValues = getValues();
+
+    updateDetails({
+      city: values.city.trim(),
+      country: values.country.trim(),
+      dateLastSeen: values.dateLastSeen.trim(),
+      description: values.description.trim(),
+      lastSeenLatitude: details.lastSeenLatitude,
+      lastSeenLongitude: details.lastSeenLongitude,
+      showPhone: values.showPhone,
+      showTelegram: values.showTelegram,
+      timeApproximate: values.timeApproximate.trim(),
+  ***REMOVED***);
+***REMOVED***;
+
+  const handleChooseLocationPress = (): void => {
+    saveCurrentFormValues();
+    router.push("/lost-pet/location-picker");
+***REMOVED***;
+
   const handlePreviewPress = (values: LostPetDetailsFormValues): void => {
     updateDetails({
       city: values.city.trim(),
       country: values.country.trim(),
       dateLastSeen: values.dateLastSeen.trim(),
       description: values.description.trim(),
+      lastSeenLatitude: details.lastSeenLatitude,
+      lastSeenLongitude: details.lastSeenLongitude,
       showPhone: values.showPhone,
       showTelegram: values.showTelegram,
       timeApproximate: values.timeApproximate.trim(),
@@ -92,6 +116,7 @@ export default function LostPetDetailsScreen() {
       <AnnouncementDetailsFormCards
         control={control}
         errors={errors}
+        onChooseLocationPress={handleChooseLocationPress}
       />
     </AppScreenScaffold>
   );

@@ -30,11 +30,17 @@ interface AnnouncementDetailsFormCardsProps<
     timeApproximate?: { message?: string };
 ***REMOVED***;
   isDescriptionOptional?: boolean;
+  onChooseLocationPress: () => void;
 }
 
 export function AnnouncementDetailsFormCards<
   T extends FieldValues & AnnouncementDetailsFormFields,
->({ control, errors, isDescriptionOptional }: AnnouncementDetailsFormCardsProps<T>) {
+>({
+  control,
+  errors,
+  isDescriptionOptional,
+  onChooseLocationPress,
+}: AnnouncementDetailsFormCardsProps<T>) {
   return (
     <>
       {/* Location */}
@@ -42,7 +48,7 @@ export function AnnouncementDetailsFormCards<
         <Button
           fullWidth
           label="Choose location on a map"
-          onPress={() => {}}
+          onPress={onChooseLocationPress}
           size="md"
           variant="primary"
         />
