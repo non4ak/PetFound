@@ -3,8 +3,9 @@ import { Image, View } from "react-native";
 import { Marker } from "react-native-maps";
 
 import {
+  MAP_DEFAULT_PET_IMAGE_URI,
+  MAP_MARKER_ANCHOR,
   PET_MARKER_COLORS,
-  USER_LOCATION_MARKER_ANCHOR,
 } from "@/constants/map.constants";
 import type { PetMapMarkerData } from "@/types/map.types";
 import { petMarkerStyles } from "@/components/map/map.styles";
@@ -24,7 +25,7 @@ export function PetMapMarker({ marker, onPress }: PetMapMarkerProps) {
 
   return (
     <Marker
-      anchor={USER_LOCATION_MARKER_ANCHOR}
+      anchor={MAP_MARKER_ANCHOR}
       coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
       onPress={handlePress}
       tracksViewChanges={loading}
@@ -36,7 +37,7 @@ export function PetMapMarker({ marker, onPress }: PetMapMarkerProps) {
           resizeMode="cover"
           source={{
             uri: !marker.imageUri?.startsWith("http")
-              ? "https://images.unsplash.com/photo-1552728089-57168a151b75?q=80&w=200&auto=format&fit=crop"
+              ? MAP_DEFAULT_PET_IMAGE_URI
               : marker.imageUri,
           }}
           style={petMarkerStyles.image}

@@ -1,8 +1,16 @@
-import type { LatLng, MapStyleElement, Region } from "react-native-maps";
+import type { MapStyleElement, Region } from "react-native-maps";
 
-import type { PetMapMarkerType } from "../types/map.types";
+import type { MapFloatingActionId, PetMapMarkerType } from "../types/map.types";
 
 export const MAP_TAB_BAR_OFFSET: number = 96;
+export const MAP_MY_LOCATION_ACTION_ID: MapFloatingActionId = "my-location";
+export const MAP_FILTERS_TOP_OFFSET: number = 60;
+export const MAP_PET_LOCATION_REGION_DELTA: number = 0.01;
+export const MAP_SEARCH_TOP_OFFSET: number = 4;
+export const MAP_SEARCH_PLACE_REGION_DELTA: number = 0.05;
+export const MAP_USER_LOCATION_REGION_DELTA: number = 0.02;
+export const MAP_DEFAULT_PET_IMAGE_URI: string =
+  "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop";
 
 export const INITIAL_REGION: Region = {
   latitude: 50.4501,
@@ -11,12 +19,7 @@ export const INITIAL_REGION: Region = {
   longitudeDelta: 0.04,
 };
 
-export const USER_LOCATION_COORDINATE: LatLng = {
-  latitude: 50.4461,
-  longitude: 30.5264,
-};
-
-export const USER_LOCATION_MARKER_ANCHOR: {
+export const MAP_MARKER_ANCHOR: {
   readonly x: number;
   readonly y: number;
 } = {

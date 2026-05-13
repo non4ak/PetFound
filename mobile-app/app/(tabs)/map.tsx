@@ -1,88 +1,54 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { View } from "react-native";
-import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { LostPetMap } from "@/components/map/LostPetMap";
 import { MapFloatingControls } from "@/components/map/MapFloatingControls";
 import { MapTopOverlay } from "@/components/map/MapTopOverlay";
 import { FLOATING_MAP_ACTIONS, MAP_FILTER_CHIPS } from "@/constants/map.data";
-import {
-  MAP_TAB_BAR_OFFSET,
-  USER_LOCATION_COORDINATE,
-} from "@/constants/map.constants";
-import type { PetMapMarkerData } from "@/types/map.types";
-import { useGetAnnouncements } from "@/data/hooks/announcements";
-import type { AnnouncementQueryFilter } from "@/types/announcement";
+import { MAP_TAB_BAR_OFFSET } from "@/constants/map.constants";
+import { useLostPetMapController } from "@/hooks/useLostPetMapController";
 
 export default function MapScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
-  const router = useRouter();
-  const mapRef = useRef<any>(null);
-  const [searchQuery, setSearchQuery] = useState<AnnouncementQueryFilter>({});
   const {
-    data: announcements,
-    isLoading,
-    isError,
-  } = useGetAnnouncements(searchQuery);
-
-  const markers: (PetMapMarkerData | null)[] =
-    announcements?.items.map((announcement) => {
-      if (
-        announcement.lastSeenLatitude === null ||
-        announcement.lastSeenLongitude === null
-      ) {
-        return null;
-      }
-      return {
-        id: announcement.id,
-        latitude: announcement.lastSeenLatitude,
-        longitude: announcement.lastSeenLongitude,
-        petId: announcement.petId,
-        imageUri: announcement.petPhotoUrl?.startsWith("http")
-          ? announcement.petPhotoUrl
-          : "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop",
-        type: announcement.petStatus === 0 ? "lost" : "found",
-        lostDate: announcement.lastDateWhenSeen || new Date().toISOString(),
-      };
-    }) || [];
-
-  const handleMarkerPress = (id: number): void => {
-    router.push({
-      pathname: "/pet/[id]",
-      params: { id: id },
-    });
-  };
-
-  const handlePlaceSelected = React.useCallback((location: { lat: number; lng: number } | null) => {
-    if (location) {
-      mapRef.current?.animateToRegion({
-        latitude: location.lat,
-        longitude: location.lng,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
-      });
-    }
-  }, []);
+    activeFilterIds,
+    mapRef,
+    markers,
+    onFilterPress,
+    onFloatingActionPress,
+    onMapPress,
+    onMarkerPress,
+    onPlaceSelected,
+    onUserLocationChange,
+    searchBarRef,
+    showsUserLocation,
+  } = useLostPetMapController();
 
   return (
     <View className="flex-1 bg-[#f2efe9]">
       <LostPetMap
         mapRef={mapRef}
         markers={markers}
-        onMarkerPress={handleMarkerPress}
-        userLocationCoordinate={USER_LOCATION_COORDINATE}
+        onMapPress={onMapPress}
+        onMarkerPress={onMarkerPress}
+        onUserLocationChange={onUserLocationChange}
+        showsUserLocation={showsUserLocation}
       />
 
       <MapTopOverlay
+        activeFilterIds={activeFilterIds}
         filters={MAP_FILTER_CHIPS}
-        onPlaceSelected={handlePlaceSelected}
+        onFilterPress={onFilterPress}
+        onPlaceSelected={onPlaceSelected}
+        searchBarRef={searchBarRef}
         topInset={insets.top}
       />
 
       <MapFloatingControls
         actions={FLOATING_MAP_ACTIONS}
         bottomInset={insets.bottom}
+        onActionPress={onFloatingActionPress}
         tabBarOffset={MAP_TAB_BAR_OFFSET}
       />
     </View>

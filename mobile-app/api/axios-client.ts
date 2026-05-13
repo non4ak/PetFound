@@ -6,6 +6,7 @@ const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const AUTH_ENDPOINTS: readonly string[] = [
   '/Auth/login/mobile',
+  '/Auth/google/mobile',
   '/Auth/register',
   '/Auth/refresh/mobile',
 ];

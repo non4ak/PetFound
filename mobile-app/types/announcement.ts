@@ -12,6 +12,8 @@ export interface AnnouncementDetails {
   country: string;
   dateLastSeen: string;
   description: string;
+  lastSeenLatitude: number | null;
+  lastSeenLongitude: number | null;
   showPhone: boolean;
   showTelegram: boolean;
   timeApproximate: string;
@@ -31,6 +33,8 @@ export interface CreateAnnouncementRequest {
   isPhonePublic: boolean;
   isTelegramActive: boolean;
   lastDateWhenSeen: string;
+  lastSeenLatitude?: number;
+  lastSeenLongitude?: number;
   nearLandmark: string;
   petAgeCategory?: OnboardingPetAgeCategory;
   petDetails: string;
@@ -58,8 +62,8 @@ export interface AnnouncementResponse {
     isPhonePublic: boolean;
     isTelegramActive: boolean;
     nearLandmark: string;
-    lastSeenLatitude: number;
-    lastSeenLongitude: number;
+    lastSeenLatitude: number | null;
+    lastSeenLongitude: number | null;
     isActive: boolean;
     createdOn: string;
     pet: {
@@ -118,8 +122,8 @@ export type Announcement = {
   petDetails: string;
   isPhonePublic: boolean;
   isTelegramActive: boolean;
-  lastSeenLatitude: number;
-  lastSeenLongitude: number;
+  lastSeenLatitude: number | null;
+  lastSeenLongitude: number | null;
   isActive: boolean;
   createdOn: string;
   commentsCount: number;

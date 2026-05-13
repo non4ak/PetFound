@@ -28,6 +28,11 @@ import {
 import { useCreateComment, useGetComments } from "@/data/hooks/comments";
 import { uploadPhotoFromUriQuery } from "@/data/queries/photos";
 import type { Comment } from "@/types/comment";
+import {
+  getMapTargetCoordinate,
+  getMapTargetParams,
+  type MapTargetCoordinate,
+} from "@/utils/mapTarget";
 
 const STATUS_STYLES = {
   found: {
@@ -44,8 +49,8 @@ const STATUS_STYLES = {
 
 function flattenComments(
   comments: Comment[],
-): Array<{ comment: Comment; depth: number }> {
-  const result: Array<{ comment: Comment; depth: number }> = [];
+): { comment: Comment; depth: number }[] {
+  const result: { comment: Comment; depth: number }[] = [];
   function traverse(c: Comment, depth: number) {
     result.push({ comment: c, depth });
     c.replies.forEach((r) => traverse(r, depth + 1));
@@ -87,6 +92,26 @@ export default function PetDetailsScreen() {
     router.back();
   };
 
+  const handleOpenMapPress = (): void => {
+    const coordinate: MapTargetCoordinate | null = getMapTargetCoordinate(
+      announcement?.lastSeenLatitude,
+      announcement?.lastSeenLongitude,
+    );
+
+    if (coordinate === null) {
+      Alert.alert(
+        "Location is not available",
+        "This announcement does not have map coordinates.",
+      );
+      return;
+    }
+
+    router.push({
+      pathname: "/(tabs)/map",
+      params: getMapTargetParams(coordinate),
+    });
+  };
+
   const handleArchivePress = () => {
     Alert.alert(
       "Archive announcement",
@@ -122,8 +147,7 @@ export default function PetDetailsScreen() {
       {
         text: "Take photo",
         onPress: async () => {
-          const { granted } =
-            await ImagePicker.requestCameraPermissionsAsync();
+          const { granted } = await ImagePicker.requestCameraPermissionsAsync();
           if (!granted) {
             Alert.alert(
               "Permission needed",
@@ -172,8 +196,7 @@ export default function PetDetailsScreen() {
 
       let imageUrl: string | undefined;
       if (selectedImage) {
-        const fileName =
-          selectedImage.uri.split("/").pop() ?? "photo.jpg";
+        const fileName = selectedImage.uri.split("/").pop() ?? "photo.jpg";
         const contentType = selectedImage.mimeType ?? "image/jpeg";
         imageUrl = await uploadPhotoFromUriQuery({
           uri: selectedImage.uri,
@@ -221,7 +244,7 @@ export default function PetDetailsScreen() {
     STATUS_STYLES[announcement?.petStatus === 0 ? "lost" : "found"];
 
   return (
-    <SafeAreaView className="flex-1 bg-[#FFF5E2]">
+    <SafeAreaView className="flex-1 bg-white">
       <Modal
         visible={fullScreenImageUrl !== null}
         transparent
@@ -244,7 +267,7 @@ export default function PetDetailsScreen() {
           </TouchableOpacity>
         </View>
       </Modal>
-      <View className="mx-6 flex-row items-center justify-between rounded-b-[16px] bg-white px-5 py-4">
+      <View className="flex-row items-center justify-between rounded-b-[16px] bg-white px-5 py-4">
         <TouchableOpacity
           className="h-10 w-10 items-center justify-center rounded-full border border-[#CBD5E1] bg-white"
           onPress={handleBackPress}
@@ -259,8 +282,8 @@ export default function PetDetailsScreen() {
         </Typography>
         {isOwner ? (
           <View className="flex-row items-center gap-2">
-            {announcement != null && (
-              announcement.isActive ? (
+            {announcement != null &&
+              (announcement.isActive ? (
                 <TouchableOpacity
                   onPress={handleArchivePress}
                   disabled={isArchiving || isRestoring}
@@ -269,7 +292,10 @@ export default function PetDetailsScreen() {
                   {isArchiving ? (
                     <ActivityIndicator size="small" color="#94A3B8" />
                   ) : (
-                    <Typography variant="body-small" className="text-secondary-text">
+                    <Typography
+                      variant="body-small"
+                      className="text-secondary-text"
+                    >
                       Archive
                     </Typography>
                   )}
@@ -283,13 +309,15 @@ export default function PetDetailsScreen() {
                   {isRestoring ? (
                     <ActivityIndicator size="small" color="#D89F35" />
                   ) : (
-                    <Typography variant="body-small" className="font-semibold text-primary">
+                    <Typography
+                      variant="body-small"
+                      className="font-semibold text-primary"
+                    >
                       Restore
                     </Typography>
                   )}
                 </TouchableOpacity>
-              )
-            )}
+              ))}
             <TouchableOpacity
               onPress={() =>
                 router.push({
@@ -310,18 +338,18 @@ export default function PetDetailsScreen() {
       </View>
 
       <KeyboardAvoidingView
-        className="flex-1"
+        className="flex-1 bg-background"
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView
           className="flex-1"
-          contentContainerClassName="px-6 pb-4"
+          contentContainerClassName="pb-4 "
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="mt-3 bg-white px-4 pb-5 pt-3">
+          <View className="mt-3 bg-white px-6 pb-5 pt-3">
             <Image
-              className="h-[160px] w-full rounded-[8px]"
+              className="h-[180px] w-full rounded-[8px]"
               resizeMode="cover"
               source={{
                 uri: petInfo?.petPhotoUrl?.startsWith("http")
@@ -384,7 +412,7 @@ export default function PetDetailsScreen() {
                     .join(", ")}
                 </Typography>
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleOpenMapPress}>
                 <Typography
                   className="font-medium text-primary"
                   variant="body-small"
@@ -460,66 +488,68 @@ export default function PetDetailsScreen() {
           </View>
 
           {/* Comments section */}
-          <View className="border-t border-[#F4E8D0] bg-white px-4 pt-5 pb-2">
-            <Typography
-              className="font-semibold text-heading-text"
-              variant="body-small"
-            >
-              Comments ({commentsData?.totalCount ?? 0})
-            </Typography>
-          </View>
+          <View className="mt-6">
+            <View className="border-t border-[#F4E8D0] bg-white px-6 pt-5 pb-2">
+              <Typography
+                className="font-semibold text-heading-text"
+                variant="body-small"
+              >
+                Comments ({commentsData?.totalCount ?? 0})
+              </Typography>
+            </View>
 
-          <View className="bg-white px-4">
-            {isLoadingComments ? (
-              <View className="items-center py-6">
-                <ActivityIndicator size="small" color="#F2C94C" />
-              </View>
-            ) : flatComments.length === 0 ? (
-              <View className="items-center py-6">
-                <Typography
-                  className="text-center text-secondary-text"
-                  variant="body-small"
-                >
-                  No comments yet. Be the first!
-                </Typography>
-              </View>
-            ) : (
-              flatComments.map(({ comment, depth }) => (
-                <View
-                  key={comment.id}
-                  className="border-b border-[#F4E8D0] py-3"
-                  style={{ paddingLeft: depth * 16 }}
-                >
-                  <Typography
-                    className="font-bold text-heading-text"
-                    variant="body-small"
-                  >
-                    {comment.author.userName}
-                  </Typography>
-                  <Typography
-                    className={`mt-0.5 ${comment.isDeleted ? "italic text-secondary-text" : "text-heading-text"}`}
-                    variant="body-small"
-                  >
-                    {comment.isDeleted
-                      ? "Comment deleted"
-                      : comment.commentMessage}
-                  </Typography>
-                  {!comment.isDeleted && comment.imageUrl && (
-                    <TouchableOpacity
-                      activeOpacity={0.85}
-                      onPress={() => setFullScreenImageUrl(comment.imageUrl!)}
-                    >
-                      <Image
-                        source={{ uri: comment.imageUrl }}
-                        className="mt-2 rounded-[8px]"
-                        style={{ width: "100%", height: 200 }}
-                        resizeMode="cover"
-                      />
-                    </TouchableOpacity>
-                  )}
+            <View className="bg-white px-6">
+              {isLoadingComments ? (
+                <View className="items-center py-6">
+                  <ActivityIndicator size="small" color="#F2C94C" />
                 </View>
-              ))
-            )}
+              ) : flatComments.length === 0 ? (
+                <View className="items-center py-6">
+                  <Typography
+                    className="text-center text-secondary-text"
+                    variant="body-small"
+                  >
+                    No comments yet. Be the first!
+                  </Typography>
+                </View>
+              ) : (
+                flatComments.map(({ comment, depth }) => (
+                  <View
+                    key={comment.id}
+                    className="border-b border-[#F4E8D0] py-3"
+                    style={{ paddingLeft: depth * 16 }}
+                  >
+                    <Typography
+                      className="font-bold text-heading-text"
+                      variant="body-small"
+                    >
+                      {comment.author.userName}
+                    </Typography>
+                    <Typography
+                      className={`mt-0.5 ${comment.isDeleted ? "italic text-secondary-text" : "text-heading-text"}`}
+                      variant="body-small"
+                    >
+                      {comment.isDeleted
+                        ? "Comment deleted"
+                        : comment.commentMessage}
+                    </Typography>
+                    {!comment.isDeleted && comment.imageUrl && (
+                      <TouchableOpacity
+                        activeOpacity={0.85}
+                        onPress={() => setFullScreenImageUrl(comment.imageUrl!)}
+                      >
+                        <Image
+                          source={{ uri: comment.imageUrl }}
+                          className="mt-2 rounded-[8px]"
+                          style={{ width: "100%", height: 200 }}
+                          resizeMode="cover"
+                        />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                ))
+              )}
+            </View>
           </View>
         </ScrollView>
 

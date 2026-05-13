@@ -1,4 +1,11 @@
-import React, { startTransition } from "react";
+import React, { startTransition, useState } from "react";
+import {
+  GoogleSignin,
+  isCancelledResponse,
+  isErrorWithCode,
+  isSuccessResponse,
+  type SignInResponse,
+} from "@react-native-google-signin/google-signin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -18,7 +25,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Typography } from "@/components/ui/Typography";
 import { useAuth } from "@/contexts/AuthContext";
-import { useLoginMutation } from "@/data/hooks/auth";
+import { useGoogleLoginMutation, useLoginMutation } from "@/data/hooks/auth";
 import { getApiErrorMessage } from "@/utils/apiError";
 import {
   loginSchema,
@@ -29,6 +36,9 @@ const GOOGLE_LOGO_SOURCE: ImageSourcePropType = require("@/assets/images/google-
 
 export default function LoginScreen() {
   const auth = useAuth();
+  const [isGoogleSignInPending, setIsGoogleSignInPending] =
+    useState<boolean>(false);
+  const googleLoginMutation = useGoogleLoginMutation();
   const loginMutation = useLoginMutation();
   const router = useRouter();
   const {
@@ -43,6 +53,69 @@ export default function LoginScreen() {
     },
     resolver: zodResolver(loginSchema),
   });
+  const isAuthActionPending: boolean =
+    loginMutation.isPending ||
+    googleLoginMutation.isPending ||
+    isGoogleSignInPending;
+
+  const completeGoogleLogin = async (): Promise<void> => {
+    setIsGoogleSignInPending(true);
+
+    try {
+      if (Platform.OS === "android") {
+        await GoogleSignin.hasPlayServices({
+          showPlayServicesUpdateDialog: true,
+        });
+      }
+
+      const googleResponse: SignInResponse = await GoogleSignin.signIn();
+
+      if (isCancelledResponse(googleResponse)) {
+        return;
+      }
+
+      if (!isSuccessResponse(googleResponse)) {
+        throw new Error("Google sign-in failed.");
+      }
+
+      const idToken: string | null = googleResponse.data.idToken;
+
+      if (idToken === null || idToken.trim().length === 0) {
+        throw new Error("Google sign-in did not return an ID token.");
+      }
+
+      const session = await googleLoginMutation.mutateAsync({
+        idToken,
+      });
+
+      await auth.completeSignIn(session);
+
+      startTransition(() => {
+        router.replace(
+          auth.isOnboardingActive ? "/(onboarding)/profile" : "/(tabs)",
+        );
+      });
+    } catch (error) {
+      console.error("Google Sign-In failed.", {
+        code: isErrorWithCode(error) ? error.code : null,
+        hasWebClientId:
+          typeof process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID === "string" &&
+          process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID.trim().length > 0,
+        message: error instanceof Error ? error.message : null,
+        name: error instanceof Error ? error.name : null,
+        platform: Platform.OS,
+      });
+
+      setError("root", {
+        message: getApiErrorMessage(
+          error,
+          "Unable to sign in with Google right now.",
+        ),
+      });
+    } finally {
+      setIsGoogleSignInPending(false);
+    }
+  };
 
   const handleLogin = async (values: LoginFormValues): Promise<void> => {
     try {
@@ -135,7 +208,7 @@ export default function LoginScreen() {
 
           <View className="mt-8">
             <Button
-              disabled={loginMutation.isPending}
+              disabled={isAuthActionPending}
               errorText={errors.root?.message}
               fullWidth
               label={loginMutation.isPending ? "Signing In..." : "Log In"}
@@ -155,9 +228,13 @@ export default function LoginScreen() {
 
           <View className="flex-col gap-3">
             <Button
-              disabled
+              disabled={isAuthActionPending}
               fullWidth
-              label="Continue with Google"
+              label={
+                isGoogleSignInPending || googleLoginMutation.isPending
+                  ? "Connecting..."
+                  : "Continue with Google"
+              }
               leadingIcon={
                 <Image
                   resizeMode="contain"
@@ -165,6 +242,7 @@ export default function LoginScreen() {
                   style={{ height: 20, width: 20 }}
                 />
               }
+              onPress={completeGoogleLogin}
               size="md"
               variant="outline"
             />

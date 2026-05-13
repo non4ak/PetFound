@@ -1,135 +1,60 @@
-import React, { useState } from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
-import { useRouter } from "expo-router";
+import React, { useCallback } from "react";
+import { View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { useQueryClient } from "@tanstack/react-query";
 
 import { AnnouncementPreviewCard } from "@/components/announcement/AnnouncementPreviewCard";
-import { AppScreenScaffold } from "@/components/ui/AppScreenScaffold";
-import { Button } from "@/components/ui/Button";
-import { Typography } from "@/components/ui/Typography";
+import { AnnouncementPreviewScaffold } from "@/components/announcement/AnnouncementPreviewScaffold";
 import { useFoundPetFlow } from "@/contexts/FoundPetFlowContext";
-import { createAnnouncementQuery } from "@/data/queries/announcements";
+import { useAnnouncementPreviewActions } from "@/hooks/useAnnouncementPreviewActions";
+import type { CreateAnnouncementRequest } from "@/types/announcement";
 import {
-  AnnouncementPetStatus,
-  type CreateAnnouncementRequest,
-} from "@/types/announcement";
-import { toAnnouncementDateTimeOffset } from "@/utils/announcementDate";
-import { getApiErrorMessage } from "@/utils/apiError";
-import { getPetSexLabel, getPetSizeLabel, getPetTypeLabel } from "@/utils/petLabels";
+  createFoundPetAnnouncementRequest,
+  FOUND_PET_PREVIEW_TITLE,
+  getAnnouncementPreviewBadges,
+} from "@/utils/announcementPreview";
 
-export default function FoundPetPreviewScreen() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
+export default function FoundPetPreviewScreen(): React.JSX.Element {
   const { details, info, photoUri, resetDraft } = useFoundPetFlow();
-  const [isPosting, setIsPosting] = useState<boolean>(false);
 
-  const handlePostPress = async (): Promise<void> => {
-    setIsPosting(true);
+  const createRequest = useCallback(
+    (): CreateAnnouncementRequest =>
+      createFoundPetAnnouncementRequest(details, info, photoUri),
+    [details, info, photoUri],
+  );
 
-    try {
-      const request: CreateAnnouncementRequest = {
-        approximateTime: details.timeApproximate.trim().length > 0
-          ? details.timeApproximate.trim()
-          : "Unknown",
-        city: details.city.trim(),
-        country: details.country.trim(),
-        isPhonePublic: details.showPhone,
-        isTelegramActive: details.showTelegram,
-        lastDateWhenSeen: toAnnouncementDateTimeOffset(details.dateLastSeen),
-        nearLandmark: details.city.trim(),
-        petDetails: details.description.trim().length > 0
-          ? details.description.trim()
-          : "No additional details provided.",
-        petName: "Found pet",
-        petStatus: AnnouncementPetStatus.Found,
-        ...(info.breed.trim().length > 0 ? { breed: info.breed.trim() } : {}),
-        ...(info.chipNumber.trim().length > 0
-          ? { chipNumber: info.chipNumber.trim() }
-          : {}),
-        ...(info.petAgeCategory !== null
-          ? { petAgeCategory: info.petAgeCategory }
-          : {}),
-        ...(photoUri !== null && photoUri.trim().length > 0
-          ? { petPhotoUrl: photoUri.trim() }
-          : {}),
-        ...(info.petSex !== null ? { petSex: info.petSex } : {}),
-        ...(info.petSize !== null ? { petSize: info.petSize } : {}),
-        ...(info.petType !== null ? { petType: info.petType } : {}),
-      };
+  const { isPosting, onBackPress, onOpenMapPress, onPostPress } =
+    useAnnouncementPreviewActions({
+      createRequest,
+      details,
+      resetDraft,
+    });
 
-      await createAnnouncementQuery(request);
-      await queryClient.invalidateQueries({ queryKey: ["announcements"] });
-      resetDraft();
-      router.replace("/(tabs)");
-    } catch (error: unknown) {
-      Alert.alert(
-        "Post failed",
-        getApiErrorMessage(error, "Could not create announcement."),
-      );
-    } finally {
-      setIsPosting(false);
-    }
-  };
+  const badges: string[] = getAnnouncementPreviewBadges({
+    breed: info.breed,
+    petSex: info.petSex,
+    petSize: info.petSize,
+    petType: info.petType,
+  });
 
-  const badges: string[] = [getPetTypeLabel(info.petType)];
-  if (info.breed.trim().length > 0) badges.push(info.breed);
-  const sexLabel = getPetSexLabel(info.petSex);
-  if (sexLabel !== null) badges.push(sexLabel);
-  const sizeLabel = getPetSizeLabel(info.petSize);
-  if (sizeLabel !== null) badges.push(sizeLabel);
+  const hasPhoto: boolean = photoUri !== null && photoUri.trim().length > 0;
 
   return (
-    <AppScreenScaffold
-      footer={
-        <Button
-          fullWidth
-          disabled={isPosting}
-          label={isPosting ? "Posting..." : "Post"}
-          onPress={handlePostPress}
-          size="md"
-          trailingIcon={
-            <Ionicons name="arrow-forward" size={18} color="#1E1E1E" />
-          }
-          variant="primary"
-        />
-      }
-      header={
-        <View className="flex-row items-center justify-between">
-          <TouchableOpacity
-            className="h-10 w-10 items-center justify-center rounded-full bg-white"
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={20} color="#94A3B8" />
-          </TouchableOpacity>
-          <Typography
-            variant="body-regular"
-            className="font-semibold text-heading-text"
-          >
-            Preview
-          </Typography>
-          <TouchableOpacity disabled={isPosting} onPress={handlePostPress}>
-            <Typography variant="body-small" className="text-primary">
-              {isPosting ? "Posting..." : "Post"}
-            </Typography>
-          </TouchableOpacity>
-        </View>
-      }
+    <AnnouncementPreviewScaffold
+      isPosting={isPosting}
+      onBackPress={onBackPress}
+      onPostPress={onPostPress}
     >
-      <Typography variant="body-small" className="text-secondary-text">
-        How your post will look in the feed
-      </Typography>
-
       <AnnouncementPreviewCard
         badges={badges}
         details={details}
-        title="Found pet"
+        onOpenMapPress={onOpenMapPress}
+        title={FOUND_PET_PREVIEW_TITLE}
         type="found"
       >
-        {photoUri !== null && photoUri.trim().length > 0 ? (
+        {hasPhoto ? (
           <Image
-            source={{ uri: photoUri }}
+            source={{ uri: photoUri ?? "" }}
             style={{ height: 180, width: "100%", borderRadius: 16 }}
             contentFit="cover"
           />
@@ -139,6 +64,6 @@ export default function FoundPetPreviewScreen() {
           </View>
         )}
       </AnnouncementPreviewCard>
-    </AppScreenScaffold>
+    </AnnouncementPreviewScaffold>
   );
 }
