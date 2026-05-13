@@ -24,3 +24,15 @@ export async function getAllComments(announcementId: number | null, pageNumber: 
 export async function deleteComment(announcementId: number, commentId: number) {
     return await axiosClient.delete(`/admin/announcements/${announcementId}/comments/${commentId}`);
 }
+
+export async function editComment(announcementId: number, commentId: number, commentMessage: string, imageUrl: string | null, latitude: number | null, longitude: number | null, locationDescription: string | null) {
+    const requestBody = {
+        commentMessage: commentMessage,
+        imageUrl: imageUrl,
+        latitude: latitude,
+        longitude: longitude,
+        locationDescription: locationDescription
+  ***REMOVED***;
+    
+    return await axiosClient.put(`/admin/announcements/${announcementId}/comments/${commentId}`, requestBody);
+}

@@ -11,10 +11,18 @@ interface CommentProps {
     showId?: boolean;
     manageMode?: boolean;
     deleteComment?: (announcementId: number, commentId: number) => Promise<void>;
+    editComment?: (announcementId: number, commentId: number, commentMessage: string, imageUrl: string | null, latitude: number | null, longitude: number | null, locationDescription: string | null) => Promise<void>;
 }
 
-export const Comment = ({ comment, depth = 0, author, showId = false, manageMode = false, deleteComment }: CommentProps) => {
+export const Comment = ({ comment, depth = 0, author, showId = false, manageMode = false, deleteComment, editComment }: CommentProps) => {
     const [address, setAddress] = useState<Address | null>(null);
+
+    const [editMode, setEditMode] = useState(false);
+    const [editedMessage, setEditedMessage] = useState(comment.commentMessage);
+    const [editedImageUrl, setEditedImageUrl] = useState(comment.imageUrl);
+    const [editedLatitude, setEditedLatitude] = useState(comment.latitude);
+    const [editedLongitude, setEditedLongitude] = useState(comment.longitude);
+    const [editedLocationDescription, setEditedLocationDescription] = useState(comment.locationDescription);
 
     async function fetchAddress() {
         if (comment.latitude && comment.longitude) {
@@ -45,7 +53,9 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                     {new Date(comment.commentedAt).toLocaleString()}
                 </span>
             </p>
+
             {comment.isDeleted && <p className="text-red-600 text-sm">Deleted at {new Date(comment.deletedAt).toLocaleString()}</p>}
+
             {showId && <p className="text-gray-600 text-sm">Comment ID: {comment.id}</p>}
 
             <p 
@@ -58,14 +68,50 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                 <p className="text-gray-600 text-sm mt-1">{address?.address.road}{address?.address.house_number ? `, ${address?.address.house_number}` : ''}</p>
             )}
 
+            {editMode && (
+                <div className="flex flex-col gap-2 mt-2">
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Details: </span>
+
+                        <textarea
+                            placeholder="Message"
+                            defaultValue={editedMessage}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedMessage(e.target.value)}
+                        />
+                    </p>
+                </div>
+            )}
+
             {manageMode && (
                 comment.isDeleted ? (null) : (
                     <div className="flex gap-2 mt-2 mb-1">
-                        <Button
-                            variant="edit"
-                            size="sm">
-                            Edit
-                        </Button>
+                        {editMode ?
+                            (
+                                <Button
+                                    variant="edit"
+                                    size="sm"
+                                    onClick={() => {
+                                        setEditMode(false);
+                                        editComment && editComment(comment.announcementId, comment.id, editedMessage, editedImageUrl, editedLatitude, editedLongitude, editedLocationDescription);
+                                  ***REMOVED***}
+                                >
+                                    Save
+                                </Button>
+                            ) :
+                            (
+                                <Button
+                                    variant="edit"
+                                    size="sm"
+                                    onClick={() => setEditMode(true)}
+                                >
+                                    Edit
+                                </Button>
+                            )
+                      ***REMOVED***
+                        
+                        
                         <Button
                             variant="danger"
                             size="sm"

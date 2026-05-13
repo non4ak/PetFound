@@ -1,4 +1,4 @@
-import {  getAllComments, getCommentsByAnnouncementId, deleteComment } from "../../data/queries/comments";
+import {  getAllComments, deleteComment, editComment } from "../../data/queries/comments";
 import { useEffect, useState } from "react";
 import type { CommentSecondDto } from "@/types/comments";
 import { Comment } from "@/components/ui/Comment";
@@ -34,6 +34,11 @@ export const Comments = () => {
 
     const handleDeleteComment = async (announcementId: number, commentId: number) => {
         await deleteComment(announcementId, commentId);
+        fetchComments();
+  ***REMOVED***
+
+    const handleEditComment = async (announcementId: number, commentId: number, commentMessage: string, imageUrl: string | null, latitude: number | null, longitude: number | null, locationDescription: string | null) => {
+        await editComment(announcementId, commentId, commentMessage, imageUrl, latitude, longitude, locationDescription);
         fetchComments();
   ***REMOVED***
 
@@ -98,6 +103,7 @@ export const Comments = () => {
                         showId={showIds}
                         manageMode={true}
                         deleteComment={handleDeleteComment}
+                        editComment={handleEditComment}
                     />
                 ))}
             </div>
