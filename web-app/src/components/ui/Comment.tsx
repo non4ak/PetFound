@@ -3,6 +3,7 @@ import type { Address } from "@/types/address";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import type { deleteComment } from "@/data/queries/comments";
+import { ConfirmModal } from "./ConfirmModal";
 
 interface CommentProps {
     comment: any;
@@ -15,6 +16,8 @@ interface CommentProps {
 }
 
 export const Comment = ({ comment, depth = 0, author, showId = false, manageMode = false, deleteComment, editComment }: CommentProps) => {
+    const [action, setAction] = useState<string | null>(null)
+    
     const [address, setAddress] = useState<Address | null>(null);
 
     const [editMode, setEditMode] = useState(false);
@@ -137,16 +140,27 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                     <div className="flex gap-2 mt-2 mb-1">
                         {editMode ?
                             (
-                                <Button
-                                    variant="edit"
-                                    size="sm"
-                                    onClick={() => {
-                                        setEditMode(false);
-                                        editComment && editComment(comment.announcementId, comment.id, editedMessage, editedImageUrl, editedLatitude, editedLongitude, editedLocationDescription);
-                                    }}
-                                >
-                                    Save
-                                </Button>
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant="edit"
+                                        size="sm"
+                                        onClick={() => {
+                                            setAction("edit");
+                                        }}
+                                    >
+                                        Save
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="sm"
+                                        onClick={() => {
+                                            setAction("cancel");
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
+                                
                             ) :
                             (
                                 <Button
@@ -163,7 +177,7 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                         <Button
                             variant="danger"
                             size="sm"
-                            onClick={() => deleteComment && deleteComment(comment.announcementId, comment.id)}
+                            onClick={() => setAction("delete")}
                         >
                             Delete
                         </Button>
@@ -175,6 +189,41 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
             comment.replies && comment.replies.map((reply: any) => (
                 <Comment comment={reply} depth={depth + 1} author={comment.author} showId={showId} key={reply.id} />
             ))}
+
+            {action === "edit" && (
+                <ConfirmModal
+                    title="Save changes?"
+                    message="Are you sure you want to save changes to this comment?"
+                    onConfirm={() => {
+                        setEditMode(false);
+                        editComment && editComment(comment.announcementId, comment.id, editedMessage, editedImageUrl, editedLatitude, editedLongitude, editedLocationDescription);
+                        setAction(null);
+                    }}
+                    onCancel={() => setAction(null)}
+                />
+            )}
+            {action === "cancel" && (
+                <ConfirmModal
+                    title="Discard changes?"
+                    message="Are you sure you want to discard changes?"
+                    onConfirm={() => {
+                        setEditMode(false);
+                        setAction(null);
+                    }}
+                    onCancel={() => setAction(null)}
+                />
+            )}
+            {action === "delete" && (
+                <ConfirmModal
+                    title="Delete comment?"
+                    message="Are you sure you want to delete this comment?"
+                    onConfirm={() => {
+                        deleteComment && deleteComment(comment.announcementId, comment.id)
+                        setAction(null);
+                    }}
+                    onCancel={() => setAction(null)}
+                />
+            )}
         </div>
     );
 }
