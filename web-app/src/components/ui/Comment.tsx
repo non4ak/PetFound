@@ -57,6 +57,10 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
             {comment.isDeleted && <p className="text-red-600 text-sm">Deleted at {new Date(comment.deletedAt).toLocaleString()}</p>}
 
             {showId && <p className="text-gray-600 text-sm">Comment ID: {comment.id}</p>}
+            
+            <div className="mb-2">
+                <img src={comment.imageUrl} className="rounded-lg shadow-md max-h-[300px] object-cover" width="full"/>
+            </div>
 
             <p 
                 className={comment.isDeleted ? "text-gray-600 text-sm italic mt-1" : "text-gray-900"}
@@ -79,6 +83,50 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                             className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             onChange={(e) => setEditedMessage(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Image URL: </span>
+
+                        <textarea
+                            placeholder="URL"
+                            defaultValue={editedImageUrl}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedImageUrl(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Latitude: </span>
+
+                        <textarea
+                            placeholder="Latitude"
+                            defaultValue={editedLatitude}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedLatitude(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Longtitude: </span>
+
+                        <textarea
+                            placeholder="Longtitude"
+                            defaultValue={editedLongitude}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedLongitude(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Location description: </span>
+
+                        <textarea
+                            placeholder="Description"
+                            defaultValue={editedLocationDescription}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedLocationDescription(e.target.value)}
                         />
                     </p>
                 </div>
