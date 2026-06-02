@@ -17,6 +17,6 @@ class PetVectorizer:
         with torch.no_grad():
             outputs = self.model(**inputs)
             
-        embeddings = outputs.pooler_output[0].tolist()
+        embeddings = outputs.last_hidden_state[0][0].tolist()
         
         return embeddings
