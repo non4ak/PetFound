@@ -1,0 +1,11 @@
+petfound-env/
+.venv/
+env/
+
+*.pt
+processed_pets/
+temp_orig_*.jpg
+
+__pycache__/
+.vscode/
+.DS_Store
