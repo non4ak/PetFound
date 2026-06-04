@@ -30,3 +30,24 @@ export interface CommentDto {
   ***REMOVED***;
     replies: CommentDto[];
 }
+
+export interface CommentSecondDto {
+    id: number;
+    announcementId: number;
+    parentCommentId: number | null;
+    commentMessage: string;
+    imageUrl: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    locationDescription: string | null;
+    commentedAt: string;
+    lastModifiedAt: string;
+    isDeleted: boolean;
+    deletedAt: string | null;
+    authorUserId: number;
+    authorUserName: string;
+    announcementPetStatus: number;
+    announcementPetStatusLabel: string;
+    announcementCity: string;
+    announcementCountry: string;
+}

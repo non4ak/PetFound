@@ -1,5 +1,5 @@
 import axiosClient from "@/api/axios-client";
-import type { GetCommentsRespond, PagedList, CommentDto } from "@/types/comments";
+import type { GetCommentsRespond, PagedList, CommentDto, CommentSecondDto } from "@/types/comments";
 
 /*export async function getAnnouncements() {
     
@@ -13,4 +13,26 @@ export async function getCommentsByAnnouncementId(id: number) {
     const response = await axiosClient.get<GetCommentsRespond<PagedList<CommentDto>>>(`/announcements/${id}/comments`);
 
     return response.data.data;
+}
+
+export async function getAllComments(announcementId: number | null, pageNumber: number, pageSize: number, isDeleted: boolean | null) {
+    const response = await axiosClient.get<GetCommentsRespond<PagedList<CommentSecondDto>>>(`/admin/comments`, {params:{announcementId: announcementId,pageNumber: pageNumber, pageSize: pageSize, isDeleted: isDeleted}});
+
+    return response.data.data;
+}
+
+export async function deleteComment(announcementId: number, commentId: number) {
+    return await axiosClient.delete(`/admin/announcements/${announcementId}/comments/${commentId}`);
+}
+
+export async function editComment(announcementId: number, commentId: number, commentMessage: string, imageUrl: string | null, latitude: number | null, longitude: number | null, locationDescription: string | null) {
+    const requestBody = {
+        commentMessage: commentMessage,
+        imageUrl: imageUrl,
+        latitude: latitude,
+        longitude: longitude,
+        locationDescription: locationDescription
+  ***REMOVED***;
+    
+    return await axiosClient.put(`/admin/announcements/${announcementId}/comments/${commentId}`, requestBody);
 }
