@@ -3,7 +3,7 @@ import shutil
 import uuid
 import requests
 from typing import List
-from fastapi import FastAPI, Body, HTTPException, status
+from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel, HttpUrl
 
 from image_processor import PetProcessor
@@ -15,13 +15,10 @@ app = FastAPI(
     description="API for pet photo vectorization and similarity matching"
 )
 
-try:
-    print("Loading AI models (MegaDetector & Vision Transformer)...")
-    detector = PetProcessor()
-    vectorizer = PetVectorizer()
-    print("All models successfully loaded!")
-except Exception as e:
-    print(f"Error initializing models: {e}")
+print("Loading AI models (MegaDetector & Vision Transformer)...")
+detector = PetProcessor()
+vectorizer = PetVectorizer()
+print("All models successfully loaded!")
 
 class AnalyzeRequest(BaseModel):
     image_url: HttpUrl
@@ -33,6 +30,10 @@ class Candidate(BaseModel):
 class MatchRequest(BaseModel):
     target_vector: List[float]
     candidates: List[Candidate]
+
+@app.get("/health", status_code=status.HTTP_200_OK)
+async def health_check():
+    return {"status": "healthy"}
 
 # ENDPOINT 1: DOWNLOAD, CROP & VECTORIZE
 @app.post("/analyze", status_code=status.HTTP_200_OK)

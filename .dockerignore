@@ -1,0 +1,10 @@
+.git
+.gitignore
+.vscode
+__pycache__
+*.pyc
+petfound-env
+.venv
+env
+processed_pets
+temp_orig_*.jpg
