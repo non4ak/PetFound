@@ -103,6 +103,7 @@ public class AnnouncementService : IAnnouncementService
             LastSeenLatitude = model.LastSeenLatitude,
             LastSeenLongitude = model.LastSeenLongitude,
             IsActive = true,
+            ProcessingStatus = AnnouncementProcessingStatus.Pending,
             CreatedOn = now,
             LastModifiedOn = now
       ***REMOVED***;
