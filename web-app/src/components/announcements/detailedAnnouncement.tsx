@@ -287,6 +287,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 selectedAnnouncement.lastSeenLongitude
                             )
                         }</p>
+                        {selectedAnnouncement.lastSeenLatitude && selectedAnnouncement.lastSeenLongitude &&
                         <div className="mt-1">
                             <MapContainer 
                                 center={[selectedAnnouncement.lastSeenLatitude, selectedAnnouncement.lastSeenLongitude]} 
@@ -305,6 +306,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 </Marker>
                             </MapContainer>
                         </div>
+                        }
                         {selectedAnnouncement.isActive ? 
                             ( <Button variant="danger" className="mb-2" onClick={() => setAction("archive")}>Archive</Button> ) :
                             ( <Button variant="danger" className="mb-2" onClick={() => setAction("restore")}>Restore</Button> )
