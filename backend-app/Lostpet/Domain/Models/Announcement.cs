@@ -29,6 +29,14 @@ public class Announcement : BaseEntity
 
     public bool IsActive { get; set; } = true;
 
+    public AnnouncementProcessingStatus ProcessingStatus { get; set; } = AnnouncementProcessingStatus.Pending;
+
+    public double[]? Vector { get; set; }
+
+    public int ProcessingRetryCount { get; set; }
+
+    public DateTimeOffset? VectorizedOn { get; set; }
+
     public int ReporterUserId { get; set; }
 
     public ApplicationUser ReporterUser { get; set; } = null!;
