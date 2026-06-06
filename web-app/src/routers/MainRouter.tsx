@@ -6,6 +6,7 @@ import { MainLayout } from "@/components/MainLayout";
 import { ProtectedGuard } from "@/components/Guards";
 import { Users } from "@/pages/main/Users";
 import { Announcements } from "@/pages/main/Announcements";
+import { Comments } from "@/pages/main/Comments";
 
 export const MainRouter: RouteObject = {
     element: (
@@ -29,6 +30,10 @@ export const MainRouter: RouteObject = {
         {
             path: ROUTES.ANNOUNCEMENTS,
             element: <Announcements />,
+      ***REMOVED***,
+        {
+            path: ROUTES.COMMENTS,
+            element: <Comments />,
       ***REMOVED***
     ],
 };

@@ -1,16 +1,31 @@
 import { getAddressByCoords } from "@/data/queries/address";
 import type { Address } from "@/types/address";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/Button";
+import type { deleteComment } from "@/data/queries/comments";
+import { ConfirmModal } from "./ConfirmModal";
 
 interface CommentProps {
     comment: any;
-    depth: number;
+    depth?: number;
     author?: any;
-    showId: boolean;
+    showId?: boolean;
+    manageMode?: boolean;
+    deleteComment?: (announcementId: number, commentId: number) => Promise<void>;
+    editComment?: (announcementId: number, commentId: number, commentMessage: string, imageUrl: string | null, latitude: number | null, longitude: number | null, locationDescription: string | null) => Promise<void>;
 }
 
-export const Comment = ({ comment, depth, author, showId }: CommentProps) => {
+export const Comment = ({ comment, depth = 0, author, showId = false, manageMode = false, deleteComment, editComment }: CommentProps) => {
+    const [action, setAction] = useState<string | null>(null)
+    
     const [address, setAddress] = useState<Address | null>(null);
+
+    const [editMode, setEditMode] = useState(false);
+    const [editedMessage, setEditedMessage] = useState(comment.commentMessage);
+    const [editedImageUrl, setEditedImageUrl] = useState(comment.imageUrl);
+    const [editedLatitude, setEditedLatitude] = useState(comment.latitude);
+    const [editedLongitude, setEditedLongitude] = useState(comment.longitude);
+    const [editedLocationDescription, setEditedLocationDescription] = useState(comment.locationDescription);
 
     async function fetchAddress() {
         if (comment.latitude && comment.longitude) {
@@ -26,9 +41,9 @@ export const Comment = ({ comment, depth, author, showId }: CommentProps) => {
 
     return (
         <div className={`bg-white rounded-2xl shadow-sm pl-4 pb-2 pt-2 pr-4 flex flex-col hover:shadow-lg transition-shadow ml-${depth*2} mt-2`} key={comment.id}>
-            <p className="text-gray-900 font-semibold">{comment.author.userName}
-                {showId && <span className="text-gray-600 text-sm ml-2 font-normal">User ID: {comment.author.id}</span>}
-                {comment.parentCommentId && (
+            <p className="text-gray-900 font-semibold">{'author' in comment ? comment.author.userName : comment.authorUserName}
+                {showId && <span className="text-gray-600 text-sm ml-2 font-normal">User ID: {'author' in comment ? comment.author.id : comment.authorUserId}</span>}
+                {author && (
                     <span className="text-gray-600 font-normal ml-1 mr-1">
                         replied to
                     </span>
@@ -41,14 +56,174 @@ export const Comment = ({ comment, depth, author, showId }: CommentProps) => {
                     {new Date(comment.commentedAt).toLocaleString()}
                 </span>
             </p>
+
+            {comment.isDeleted && <p className="text-red-600 text-sm">Deleted at {new Date(comment.deletedAt).toLocaleString()}</p>}
+
             {showId && <p className="text-gray-600 text-sm">Comment ID: {comment.id}</p>}
-            <p className="text-gray-900">{comment.commentMessage}</p>
+            
+            <div className="mb-2">
+                <img src={comment.imageUrl} className="rounded-lg shadow-md max-h-[300px] object-cover" width="full"/>
+            </div>
+
+            <p 
+                className={comment.isDeleted ? "text-gray-600 text-sm italic mt-1" : "text-gray-900"}
+            >
+                {comment.commentMessage}
+            </p>
+            
             {comment.latitude && comment.longitude && (
                 <p className="text-gray-600 text-sm mt-1">{address?.address.road}{address?.address.house_number ? `, ${address?.address.house_number}` : ''}</p>
-            )} 
-            {comment.replies.map((reply: any) => (
+            )}
+
+            {editMode && (
+                <div className="flex flex-col gap-2 mt-2">
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Details: </span>
+
+                        <textarea
+                            placeholder="Message"
+                            defaultValue={editedMessage}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedMessage(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Image URL: </span>
+
+                        <textarea
+                            placeholder="URL"
+                            defaultValue={editedImageUrl}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedImageUrl(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Latitude: </span>
+
+                        <textarea
+                            placeholder="Latitude"
+                            defaultValue={editedLatitude}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedLatitude(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Longtitude: </span>
+
+                        <textarea
+                            placeholder="Longtitude"
+                            defaultValue={editedLongitude}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedLongitude(e.target.value)}
+                        />
+                    </p>
+                    <p className="text-gray-900">
+                        <span className="text-gray-600 text-sm">Location description: </span>
+
+                        <textarea
+                            placeholder="Description"
+                            defaultValue={editedLocationDescription}
+                            className="bg-white rounded-2xl shadow-sm border-solid pl-4 m-1 p-2 w-full
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onChange={(e) => setEditedLocationDescription(e.target.value)}
+                        />
+                    </p>
+                </div>
+            )}
+
+            {manageMode && (
+                comment.isDeleted ? (null) : (
+                    <div className="flex gap-2 mt-2 mb-1">
+                        {editMode ?
+                            (
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant="edit"
+                                        size="sm"
+                                        onClick={() => {
+                                            setAction("edit");
+                                      ***REMOVED***}
+                                    >
+                                        Save
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="sm"
+                                        onClick={() => {
+                                            setAction("cancel");
+                                      ***REMOVED***}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
+                                
+                            ) :
+                            (
+                                <Button
+                                    variant="edit"
+                                    size="sm"
+                                    onClick={() => setEditMode(true)}
+                                >
+                                    Edit
+                                </Button>
+                            )
+                      ***REMOVED***
+                        
+                        
+                        <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => setAction("delete")}
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                )
+            )}
+
+            {
+            comment.replies && comment.replies.map((reply: any) => (
                 <Comment comment={reply} depth={depth + 1} author={comment.author} showId={showId} key={reply.id} />
             ))}
+
+            {action === "edit" && (
+                <ConfirmModal
+                    title="Save changes?"
+                    message="Are you sure you want to save changes to this comment?"
+                    onConfirm={() => {
+                        setEditMode(false);
+                        editComment && editComment(comment.announcementId, comment.id, editedMessage, editedImageUrl, editedLatitude, editedLongitude, editedLocationDescription);
+                        setAction(null);
+                  ***REMOVED***}
+                    onCancel={() => setAction(null)}
+                />
+            )}
+            {action === "cancel" && (
+                <ConfirmModal
+                    title="Discard changes?"
+                    message="Are you sure you want to discard changes?"
+                    onConfirm={() => {
+                        setEditMode(false);
+                        setAction(null);
+                  ***REMOVED***}
+                    onCancel={() => setAction(null)}
+                />
+            )}
+            {action === "delete" && (
+                <ConfirmModal
+                    title="Delete comment?"
+                    message="Are you sure you want to delete this comment?"
+                    onConfirm={() => {
+                        deleteComment && deleteComment(comment.announcementId, comment.id)
+                        setAction(null);
+                  ***REMOVED***}
+                    onCancel={() => setAction(null)}
+                />
+            )}
         </div>
     );
 }
