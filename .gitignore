@@ -37,3 +37,6 @@ diagrams/
 .env.local
 **/.env
 **/.env.local
+
+# Local development settings with secrets
+**/appsettings.Development.json

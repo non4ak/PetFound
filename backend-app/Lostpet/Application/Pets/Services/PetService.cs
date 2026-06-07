@@ -4,6 +4,7 @@ using Domain.Models;
 using Domain.Models.Auth;
 using Domain.Models.DTOS.Pets.Models;
 using Domain.Models.DTOS.Pets.Responses;
+using Domain.Models.Enums;
 using Infrastructure.Common.Errors;
 using Infrastructure.Common.Errors.User;
 using Infrastructure.Common.ResultPattern;
@@ -138,8 +139,28 @@ public class PetService : IPetService
         pet.Breed = string.IsNullOrWhiteSpace(model.Breed) ? null : model.Breed.Trim();
         pet.ChipNumber = string.IsNullOrWhiteSpace(model.ChipNumber) ? null : model.ChipNumber.Trim();
         pet.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description.Trim();
-        pet.PetPhotoUrl = string.IsNullOrWhiteSpace(model.PetPhotoUrl) ? null : model.PetPhotoUrl.Trim();
+
+        var newPhotoUrl = string.IsNullOrWhiteSpace(model.PetPhotoUrl) ? null : model.PetPhotoUrl.Trim();
+        var photoChanged = pet.PetPhotoUrl != newPhotoUrl;
+        pet.PetPhotoUrl = newPhotoUrl;
         pet.LastModifiedOn = DateTimeOffset.UtcNow;
+
+        if (photoChanged && newPhotoUrl is not null)
+        {
+            // Photo changed - re-vectorize and re-match this pet's active announcements.
+            var related = await _context.Announcements
+                .Where(a => a.PetId == pet.Id && a.IsActive)
+                .ToListAsync();
+
+            foreach (var announcement in related)
+            {
+                announcement.ProcessingStatus = AnnouncementProcessingStatus.Pending;
+                announcement.Vector = null;
+                announcement.ProcessingRetryCount = 0;
+                announcement.VectorizedOn = null;
+                announcement.LastModifiedOn = DateTimeOffset.UtcNow;
+          ***REMOVED***
+      ***REMOVED***
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);

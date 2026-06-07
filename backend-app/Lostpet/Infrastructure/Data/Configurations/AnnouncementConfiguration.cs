@@ -1,4 +1,5 @@
 using Domain.Models;
+using Domain.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -30,6 +31,12 @@ public class AnnouncementConfiguration : IEntityTypeConfiguration<Announcement>
             .HasForeignKey(a => a.ReporterUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Property(a => a.ProcessingStatus).HasDefaultValue(AnnouncementProcessingStatus.Pending);
+        builder.Property(a => a.Vector).HasColumnType("double precision[]");
+        builder.Property(a => a.ProcessingRetryCount).HasDefaultValue(0);
+
         builder.HasIndex(a => a.ReporterUserId);
+        builder.HasIndex(a => a.ProcessingStatus);
+        builder.HasIndex(a => new { a.City, a.PetStatus });
   ***REMOVED***
 }
