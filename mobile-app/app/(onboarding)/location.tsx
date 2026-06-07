@@ -158,7 +158,7 @@ export default function LocationOnboardingScreen() {
         currentPage={2}
         totalPages={4}
         title="Your location"
-        subtitle="We show you lost pets nearby. Your city is enough â€” we never share your exact address."
+        subtitle="We show you lost pets nearby. Your city is enough, we never share your exact address."
       />
       <View className="gap-5">
         <Button
