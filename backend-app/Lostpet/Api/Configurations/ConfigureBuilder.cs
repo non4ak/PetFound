@@ -1,5 +1,6 @@
 using System.Text;
 using Api.ApiResult;
+using Api.BackgroundServices;
 using Api.Exceptions;
 using Api.Swagger;
 using Application.Announcements.Interfaces;
@@ -18,6 +19,10 @@ using Application.Comments.Interfaces;
 using Application.Comments.Services;
 using Application.Geotags.Interfaces;
 using Application.Geotags.Services;
+using Application.Matching.Interfaces;
+using Application.Matching.Services;
+using Application.Notifications.Interfaces;
+using Application.Notifications.Services;
 using Application.Meta.Interfaces;
 using Application.Meta.Services;
 using Application.Onboarding.Interfaces;
@@ -33,8 +38,10 @@ using Infrastructure.Common.Email;
 using Infrastructure.Common.Errors.User;
 using Infrastructure.Common.JWT;
 using Infrastructure.Common.Mappers.Auth;
+using Infrastructure.Common.Matching;
 using Infrastructure.Common.Storage;
 using Infrastructure.Data;
+using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -151,6 +158,21 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IEnumMetadataService, EnumMetadataService>();
         builder.Services.AddScoped<ICommentService, CommentService>();
         builder.Services.AddScoped<IGeotagService, GeotagService>();
+
+        builder.Services.Configure<MatchingServiceConfig>(builder.Configuration.GetSection("MatchingService"));
+        builder.Services.AddHttpClient<IVectorizationClient, VectorizationClient>((sp, c) =>
+        {
+            var cfg = sp.GetRequiredService<IOptions<MatchingServiceConfig>>().Value;
+            c.Timeout = TimeSpan.FromSeconds(cfg.TimeoutSeconds);
+        });
+        builder.Services.AddHttpClient<IMatchClient, MatchClient>((sp, c) =>
+        {
+            var cfg = sp.GetRequiredService<IOptions<MatchingServiceConfig>>().Value;
+            c.Timeout = TimeSpan.FromSeconds(cfg.TimeoutSeconds);
+        });
+        builder.Services.AddScoped<IMatchingProcessingService, MatchingProcessingService>();
+        builder.Services.AddScoped<INotificationService, NotificationService>();
+        builder.Services.AddHostedService<MatchingPollerBackgroundService>();
     }
 
     private static void ApplyAzureStorageEnvironmentOverrides(

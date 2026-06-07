@@ -8,4 +8,6 @@ public enum NotificationType
     NewComment = 0,
     [Display(Name = "Match found")]
     MatchFound = 1,
+    [Display(Name = "Photo processing failed")]
+    PhotoProcessingFailed = 2,
 }
