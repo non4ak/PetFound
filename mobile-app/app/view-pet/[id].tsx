@@ -49,6 +49,17 @@ export default function ViewPetScreen() {
   return (
     <AppScreenScaffold
       contentClassName="bg-background"
+      header={
+        <View className="flex-row items-center justify-between">
+          <TouchableOpacity
+            className="h-11 w-11 items-center justify-center rounded-full bg-secondary-highlight"
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={22} color="#1E1E1E" />
+          </TouchableOpacity>
+          <View className="w-11" />
+        </View>
+    ***REMOVED***
       scrollContentClassName="pb-10 px-4"
     >
       {pet !== undefined && (

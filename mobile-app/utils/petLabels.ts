@@ -10,8 +10,6 @@ export function getPetTypeLabel(petType: OnboardingPetType | null): string {
       return "Dog";
     case OnboardingPetType.Cat:
       return "Cat";
-    case OnboardingPetType.Other:
-      return "Other";
     default:
       return "Unknown";
 ***REMOVED***

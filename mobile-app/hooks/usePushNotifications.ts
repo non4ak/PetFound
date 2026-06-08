@@ -251,9 +251,12 @@ async function displayMatchNotification(
   await notifee.displayNotification({
     android: {
       channelId,
+      color: "#D89F35",
+      largeIcon: "ic_launcher",
       pressAction: {
         id: DEFAULT_PRESS_ACTION_ID,
     ***REMOVED***,
+      smallIcon: "ic_notification",
       sound: "default",
       visibility: AndroidVisibility.PUBLIC,
   ***REMOVED***,
