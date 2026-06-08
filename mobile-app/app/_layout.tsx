@@ -14,6 +14,7 @@ import { OnboardingProvider } from "@/contexts/OnboardingContext";
 import { queryClient } from "@/data/query-client";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
@@ -22,6 +23,41 @@ GoogleSignin.configure({
 export const unstable_settings = {
   initialRouteName: "(auth)",
 };
+
+function AppNavigator(): React.JSX.Element {
+  usePushNotifications();
+
+  return (
+    <>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="create-announcement"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen name="lost-pet" options={{ headerShown: false }} />
+        <Stack.Screen name="found-pet" options={{ headerShown: false }} />
+        <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
+        <Stack.Screen name="create-pet" options={{ headerShown: false }} />
+        <Stack.Screen name="view-pet" options={{ headerShown: false }} />
+        <Stack.Screen name="edit-pet" options={{ headerShown: false }} />
+        <Stack.Screen name="pet/[id]" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="my-announcements"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="modal"
+          options={{ presentation: "modal", title: "Modal" }}
+        />
+      </Stack>
+
+      <StatusBar style="auto" />
+    </>
+  );
+}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -33,40 +69,7 @@ export default function RootLayout() {
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="(onboarding)"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="create-announcement"
-                options={{ headerShown: false, presentation: "modal" }}
-              />
-              <Stack.Screen name="lost-pet" options={{ headerShown: false }} />
-              <Stack.Screen name="found-pet" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="edit-profile"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="create-pet"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="view-pet" options={{ headerShown: false }} />
-              <Stack.Screen name="edit-pet" options={{ headerShown: false }} />
-              <Stack.Screen name="pet/[id]" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="my-announcements"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="modal"
-                options={{ presentation: "modal", title: "Modal" }}
-              />
-            </Stack>
-            <StatusBar style="auto" />
+            <AppNavigator />
           </ThemeProvider>
         </OnboardingProvider>
       </AuthProvider>

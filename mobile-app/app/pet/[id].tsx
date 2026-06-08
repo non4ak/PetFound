@@ -106,7 +106,7 @@ export default function PetDetailsScreen() {
       return;
   ***REMOVED***
 
-    router.push({
+    router.dismissTo({
       pathname: "/(tabs)/map",
       params: getMapTargetParams(coordinate),
   ***REMOVED***);
@@ -412,7 +412,7 @@ export default function PetDetailsScreen() {
                     .join(", ")}
                 </Typography>
               </View>
-              <TouchableOpacity onPress={handleOpenMapPress}>
+              <TouchableOpacity hitSlop={12} onPress={handleOpenMapPress}>
                 <Typography
                   className="font-medium text-primary"
                   variant="body-small"

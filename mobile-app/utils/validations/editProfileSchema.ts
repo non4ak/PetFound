@@ -26,9 +26,8 @@ export const editProfileSchema = z.object({
   socialNetwork: z
     .string()
     .trim()
-    .min(1, 'Social media link is required')
     .refine(
-      (value: string) => socialNetworkPattern.test(value),
+      (value: string) => value.length === 0 || socialNetworkPattern.test(value),
       'Social media link must be an @handle or a valid URL',
     ),
   userPhotoUrl: z

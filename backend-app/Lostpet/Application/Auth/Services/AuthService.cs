@@ -346,6 +346,42 @@ public class AuthService : IAuthService
         return Result<bool>.Success(true);
   ***REMOVED***
 
+    public async Task<Result<bool>> UpdateDeviceKeyAsync(int userId, string deviceKey)
+    {
+        if (string.IsNullOrWhiteSpace(deviceKey))
+        {
+            return Result<bool>.Failure(UserErrors.RequiredField("deviceKey"));
+      ***REMOVED***
+
+        var normalizedDeviceKey = deviceKey.Trim();
+        if (normalizedDeviceKey.Length > 4096)
+        {
+            return Result<bool>.Failure(
+                UserErrors.UserNotCreatedError("deviceKey must not exceed 4096 characters"));
+      ***REMOVED***
+
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+        {
+            return Result<bool>.Failure(UserErrors.UserNotFoundError());
+      ***REMOVED***
+
+        if (user.DeviceKey == normalizedDeviceKey)
+        {
+            return Result<bool>.Success(true);
+      ***REMOVED***
+
+        user.DeviceKey = normalizedDeviceKey;
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            return Result<bool>.Failure(
+                UserErrors.UserNotCreatedError(result.Errors.First().Description));
+      ***REMOVED***
+
+        return Result<bool>.Success(true);
+  ***REMOVED***
+
     public async Task<Result> RefreshToken()
     {
         var refreshToken = _cookieService.GetRefreshToken();
