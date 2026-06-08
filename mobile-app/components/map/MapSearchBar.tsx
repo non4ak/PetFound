@@ -18,10 +18,30 @@ interface MapSearchBarProps {
   onPlaceSelected: (location: MapPlaceLocation | null) => void;
 }
 
+interface GooglePlacesApiLocation {
+  latitude?: number;
+  longitude?: number;
+  lat?: number;
+  lng?: number;
+}
+
+interface GooglePlacesApiDetails {
+  geometry?: {
+    location?: GooglePlacesApiLocation;
+  };
+  location?: GooglePlacesApiLocation;
+}
+
 export interface MapSearchBarRef {
   blur: () => void;
   clear: () => void;
 }
+
+const GOOGLE_PLACES_API_BASE_URL: string = "https://places.googleapis.com";
+const GOOGLE_PLACES_AUTOCOMPLETE_FIELD_MASK: string =
+  "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat";
+const GOOGLE_PLACES_DETAILS_FIELDS: string =
+  "id,displayName,formattedAddress,location";
 
 const SEARCH_BAR_STYLES = {
   container: {
@@ -67,6 +87,38 @@ const SEARCH_BAR_STYLES = {
   },
 } as const;
 
+function mapGooglePlacesLocationToMapPlaceLocation(
+  location: GooglePlacesApiLocation | undefined,
+): MapPlaceLocation | null {
+  if (location === undefined) {
+    return null;
+  }
+
+  const latitude: number | undefined = location.latitude ?? location.lat;
+  const longitude: number | undefined = location.longitude ?? location.lng;
+
+  if (latitude === undefined || longitude === undefined) {
+    return null;
+  }
+
+  return {
+    lat: latitude,
+    lng: longitude,
+  };
+}
+
+function getMapPlaceLocationFromDetails(
+  details: GooglePlacesApiDetails | null,
+): MapPlaceLocation | null {
+  if (details === null) {
+    return null;
+  }
+
+  return mapGooglePlacesLocationToMapPlaceLocation(
+    details.location ?? details.geometry?.location,
+  );
+}
+
 export const MapSearchBar = forwardRef<MapSearchBarRef, MapSearchBarProps>(
   function MapSearchBar(
     { onPlaceSelected }: MapSearchBarProps,
@@ -99,20 +151,29 @@ export const MapSearchBar = forwardRef<MapSearchBarRef, MapSearchBarProps>(
       <View className="mx-4">
         <GooglePlacesAutocomplete
           fetchDetails={true}
+          fields={GOOGLE_PLACES_DETAILS_FIELDS}
+          isNewPlacesAPI={true}
           keyboardShouldPersistTaps="always"
-          onPress={(data, details = null) => {
-            if (details?.geometry?.location) {
-              onPlaceSelected(details.geometry.location);
-            } else {
-              onPlaceSelected(null);
-            }
+          onFail={(error: unknown): void => {
+            console.warn("Google Places autocomplete failed", error);
+          }}
+          onPress={(_data, details = null) => {
+            onPlaceSelected(getMapPlaceLocationFromDetails(details));
           }}
           placeholder="Search area..."
           query={{
-            key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
-            language: "en",
+            key: process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY,
+            languageCode: "en",
           }}
           ref={placesRef}
+          requestUrl={{
+            headers: {
+              "Content-Type": "application/json",
+              "X-Goog-FieldMask": GOOGLE_PLACES_AUTOCOMPLETE_FIELD_MASK,
+            },
+            url: GOOGLE_PLACES_API_BASE_URL,
+            useOnPlatform: "all",
+          }}
           renderLeftButton={() => (
             <Ionicons
               className="mr-2 self-center"

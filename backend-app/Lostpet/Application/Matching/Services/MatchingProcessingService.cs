@@ -3,6 +3,7 @@ using Domain.Models;
 using Domain.Models.Enums;
 using Infrastructure.Common.Errors;
 using Infrastructure.Common.Matching;
+using Infrastructure.Common.Notifications;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ public class MatchingProcessingService : IMatchingProcessingService
     private readonly ApplicationDbContext _context;
     private readonly IVectorizationClient _vectorizationClient;
     private readonly IMatchClient _matchClient;
+    private readonly IPushNotificationSender _pushNotificationSender;
     private readonly MatchingServiceConfig _config;
     private readonly ILogger<MatchingProcessingService> _logger;
 
@@ -22,12 +24,14 @@ public class MatchingProcessingService : IMatchingProcessingService
         ApplicationDbContext context,
         IVectorizationClient vectorizationClient,
         IMatchClient matchClient,
+        IPushNotificationSender pushNotificationSender,
         IOptions<MatchingServiceConfig> config,
         ILogger<MatchingProcessingService> logger)
     {
         _context = context;
         _vectorizationClient = vectorizationClient;
         _matchClient = matchClient;
+        _pushNotificationSender = pushNotificationSender;
         _config = config.Value;
         _logger = logger;
     }
@@ -162,6 +166,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             .AsNoTracking()
             .Include(a => a.Pet)
             .Where(a => a.Id != target.Id)
+            .Where(a => a.ReporterUserId != target.ReporterUserId)
             .Where(a => a.IsActive)
             .Where(a => a.PetStatus == opposite)
             .Where(a => a.City != null && targetCity != null && a.City.ToLower() == targetCity)
@@ -204,17 +209,24 @@ public class MatchingProcessingService : IMatchingProcessingService
             .Where(s => s.SimilarityPercentage >= _config.SimilarityThresholdPercent)
             .ToList();
 
+        var pendingPushNotifications = new List<PendingMatchPushNotification>();
         foreach (var score in strong)
         {
-            await CreateMatchAsync(target, score, ct);
+            var createdNotifications = await CreateMatchAsync(target, score, ct);
+            pendingPushNotifications.AddRange(createdNotifications);
         }
 
         target.ProcessingStatus = AnnouncementProcessingStatus.Matched;
         target.LastModifiedOn = DateTimeOffset.UtcNow;
         await _context.SaveChangesAsync(ct);
+
+        await SendMatchPushNotificationsAsync(pendingPushNotifications, ct);
     }
 
-    private async Task CreateMatchAsync(Announcement target, MatchCandidateScore score, CancellationToken ct)
+    private async Task<IReadOnlyList<PendingMatchPushNotification>> CreateMatchAsync(
+        Announcement target,
+        MatchCandidateScore score,
+        CancellationToken ct)
     {
         int lostId;
         int foundId;
@@ -233,14 +245,14 @@ public class MatchingProcessingService : IMatchingProcessingService
             .AnyAsync(m => m.LostAnnouncementId == lostId && m.FoundAnnouncementId == foundId, ct);
         if (exists)
         {
-            return;
+            return Array.Empty<PendingMatchPushNotification>();
         }
 
         var lost = await _context.Announcements.FirstOrDefaultAsync(a => a.Id == lostId, ct);
         var found = await _context.Announcements.FirstOrDefaultAsync(a => a.Id == foundId, ct);
         if (lost is null || found is null)
         {
-            return;
+            return Array.Empty<PendingMatchPushNotification>();
         }
 
         var now = DateTimeOffset.UtcNow;
@@ -256,26 +268,118 @@ public class MatchingProcessingService : IMatchingProcessingService
         await _context.MatchResults.AddAsync(match, ct);
 
         var percentLabel = Math.Round(score.SimilarityPercentage);
-
-        match.Notifications.Add(new Notification
+        const string pushBody = "We found an announcement that may match your pet.";
+        var recipients = new[]
         {
-            UserId = lost.ReporterUserId,
-            Type = NotificationType.MatchFound,
-            Message = $"Знайдено можливий збіг з оголошенням #{foundId} ({percentLabel}%)",
-            IsRead = false,
-            CreatedOn = now,
-            LastModifiedOn = now
-        });
+            new PendingMatchPushNotification(
+                lost.ReporterUserId,
+                foundId,
+                pushBody),
+            new PendingMatchPushNotification(
+                found.ReporterUserId,
+                lostId,
+                pushBody)
+        }
+        .DistinctBy(notification => notification.UserId)
+        .ToList();
 
-        match.Notifications.Add(new Notification
+        foreach (var recipient in recipients)
         {
-            UserId = found.ReporterUserId,
-            Type = NotificationType.MatchFound,
-            Message = $"Знайдено можливий збіг з оголошенням #{lostId} ({percentLabel}%)",
-            IsRead = false,
-            CreatedOn = now,
-            LastModifiedOn = now
-        });
+            match.Notifications.Add(new Notification
+            {
+                UserId = recipient.UserId,
+                Type = NotificationType.MatchFound,
+                Message = $"Possible match found with announcement #{recipient.OppositeAnnouncementId} ({percentLabel}%)",
+                IsRead = false,
+                CreatedOn = now,
+                LastModifiedOn = now
+            });
+        }
+
+        return recipients;
+    }
+
+    private async Task SendMatchPushNotificationsAsync(
+        IReadOnlyList<PendingMatchPushNotification> pendingNotifications,
+        CancellationToken ct)
+    {
+        if (pendingNotifications.Count == 0)
+        {
+            return;
+        }
+
+        var userIds = pendingNotifications
+            .Select(notification => notification.UserId)
+            .Distinct()
+            .ToList();
+        var deviceKeys = await _context.Users
+            .AsNoTracking()
+            .Where(user => userIds.Contains(user.Id) && user.DeviceKey != null)
+            .ToDictionaryAsync(user => user.Id, user => user.DeviceKey!, ct);
+
+        foreach (var pendingNotification in pendingNotifications)
+        {
+            if (!deviceKeys.TryGetValue(pendingNotification.UserId, out var deviceKey))
+            {
+                continue;
+            }
+
+            var data = new Dictionary<string, string>
+            {
+                ["type"] = ((int)NotificationType.MatchFound).ToString(),
+                ["typeLabel"] = "MatchFound",
+                ["notificationType"] = ((int)NotificationType.MatchFound).ToString(),
+                ["oppositeAnnouncementId"] = pendingNotification.OppositeAnnouncementId.ToString(),
+                ["announcementId"] = pendingNotification.OppositeAnnouncementId.ToString()
+            };
+            var notification = new PushNotificationMessage(
+                deviceKey,
+                "Possible match found",
+                pendingNotification.Body,
+                data);
+
+            try
+            {
+                var result = await _pushNotificationSender.SendAsync(notification, ct);
+                if (result == PushNotificationSendResult.InvalidDeviceKey)
+                {
+                    await ClearInvalidDeviceKeyAsync(
+                        pendingNotification.UserId,
+                        deviceKey,
+                        ct);
+                }
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to send match push notification. UserId: {UserId}, OppositeAnnouncementId: {OppositeAnnouncementId}, DeviceKeyLength: {DeviceKeyLength}",
+                    pendingNotification.UserId,
+                    pendingNotification.OppositeAnnouncementId,
+                    deviceKey.Length);
+            }
+        }
+    }
+
+    private async Task ClearInvalidDeviceKeyAsync(
+        int userId,
+        string invalidDeviceKey,
+        CancellationToken ct)
+    {
+        await _context.Users
+            .Where(user => user.Id == userId && user.DeviceKey == invalidDeviceKey)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(user => user.DeviceKey, (string?)null),
+                ct);
+
+        _logger.LogInformation(
+            "Cleared an invalid Firebase device key. UserId: {UserId}, DeviceKeyLength: {DeviceKeyLength}",
+            userId,
+            invalidDeviceKey.Length);
     }
 
     private void MarkPhotoFailed(Announcement announcement)
@@ -292,4 +396,9 @@ public class MatchingProcessingService : IMatchingProcessingService
             LastModifiedOn = now
         });
     }
+
+    private sealed record PendingMatchPushNotification(
+        int UserId,
+        int OppositeAnnouncementId,
+        string Body);
 }

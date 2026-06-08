@@ -19,6 +19,7 @@ cssInterop(MapView, {
 interface LostPetMapProps {
   markers: PetMapMarkerData[];
   onMapPress: () => void;
+  onMapReady: () => void;
   onMarkerPress: (id: number) => void;
   onUserLocationChange: (event: UserLocationChangeEvent) => void;
   showsUserLocation: boolean;
@@ -28,6 +29,7 @@ interface LostPetMapProps {
 export function LostPetMap({
   markers,
   onMapPress,
+  onMapReady,
   onMarkerPress,
   onUserLocationChange,
   showsUserLocation,
@@ -40,6 +42,7 @@ export function LostPetMap({
       customMapStyle={CUSTOM_MAP_STYLE}
       initialRegion={INITIAL_REGION}
       onPress={onMapPress}
+      onMapReady={onMapReady}
       onUserLocationChange={onUserLocationChange}
       provider={PROVIDER_GOOGLE}
       showsBuildings={false}

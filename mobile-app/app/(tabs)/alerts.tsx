@@ -1,31 +1,71 @@
-import React from 'react';
-import { View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useState } from "react";
+import { Pressable, View } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Typography } from '@/components/ui/Typography';
+import { Typography } from "@/components/ui/Typography";
+import { MatchesSection } from "@/components/alerts/MatchesSection";
+import { AlertsSection } from "@/components/alerts/AlertsSection";
+
+type ViewModeType = "matches" | "alerts";
 
 export default function AlertsScreen() {
-  return (
-    <SafeAreaView className="flex-1 bg-alt-bg">
-      <View className="flex-1 px-6 py-6">
-        <Typography variant="title-large">Alerts</Typography>
-        <Typography variant="body-small" className="mt-2 text-neutral-400">
-          Stay updated on matches, nearby reports, and replies from the community.
-        </Typography>
+  const router = useRouter();
+  const { view } = useLocalSearchParams<{ view?: string }>();
+  const [viewMode, setViewMode] = useState<ViewModeType>(
+    view === "alerts" ? "alerts" : "matches",
+  );
 
-        <View className="mt-10 rounded-[28px] bg-foreground-background p-6">
-          <View className="h-14 w-14 items-center justify-center rounded-full bg-[#FFF3DA]">
-            <Ionicons name="notifications-outline" size={28} color="#D89F35" />
-          </View>
-          <Typography variant="title-small" className="mt-5">
-            No alerts yet
-          </Typography>
-          <Typography variant="body-small" className="mt-2 text-neutral-400">
-            When someone comments, reports a possible match, or posts nearby, your updates will
-            appear here.
-          </Typography>
+  useEffect(() => {
+    if (view === "matches" || view === "alerts") {
+      setViewMode(view);
+    }
+  }, [view]);
+
+  const handleChangeViewMode = (mode: ViewModeType): void => {
+    setViewMode(mode);
+    router.setParams({ view: mode });
+  };
+
+  const content =
+    viewMode === "matches" ? <MatchesSection /> : <AlertsSection />;
+
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-1 px-6 py-6 gap-4">
+        <Typography variant="title-large">Alerts</Typography>
+
+        <View className="mt-4 flex flex-row rounded-full bg-foreground-background p-1">
+          <Pressable
+            onPress={() => handleChangeViewMode("matches")}
+            className={`flex-1 rounded-l-full p-3 ${
+              viewMode === "matches" ? "bg-primary" : "bg-transparent"
+            }`}
+          >
+            <Typography
+              variant="title-small"
+              className={`text-center ${viewMode === "matches" ? "text-white" : "text-slate-600"}`}
+            >
+              Matches
+            </Typography>
+          </Pressable>
+
+          <Pressable
+            onPress={() => handleChangeViewMode("alerts")}
+            className={`flex-1 rounded-r-full p-3 ${
+              viewMode === "alerts" ? "bg-primary" : "bg-transparent"
+            }`}
+          >
+            <Typography
+              variant="title-small"
+              className={`text-center ${viewMode === "alerts" ? "text-white" : "text-slate-600"}`}
+            >
+              Alerts
+            </Typography>
+          </Pressable>
         </View>
+
+        {content}
       </View>
     </SafeAreaView>
   );

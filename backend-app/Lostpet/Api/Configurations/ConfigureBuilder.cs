@@ -39,6 +39,7 @@ using Infrastructure.Common.Errors.User;
 using Infrastructure.Common.JWT;
 using Infrastructure.Common.Mappers.Auth;
 using Infrastructure.Common.Matching;
+using Infrastructure.Common.Notifications;
 using Infrastructure.Common.Storage;
 using Infrastructure.Data;
 using Microsoft.Extensions.Options;
@@ -160,6 +161,11 @@ public static class ConfigureBuilder
         builder.Services.AddScoped<IGeotagService, GeotagService>();
 
         builder.Services.Configure<MatchingServiceConfig>(builder.Configuration.GetSection("MatchingService"));
+        builder.Services.Configure<FirebasePushNotificationConfig>(options =>
+        {
+            builder.Configuration.GetSection("Firebase").Bind(options);
+            ApplyFirebaseEnvironmentOverrides(builder.Configuration, builder.Environment.ContentRootPath, options);
+        });
         builder.Services.AddHttpClient<IVectorizationClient, VectorizationClient>((sp, c) =>
         {
             var cfg = sp.GetRequiredService<IOptions<MatchingServiceConfig>>().Value;
@@ -172,7 +178,38 @@ public static class ConfigureBuilder
         });
         builder.Services.AddScoped<IMatchingProcessingService, MatchingProcessingService>();
         builder.Services.AddScoped<INotificationService, NotificationService>();
+        builder.Services.AddSingleton<IPushNotificationSender, FirebasePushNotificationSender>();
         builder.Services.AddHostedService<MatchingPollerBackgroundService>();
+    }
+
+    private static void ApplyFirebaseEnvironmentOverrides(
+        IConfiguration configuration,
+        string contentRootPath,
+        FirebasePushNotificationConfig options)
+    {
+        var projectId = configuration["FIREBASE_PROJECT_ID"];
+        if (!string.IsNullOrWhiteSpace(projectId))
+        {
+            options.ProjectId = projectId;
+        }
+
+        var credentialsJson = configuration["FIREBASE_CREDENTIALS_JSON"];
+        if (!string.IsNullOrWhiteSpace(credentialsJson))
+        {
+            options.CredentialsJson = credentialsJson;
+        }
+
+        var credentialsPath = configuration["FIREBASE_CREDENTIALS_PATH"];
+        if (!string.IsNullOrWhiteSpace(credentialsPath))
+        {
+            options.CredentialsPath = credentialsPath;
+        }
+
+        if (!string.IsNullOrWhiteSpace(options.CredentialsPath)
+            && !Path.IsPathRooted(options.CredentialsPath))
+        {
+            options.CredentialsPath = Path.GetFullPath(options.CredentialsPath, contentRootPath);
+        }
     }
 
     private static void ApplyAzureStorageEnvironmentOverrides(

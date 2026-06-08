@@ -18,6 +18,7 @@ export default function MapScreen(): React.JSX.Element {
     onFilterPress,
     onFloatingActionPress,
     onMapPress,
+    onMapReady,
     onMarkerPress,
     onPlaceSelected,
     onUserLocationChange,
@@ -31,6 +32,7 @@ export default function MapScreen(): React.JSX.Element {
         mapRef={mapRef}
         markers={markers}
         onMapPress={onMapPress}
+        onMapReady={onMapReady}
         onMarkerPress={onMarkerPress}
         onUserLocationChange={onUserLocationChange}
         showsUserLocation={showsUserLocation}

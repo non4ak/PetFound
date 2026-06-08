@@ -100,11 +100,12 @@ export default function ProfileScreen() {
       }
       scrollContentClassName="pb-10"
     >
-      <View className="rounded-lg bg-white px-6 py-12">
+      <View className="rounded-lg bg-white py-12">
         <View className="flex-row items-center gap-5">
-          <View className="flex-1 items-center justify-center">
+          <View className="flex-1 items-center  justify-center">
             <View className="h-[80px] w-[80px] items-center justify-center overflow-hidden rounded-full border-2 border-primary">
-              {profile?.userPhotoUrl !== undefined && profile.userPhotoUrl.trim().length > 0 ? (
+              {profile?.userPhotoUrl !== undefined &&
+              profile.userPhotoUrl.trim().length > 0 ? (
                 <Image
                   source={{ uri: profile.userPhotoUrl }}
                   style={{ height: 80, width: 80 }}
@@ -179,7 +180,10 @@ export default function ProfileScreen() {
             <View className="h-9 w-9 items-center justify-center rounded-[8px] bg-[#FFF5E3]">
               <Ionicons name="megaphone-outline" size={18} color="#D89F35" />
             </View>
-            <Typography variant="body-medium" className="font-semibold text-heading-text">
+            <Typography
+              variant="body-medium"
+              className="font-semibold text-heading-text"
+            >
               My announcements
             </Typography>
           </View>
@@ -203,7 +207,10 @@ export default function ProfileScreen() {
         >
           <View className="pt-3 gap-3">
             {pets.length === 0 ? (
-              <Typography variant="body-small" className="text-secondary-text py-2">
+              <Typography
+                variant="body-small"
+                className="text-secondary-text py-2"
+              >
                 No pets added yet.
               </Typography>
             ) : (
@@ -229,7 +236,11 @@ export default function ProfileScreen() {
                       variant="body-small"
                       className="mt-0.5 text-secondary-text"
                     >
-                      {[pet.breed ?? pet.petTypeLabel, pet.petSexLabel, pet.petSizeLabel]
+                      {[
+                        pet.breed ?? pet.petTypeLabel,
+                        pet.petSexLabel,
+                        pet.petSizeLabel,
+                      ]
                         .filter(Boolean)
                         .join(" · ")}
                     </Typography>

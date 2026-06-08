@@ -40,3 +40,7 @@ diagrams/
 
 # Local development settings with secrets
 **/appsettings.Development.json
+
+# Firebase service account credentials
+**/*firebase-adminsdk*.json
+**/firebase-service-account.json
