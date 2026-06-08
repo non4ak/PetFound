@@ -4,6 +4,7 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
+  Linking,
   Modal,
   Platform,
   ScrollView,
@@ -18,7 +19,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 
 import { PreviewBadge } from "@/components/announcement/PreviewBadge";
-import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
 import {
   useArchiveAnnouncement,
@@ -46,6 +46,31 @@ const STATUS_STYLES = {
     textColor: "#D95068",
   },
 };
+
+function getSocialMediaUrl(socialNetwork: string): string {
+  const trimmedSocialNetwork: string = socialNetwork.trim();
+
+  if (
+    trimmedSocialNetwork.startsWith("https://") ||
+    trimmedSocialNetwork.startsWith("http://")
+  ) {
+    return trimmedSocialNetwork;
+  }
+
+  return `https://t.me/${trimmedSocialNetwork.replace(/^@/, "")}`;
+}
+
+async function openContactUrl(url: string, errorMessage: string): Promise<void> {
+  try {
+    await Linking.openURL(url);
+  } catch (error: unknown) {
+    console.warn("Failed to open announcement contact.", {
+      error,
+      url,
+    });
+    Alert.alert("Could not open contact", errorMessage);
+  }
+}
 
 function flattenComments(
   comments: Comment[],
@@ -85,6 +110,10 @@ export default function PetDetailsScreen() {
 
   const announcement = announcementData?.data;
   const petInfo = announcementData?.data?.pet;
+  const phoneNumber: string | null =
+    announcement?.phoneNumber?.trim() || null;
+  const socialNetwork: string | null =
+    announcement?.socialNetwork?.trim() || null;
 
   const flatComments = flattenComments(commentsData?.items ?? []);
 
@@ -467,24 +496,70 @@ export default function PetDetailsScreen() {
               {announcement?.petDetails}
             </Typography>
 
-            <View className="mt-5 flex-row gap-3">
-              <View className="flex-1">
-                <Button
-                  fullWidth
-                  label="Phone number"
-                  size="sm"
-                  variant="outline"
-                />
+            {(phoneNumber !== null || socialNetwork !== null) && (
+              <View className="mt-5 gap-3">
+                {phoneNumber !== null && (
+                  <TouchableOpacity
+                    className="flex-row items-center gap-3 rounded-[12px] border border-primary bg-white px-4 py-3"
+                    onPress={() =>
+                      void openContactUrl(
+                        `tel:${phoneNumber}`,
+                        "The phone application could not be opened.",
+                      )
+                    }
+                  >
+                    <Ionicons name="call-outline" size={20} color="#D89F35" />
+                    <View className="flex-1">
+                      <Typography
+                        className="text-secondary-text"
+                        variant="body-small"
+                      >
+                        Phone number
+                      </Typography>
+                      <Typography
+                        className="font-semibold text-heading-text"
+                        variant="body-regular"
+                      >
+                        {phoneNumber}
+                      </Typography>
+                    </View>
+                  </TouchableOpacity>
+                )}
+
+                {socialNetwork !== null && (
+                  <TouchableOpacity
+                    className="flex-row items-center gap-3 rounded-[12px] border border-primary bg-white px-4 py-3"
+                    onPress={() =>
+                      void openContactUrl(
+                        getSocialMediaUrl(socialNetwork),
+                        "The social media link could not be opened.",
+                      )
+                    }
+                  >
+                    <Ionicons
+                      name="paper-plane-outline"
+                      size={20}
+                      color="#D89F35"
+                    />
+                    <View className="flex-1">
+                      <Typography
+                        className="text-secondary-text"
+                        variant="body-small"
+                      >
+                        Social media
+                      </Typography>
+                      <Typography
+                        className="font-semibold text-heading-text"
+                        numberOfLines={2}
+                        variant="body-regular"
+                      >
+                        {socialNetwork}
+                      </Typography>
+                    </View>
+                  </TouchableOpacity>
+                )}
               </View>
-              <View className="flex-1">
-                <Button
-                  fullWidth
-                  label="Telegram"
-                  size="sm"
-                  variant="outline"
-                />
-              </View>
-            </View>
+            )}
           </View>
 
           {/* Comments section */}

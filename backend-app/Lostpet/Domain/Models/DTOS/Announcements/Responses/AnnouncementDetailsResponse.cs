@@ -26,6 +26,10 @@ public class AnnouncementDetailsResponse
 
     public bool IsTelegramActive { get; set; }
 
+    public string? PhoneNumber { get; set; }
+
+    public string? SocialNetwork { get; set; }
+
     public string? NearLandmark { get; set; }
 
     public decimal? LastSeenLatitude { get; set; }

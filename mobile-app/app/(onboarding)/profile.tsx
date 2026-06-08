@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
 import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 import { OnboardingProgress } from "@/components/onboarding/OnboardingProgress";
 import { OnboardingScaffold } from "@/components/onboarding/OnboardingScaffold";

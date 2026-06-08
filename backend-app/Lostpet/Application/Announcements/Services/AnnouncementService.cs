@@ -236,6 +236,7 @@ public class AnnouncementService : IAnnouncementService
         var announcement = await _context.Announcements
             .AsNoTracking()
             .Include(a => a.Pet)
+            .Include(a => a.ReporterUser)
             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (announcement is null)
@@ -256,6 +257,12 @@ public class AnnouncementService : IAnnouncementService
             PetDetails = announcement.PetDetails,
             IsPhonePublic = announcement.IsPhonePublic,
             IsTelegramActive = announcement.IsTelegramActive,
+            PhoneNumber = announcement.IsPhonePublic
+                ? announcement.ReporterUser.PhoneNumber
+                : null,
+            SocialNetwork = announcement.IsTelegramActive
+                ? announcement.ReporterUser.SocialNetwork
+                : null,
             NearLandmark = announcement.NearLandmark,
             LastSeenLatitude = announcement.LastSeenLatitude,
             LastSeenLongitude = announcement.LastSeenLongitude,

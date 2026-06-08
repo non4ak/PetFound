@@ -61,6 +61,8 @@ export interface AnnouncementResponse {
     petDetails: string;
     isPhonePublic: boolean;
     isTelegramActive: boolean;
+    phoneNumber: string | null;
+    socialNetwork: string | null;
     nearLandmark: string;
     lastSeenLatitude: number | null;
     lastSeenLongitude: number | null;

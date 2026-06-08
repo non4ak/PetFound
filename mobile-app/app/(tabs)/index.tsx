@@ -44,6 +44,23 @@ const PET_TYPE_MAP: Record<PetTypeFilter, number | undefined> = {
   cat: 1,
 };
 
+function mergeUniqueAnnouncements(
+  currentItems: Announcement[],
+  nextItems: Announcement[],
+): Announcement[] {
+  const announcementsById = new Map<number, Announcement>();
+
+  for (const item of currentItems) {
+    announcementsById.set(item.id, item);
+  }
+
+  for (const item of nextItems) {
+    announcementsById.set(item.id, item);
+  }
+
+  return Array.from(announcementsById.values());
+}
+
 export default function HomeScreen() {
   const router = useRouter();
 
@@ -87,10 +104,14 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!data) return;
+    if (data.currentPage !== pageNumber) return;
+
+    const nextItems: Announcement[] = data.items ?? [];
+
     if (pageNumber === 0) {
-      setAllItems(data.items ?? []);
+      setAllItems(mergeUniqueAnnouncements([], nextItems));
     } else {
-      setAllItems((prev) => [...prev, ...(data.items ?? [])]);
+      setAllItems((prev) => mergeUniqueAnnouncements(prev, nextItems));
     }
     setIsFetchingMore(false);
   }, [data, pageNumber]);
