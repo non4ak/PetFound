@@ -40,7 +40,12 @@ public sealed class FirebasePushNotificationSender : IPushNotificationSender
             Data = new Dictionary<string, string>(notification.Data),
             Android = new AndroidConfig
             {
-                Priority = Priority.High
+                Priority = Priority.High,
+                Notification = new AndroidNotification
+                {
+                    Color = "#D89F35",
+                    Icon = "ic_notification"
+              ***REMOVED***
           ***REMOVED***
       ***REMOVED***;
 
