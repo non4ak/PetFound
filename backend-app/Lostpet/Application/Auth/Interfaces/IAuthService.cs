@@ -24,6 +24,8 @@ public interface IAuthService
 
     public Task<Result<bool>> UpdateUserProfile(int userId, UpdateProfileModel model);
 
+    public Task<Result<bool>> UpdateDeviceKeyAsync(int userId, string deviceKey);
+
     public Task<Result> RefreshToken();
 
     public Task<Result<MobileLoginResponse>> RefreshTokenMobile(string refreshToken);

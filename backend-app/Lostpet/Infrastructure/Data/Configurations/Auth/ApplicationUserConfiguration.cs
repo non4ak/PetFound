@@ -13,6 +13,7 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         builder.Property(u => u.City).HasMaxLength(128);
         builder.Property(u => u.SocialNetwork).HasMaxLength(512);
         builder.Property(u => u.UserPhotoUrl).HasMaxLength(2048);
+        builder.Property(u => u.DeviceKey).HasMaxLength(4096);
 
         builder.Property(u => u.NotificationChannelPreference)
             .HasDefaultValue(NotificationChannelPreference.Both);
