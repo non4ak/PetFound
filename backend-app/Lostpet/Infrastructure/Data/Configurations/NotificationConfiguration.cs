@@ -14,6 +14,10 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
 
         builder.Property(n => n.Message).HasMaxLength(2000).IsRequired();
 
+        builder.HasIndex(n => new { n.UserId, n.MatchResultId, n.Type })
+            .IsUnique()
+            .HasFilter("\"MatchResultId\" IS NOT NULL");
+
         builder.HasOne(n => n.User)
             .WithMany(u => u.Notifications)
             .HasForeignKey(n => n.UserId)

@@ -36,6 +36,7 @@ interface LostPetMapController {
   onFloatingActionPress: (actionId: MapFloatingActionId) => Promise<void>;
   onFilterPress: (filterId: string) => void;
   onMapPress: () => void;
+  onMapReady: () => void;
   onMarkerPress: (id: number) => void;
   onPlaceSelected: (location: MapPlaceLocation | null) => void;
   onUserLocationChange: (event: UserLocationChangeEvent) => void;
@@ -52,7 +53,7 @@ function mapLocationToCoordinate(location: Location.LocationObject): LatLng {
 
 export function useLostPetMapController(): LostPetMapController {
   const router = useRouter();
-  const mapParams = useLocalSearchParams<{
+  const { targetLatitude, targetLongitude } = useLocalSearchParams<{
     targetLatitude?: string;
     targetLongitude?: string;
   }>();
@@ -61,12 +62,17 @@ export function useLostPetMapController(): LostPetMapController {
   const [searchQuery, setSearchQuery] = useState<AnnouncementQueryFilter>({});
   const [userLocationCoordinate, setUserLocationCoordinate] =
     useState<LatLng | null>(null);
+  const [isMapReady, setIsMapReady] = useState<boolean>(false);
   const [showsUserLocation, setShowsUserLocation] = useState<boolean>(false);
   const { data: announcements } = useGetAnnouncements(searchQuery);
 
   const targetCoordinate: MapTargetCoordinate | null = React.useMemo(
-    () => getMapTargetCoordinateFromParams(mapParams),
-    [mapParams.targetLatitude, mapParams.targetLongitude],
+    () =>
+      getMapTargetCoordinateFromParams({
+        targetLatitude,
+        targetLongitude,
+      }),
+    [targetLatitude, targetLongitude],
   );
 
   const markers: PetMapMarkerData[] = React.useMemo(
@@ -125,10 +131,6 @@ export function useLostPetMapController(): LostPetMapController {
       }
 
       setUserLocationCoordinate(coordinate);
-
-      if (targetCoordinate === null) {
-        centerMapOnCoordinate(coordinate, MAP_USER_LOCATION_REGION_DELTA);
-      }
     }
 
     void loadUserLocation();
@@ -136,15 +138,39 @@ export function useLostPetMapController(): LostPetMapController {
     return () => {
       isMounted = false;
     };
-  }, [centerMapOnCoordinate, getCurrentUserCoordinate, targetCoordinate]);
+  }, [getCurrentUserCoordinate]);
 
   React.useEffect(() => {
-    if (targetCoordinate === null) {
+    if (!isMapReady || targetCoordinate === null) {
       return;
     }
 
     centerMapOnCoordinate(targetCoordinate, MAP_PET_LOCATION_REGION_DELTA);
-  }, [centerMapOnCoordinate, targetCoordinate]);
+  }, [centerMapOnCoordinate, isMapReady, targetCoordinate]);
+
+  React.useEffect(() => {
+    if (
+      !isMapReady ||
+      targetCoordinate !== null ||
+      userLocationCoordinate === null
+    ) {
+      return;
+    }
+
+    centerMapOnCoordinate(
+      userLocationCoordinate,
+      MAP_USER_LOCATION_REGION_DELTA,
+    );
+  }, [
+    centerMapOnCoordinate,
+    isMapReady,
+    targetCoordinate,
+    userLocationCoordinate,
+  ]);
+
+  const onMapReady = React.useCallback((): void => {
+    setIsMapReady(true);
+  }, []);
 
   const onMarkerPress = React.useCallback(
     (id: number): void => {
@@ -248,6 +274,7 @@ export function useLostPetMapController(): LostPetMapController {
     onFloatingActionPress,
     onFilterPress,
     onMapPress,
+    onMapReady,
     onMarkerPress,
     onPlaceSelected,
     onUserLocationChange,

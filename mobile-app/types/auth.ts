@@ -23,6 +23,10 @@ export interface GoogleLoginRequest {
   idToken: string;
 }
 
+export interface DeviceKeyRequest {
+  deviceKey: string;
+}
+
 export interface RegisterRequest {
   email: string;
   password: string;

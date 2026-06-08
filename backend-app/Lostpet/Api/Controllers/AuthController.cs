@@ -174,6 +174,25 @@ public class AuthController : ControllerBase
         );
     }
 
+    [Authorize]
+    [HttpPut("device-key")]
+    public async Task<IActionResult> UpdateDeviceKeyAsync([FromBody] UpdateDeviceKeyModel model)
+    {
+        var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(id, out var userId))
+        {
+            return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
+        }
+
+        var result = await _authService.UpdateDeviceKeyAsync(userId, model.DeviceKey);
+        return result.Match(
+            successStatusCode: 204,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+
     [AllowAnonymous]
     [HttpGet("email-confirmation")]
     public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string email, string token)

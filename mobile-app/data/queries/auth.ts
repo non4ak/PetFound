@@ -2,6 +2,7 @@ import { axiosClient } from '@/api/axios-client';
 import type {
   ApiResponse,
   AuthSession,
+  DeviceKeyRequest,
   GoogleLoginRequest,
   LoginRequest,
   MobileAuthResponse,
@@ -68,4 +69,8 @@ export async function registerQuery(request: RegisterRequest): Promise<void> {
 
 export async function logoutQuery(): Promise<void> {
   await axiosClient.get('/Auth/logout');
+}
+
+export async function updateDeviceKeyQuery(request: DeviceKeyRequest): Promise<void> {
+  await axiosClient.put('/Auth/device-key', request);
 }

@@ -99,7 +99,7 @@ export function Button({
         {!isIconOnly && label && (
           <Typography
             variant="body-medium"
-            className={cn(buttonTextVariants({ variant, size }), "leading-[1]")}
+            className={cn(buttonTextVariants({ variant, size }))}
           >
             {label}
           </Typography>
