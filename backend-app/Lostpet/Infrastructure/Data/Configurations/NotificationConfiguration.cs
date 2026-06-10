@@ -32,5 +32,5 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
             .WithMany(c => c.Notifications)
             .HasForeignKey(n => n.CommentId)
             .OnDelete(DeleteBehavior.SetNull);
-  ***REMOVED***
+    }
 }

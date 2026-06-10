@@ -17,7 +17,7 @@ namespace Infrastructure.Migrations
                 type: "timestamp with time zone",
                 nullable: false,
                 defaultValueSql: "NOW()");
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -25,6 +25,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "RegisteredAt",
                 table: "AspNetUsers");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

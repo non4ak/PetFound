@@ -12,7 +12,7 @@ public class RoleService : IRoleService
     public RoleService(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
-  ***REMOVED***
+    }
 
     public async Task<bool> AddToRolesAsync(ApplicationUser user, string role)
     {
@@ -30,20 +30,20 @@ public class RoleService : IRoleService
             default:
                 result = false;
                 break;
-      ***REMOVED***
+        }
 
         return result;
-  ***REMOVED***
+    }
 
     private async Task<IdentityResult> AddToAdminAsync(ApplicationUser user)
     {
         var res = await AddToUserAsync(user);
         if (!res.Succeeded) return res;
         return await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-  ***REMOVED***
+    }
 
     private async Task<IdentityResult> AddToUserAsync(ApplicationUser user)
     {
         return await _userManager.AddToRoleAsync(user, UserRoles.User);
-  ***REMOVED***
+    }
 }

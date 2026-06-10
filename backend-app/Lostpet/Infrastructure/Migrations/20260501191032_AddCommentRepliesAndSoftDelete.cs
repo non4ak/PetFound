@@ -51,7 +51,7 @@ namespace Infrastructure.Migrations
                 principalTable: "Comments",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -84,6 +84,6 @@ namespace Infrastructure.Migrations
                 name: "IX_Comments_AnnouncementId",
                 table: "Comments",
                 column: "AnnouncementId");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

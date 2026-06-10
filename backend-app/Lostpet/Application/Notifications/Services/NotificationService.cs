@@ -19,7 +19,7 @@ public class NotificationService : INotificationService
     public NotificationService(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<IPagedList<NotificationResponse>>> GetMyPagedAsync(int userId, int pageNumber, int pageSize, bool? unreadOnly)
     {
@@ -35,7 +35,7 @@ public class NotificationService : INotificationService
         if (unreadOnly == true)
         {
             query = query.Where(n => !n.IsRead);
-      ***REMOVED***
+        }
 
         query = query.OrderByDescending(n => n.CreatedOn).ThenByDescending(n => n.Id);
 
@@ -49,10 +49,10 @@ public class NotificationService : INotificationService
             pageSize: paged.PageSize)
         {
             TotalPages = paged.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<NotificationResponse>>.Success(result);
-  ***REMOVED***
+    }
 
     public async Task<Result<IPagedList<MatchResultResponse>>> GetMyMatchesAsync(int userId, int pageNumber, int pageSize, MatchResultStatus? status)
     {
@@ -67,7 +67,7 @@ public class NotificationService : INotificationService
         if (status.HasValue)
         {
             query = query.Where(m => m.Status == status.Value);
-      ***REMOVED***
+        }
 
         query = query.OrderByDescending(m => m.CreatedOn).ThenByDescending(m => m.Id);
 
@@ -81,10 +81,10 @@ public class NotificationService : INotificationService
             pageSize: paged.PageSize)
         {
             TotalPages = paged.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<MatchResultResponse>>.Success(result);
-  ***REMOVED***
+    }
 
     private static MatchResultResponse MapMatchResponse(MatchResult m, int userId)
     {
@@ -110,10 +110,10 @@ public class NotificationService : INotificationService
                 PetPhotoUrl = opposite.Pet.PetPhotoUrl,
                 PetName = opposite.Pet.PetName,
                 IsActive = opposite.IsActive
-          ***REMOVED***,
+            },
             CreatedOn = m.CreatedOn
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 
     public async Task<Result<bool>> MarkAsReadAsync(int userId, int notificationId)
     {
@@ -122,13 +122,13 @@ public class NotificationService : INotificationService
         if (notification is null)
         {
             return Result<bool>.Failure(Error.NotFound("Notification.NotFound", "Notification not found"));
-      ***REMOVED***
+        }
 
         notification.IsRead = true;
         notification.LastModifiedOn = DateTimeOffset.UtcNow;
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public Task<Result<bool>> ApproveMatchAsync(int userId, int matchResultId)
         => SetMatchStatusAsync(userId, matchResultId, MatchResultStatus.Approved);
@@ -145,20 +145,20 @@ public class NotificationService : INotificationService
         if (match is null)
         {
             return Result<bool>.Failure(Error.NotFound("Match.NotFound", "Match not found"));
-      ***REMOVED***
+        }
 
         var isParticipant = match.LostAnnouncement.ReporterUserId == userId
                             || match.FoundAnnouncement.ReporterUserId == userId;
         if (!isParticipant)
         {
             return Result<bool>.Failure(Error.Forbidden("Match.Forbidden", "You are not a participant of this match"));
-      ***REMOVED***
+        }
 
         match.Status = status;
         match.LastModifiedOn = DateTimeOffset.UtcNow;
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     private static NotificationResponse MapResponse(Notification n, int userId)
     {
@@ -171,7 +171,7 @@ public class NotificationService : INotificationService
             IsRead = n.IsRead,
             CreatedOn = n.CreatedOn,
             MatchResultId = n.MatchResultId
-      ***REMOVED***;
+        };
 
         if (n.MatchResult is not null)
         {
@@ -187,9 +187,9 @@ public class NotificationService : INotificationService
                 SimilarityPercentage = (double)m.SimilarityScore * 100d,
                 Status = m.Status,
                 StatusLabel = m.Status.GetDisplayName()
-          ***REMOVED***;
-      ***REMOVED***
+            };
+        }
 
         return response;
-  ***REMOVED***
+    }
 }

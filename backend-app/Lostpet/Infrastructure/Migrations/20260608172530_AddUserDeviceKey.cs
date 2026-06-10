@@ -16,7 +16,7 @@ namespace Infrastructure.Migrations
                 type: "character varying(4096)",
                 maxLength: 4096,
                 nullable: true);
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -24,6 +24,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "DeviceKey",
                 table: "AspNetUsers");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

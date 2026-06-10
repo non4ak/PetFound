@@ -16,7 +16,7 @@ public class TokenService : ITokenService
     {
         _jwtConfig = config.GetSection("JWTConfig").Get<JWTConfig>()
                      ?? throw new InvalidOperationException("JWTConfig section is missing.");
-  ***REMOVED***
+    }
 
     public string GenerateAuthToken(ApplicationUser user, IEnumerable<string>? roles)
     {
@@ -29,12 +29,12 @@ public class TokenService : ITokenService
             new("id", user.Id.ToString()),
             new("email", user.Email ?? string.Empty),
             new("username", user.UserName ?? string.Empty)
-      ***REMOVED***;
+        };
 
         if (roles is not null)
         {
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-      ***REMOVED***
+        }
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -43,12 +43,12 @@ public class TokenService : ITokenService
             SigningCredentials = credentials,
             Issuer = _jwtConfig.Issuer,
             Audience = _jwtConfig.Audience,
-      ***REMOVED***;
+        };
 
         var tokenHandler = new JsonWebTokenHandler();
 
         return tokenHandler.CreateToken(tokenDescriptor);
-  ***REMOVED***
+    }
 
     public RefreshTokenDTO GenerateRefreshToken()
     {
@@ -58,6 +58,6 @@ public class TokenService : ITokenService
         {
             Bytes = Base64UrlEncoder.Encode(raw),
             ExpirationTimeInDays = _jwtConfig.RefreshTokenExpirationInDays
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 }

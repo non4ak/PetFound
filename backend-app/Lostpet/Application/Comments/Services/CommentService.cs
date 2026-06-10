@@ -20,20 +20,20 @@ public class CommentService : ICommentService
     public CommentService(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<CommentResponse>> CreateAsync(int userId, int announcementId, CreateCommentModel model)
     {
         if (string.IsNullOrWhiteSpace(model.CommentMessage))
         {
             return Result<CommentResponse>.Failure(UserErrors.RequiredField("commentMessage"));
-      ***REMOVED***
+        }
 
         var announcementExists = await _context.Announcements.AnyAsync(a => a.Id == announcementId);
         if (!announcementExists)
         {
             return Result<CommentResponse>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         if (model.ParentCommentId.HasValue)
         {
@@ -44,13 +44,13 @@ public class CommentService : ICommentService
             if (parent is null)
             {
                 return Result<CommentResponse>.Failure(Error.NotFound("Comment.ParentNotFound", "Parent comment not found"));
-          ***REMOVED***
+            }
 
             if (parent.AnnouncementId != announcementId)
             {
                 return Result<CommentResponse>.Failure(Error.Validation("Comment.ParentMismatch", "Parent comment belongs to another announcement"));
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         var now = DateTimeOffset.UtcNow;
         var comment = new Comment
@@ -67,7 +67,7 @@ public class CommentService : ICommentService
             CreatedOn = now,
             LastModifiedOn = now,
             IsDeleted = false
-      ***REMOVED***;
+        };
 
         await _context.Comments.AddAsync(comment);
         await _context.SaveChangesAsync();
@@ -75,7 +75,7 @@ public class CommentService : ICommentService
         await _context.Entry(comment).Reference(c => c.Author).LoadAsync();
 
         return Result<CommentResponse>.Success(MapComment(comment, includeReplies: false));
-  ***REMOVED***
+    }
 
     public async Task<Result<IPagedList<CommentResponse>>> GetThreadAsync(int announcementId, int pageNumber, int pageSize)
     {
@@ -83,7 +83,7 @@ public class CommentService : ICommentService
         if (!announcementExists)
         {
             return Result<IPagedList<CommentResponse>>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         var rootsQuery = _context.Comments
             .AsNoTracking()
@@ -112,12 +112,12 @@ public class CommentService : ICommentService
                 if (nextLevel.Count == 0)
                 {
                     break;
-              ***REMOVED***
+                }
 
                 allDescendants.AddRange(nextLevel);
                 currentLevelIds = nextLevel.Select(c => c.Id).ToList();
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         var byParent = allDescendants
             .GroupBy(c => c.ParentCommentId!.Value)
@@ -135,33 +135,33 @@ public class CommentService : ICommentService
         )
         {
             TotalPages = pagedRoots.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<CommentResponse>>.Success(paged);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> UpdateAsync(int userId, int announcementId, int commentId, UpdateCommentModel model)
     {
         if (string.IsNullOrWhiteSpace(model.CommentMessage))
         {
             return Result<bool>.Failure(UserErrors.RequiredField("commentMessage"));
-      ***REMOVED***
+        }
 
         var comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId && c.AnnouncementId == announcementId);
         if (comment is null)
         {
             return Result<bool>.Failure(Error.NotFound("Comment.NotFound", "Comment not found"));
-      ***REMOVED***
+        }
 
         if (comment.UserId != userId)
         {
             return Result<bool>.Failure(Error.Forbidden("Comment.Forbidden", "Only the author can edit this comment"));
-      ***REMOVED***
+        }
 
         if (comment.IsDeleted)
         {
             return Result<bool>.Failure(Error.Validation("Comment.Deleted", "Cannot edit a deleted comment"));
-      ***REMOVED***
+        }
 
         comment.CommentMessage = model.CommentMessage.Trim();
         comment.ImageUrl = string.IsNullOrWhiteSpace(model.ImageUrl) ? null : model.ImageUrl.Trim();
@@ -172,7 +172,7 @@ public class CommentService : ICommentService
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> SoftDeleteAsync(int userId, int announcementId, int commentId)
     {
@@ -180,17 +180,17 @@ public class CommentService : ICommentService
         if (comment is null)
         {
             return Result<bool>.Failure(Error.NotFound("Comment.NotFound", "Comment not found"));
-      ***REMOVED***
+        }
 
         if (comment.UserId != userId)
         {
             return Result<bool>.Failure(Error.Forbidden("Comment.Forbidden", "Only the author can delete this comment"));
-      ***REMOVED***
+        }
 
         if (comment.IsDeleted)
         {
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
 
         var now = DateTimeOffset.UtcNow;
         comment.IsDeleted = true;
@@ -201,7 +201,7 @@ public class CommentService : ICommentService
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     private static CommentResponse BuildTree(Comment comment, Dictionary<int, List<Comment>> byParent)
     {
@@ -212,10 +212,10 @@ public class CommentService : ICommentService
             response.Replies = children
                 .Select(child => BuildTree(child, byParent))
                 .ToList();
-      ***REMOVED***
+        }
 
         return response;
-  ***REMOVED***
+    }
 
     private static CommentResponse MapComment(Comment comment, bool includeReplies)
     {
@@ -237,8 +237,8 @@ public class CommentService : ICommentService
             {
                 Id = comment.UserId,
                 UserName = comment.Author?.UserName ?? string.Empty
-          ***REMOVED***,
+            },
             Replies = includeReplies ? new List<CommentResponse>() : new List<CommentResponse>()
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 }

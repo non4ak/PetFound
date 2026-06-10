@@ -31,7 +31,7 @@ namespace Infrastructure.Migrations
                 columns: new[] { "UserId", "MatchResultId", "Type" },
                 unique: true,
                 filter: "\"MatchResultId\" IS NOT NULL");
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -44,6 +44,6 @@ namespace Infrastructure.Migrations
                 name: "IX_Notifications_UserId",
                 table: "Notifications",
                 column: "UserId");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

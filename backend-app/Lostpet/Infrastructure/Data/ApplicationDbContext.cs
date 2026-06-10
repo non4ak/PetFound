@@ -12,7 +12,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-  ***REMOVED***
+    }
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
@@ -39,5 +39,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         modelBuilder.ApplyConfiguration(new MatchResultConfiguration());
         modelBuilder.ApplyConfiguration(new NotificationConfiguration());
         modelBuilder.ApplyConfiguration(new GeotagConfiguration());
-  ***REMOVED***
+    }
 }

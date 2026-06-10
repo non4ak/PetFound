@@ -35,5 +35,5 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
 
         builder.HasIndex(c => new { c.AnnouncementId, c.CommentedAt });
         builder.HasIndex(c => c.ParentCommentId);
-  ***REMOVED***
+    }
 }

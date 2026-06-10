@@ -37,7 +37,7 @@ namespace Infrastructure.Migrations
                 type: "boolean",
                 nullable: false,
                 defaultValue: false);
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -57,6 +57,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "IsTelegramActive",
                 table: "Announcements");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

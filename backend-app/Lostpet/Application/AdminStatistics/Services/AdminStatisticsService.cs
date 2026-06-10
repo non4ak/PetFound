@@ -15,7 +15,7 @@ public class AdminStatisticsService : IAdminStatisticsService
     public AdminStatisticsService(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<StatisticsSummaryResponse>> GetSummaryAsync()
     {
@@ -52,20 +52,20 @@ public class AdminStatisticsService : IAdminStatisticsService
             TotalComments = totalComments,
             CommentsLast30Days = commentsLast30Days,
             TotalPets = totalPets
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     public async Task<Result<StatisticsTimeseriesResponse>> GetTimeseriesAsync(DateTimeOffset from, DateTimeOffset to)
     {
         if (to < from)
         {
             return Result<StatisticsTimeseriesResponse>.Failure(Error.Validation("Statistics.InvalidRange", "'to' must be greater than or equal to 'from'"));
-      ***REMOVED***
+        }
 
         if ((to - from).TotalDays > 366)
         {
             return Result<StatisticsTimeseriesResponse>.Failure(Error.Validation("Statistics.RangeTooWide", "Range cannot exceed 366 days"));
-      ***REMOVED***
+        }
 
         var fromDay = new DateTimeOffset(from.UtcDateTime.Date, TimeSpan.Zero);
         var toExclusive = new DateTimeOffset(to.UtcDateTime.Date, TimeSpan.Zero).AddDays(1);
@@ -99,8 +99,8 @@ public class AdminStatisticsService : IAdminStatisticsService
             Announcements = FillMissingDays(announcements, fromDay, toExclusive),
             Users = FillMissingDays(users, fromDay, toExclusive),
             Comments = FillMissingDays(comments, fromDay, toExclusive)
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     private static List<StatisticsTimeseriesPoint> GroupByDay(IEnumerable<DateTimeOffset> timestamps)
     {
@@ -108,7 +108,7 @@ public class AdminStatisticsService : IAdminStatisticsService
             .GroupBy(t => t.UtcDateTime.Date)
             .Select(g => new StatisticsTimeseriesPoint { Date = g.Key, Count = g.Count() })
             .ToList();
-  ***REMOVED***
+    }
 
     private static IEnumerable<StatisticsTimeseriesPoint> FillMissingDays(
         IReadOnlyCollection<StatisticsTimeseriesPoint> points,
@@ -123,8 +123,8 @@ public class AdminStatisticsService : IAdminStatisticsService
             {
                 Date = day,
                 Count = byDate.TryGetValue(day, out var count) ? count : 0
-          ***REMOVED***);
-      ***REMOVED***
+            });
+        }
         return result;
-  ***REMOVED***
+    }
 }

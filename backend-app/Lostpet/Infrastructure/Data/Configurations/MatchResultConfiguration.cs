@@ -25,5 +25,5 @@ public class MatchResultConfiguration : IEntityTypeConfiguration<MatchResult>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(m => new { m.LostAnnouncementId, m.FoundAnnouncementId }).IsUnique();
-  ***REMOVED***
+    }
 }

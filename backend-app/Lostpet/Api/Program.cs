@@ -15,5 +15,5 @@ public class Program
         await app.Configure();
 
         await app.RunAsync();
-  ***REMOVED***
+    }
 }

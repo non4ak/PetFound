@@ -15,7 +15,7 @@ public static class EnumExtensions
         if (string.IsNullOrWhiteSpace(name))
         {
             return value.ToString();
-      ***REMOVED***
+        }
 
         return DisplayNameCache.GetOrAdd((enumType, name), static key =>
         {
@@ -25,6 +25,6 @@ public static class EnumExtensions
             var display = member?.GetCustomAttribute<DisplayAttribute>();
 
             return display?.Name ?? memberName;
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 }

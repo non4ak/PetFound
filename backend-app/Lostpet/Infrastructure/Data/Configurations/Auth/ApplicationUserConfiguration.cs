@@ -17,5 +17,5 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 
         builder.Property(u => u.NotificationChannelPreference)
             .HasDefaultValue(NotificationChannelPreference.Both);
-  ***REMOVED***
+    }
 }

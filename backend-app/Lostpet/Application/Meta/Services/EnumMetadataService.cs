@@ -21,10 +21,10 @@ public class EnumMetadataService : IEnumMetadataService
             NotificationTypes = MapEnum<NotificationType>(),
             MatchResultStatuses = MapEnum<MatchResultStatus>(),
             GeotagCategories = MapEnum<GeotagCategory>()
-      ***REMOVED***;
+        };
 
         return Task.FromResult(Result<EnumsResponse>.Success(response));
-  ***REMOVED***
+    }
 
     private static List<EnumOptionResponse> MapEnum<TEnum>()
         where TEnum : struct, Enum
@@ -35,8 +35,8 @@ public class EnumMetadataService : IEnumMetadataService
                 Value = Convert.ToInt32(value),
                 Name = value.ToString(),
                 Label = ((Enum)(object)value).GetDisplayName()
-          ***REMOVED***)
+            })
             .ToList();
-  ***REMOVED***
+    }
 }
 

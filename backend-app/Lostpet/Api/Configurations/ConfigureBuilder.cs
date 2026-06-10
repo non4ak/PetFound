@@ -68,7 +68,7 @@ public static class ConfigureBuilder
         services.AddDbContext<ApplicationDbContext>(opts =>
         {
             opts.UseNpgsql(builder.Configuration.GetConnectionString("DataContext"));
-      ***REMOVED***);
+        });
 
         services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
             {
@@ -82,7 +82,7 @@ public static class ConfigureBuilder
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 
                 options.User.RequireUniqueEmail = true;
-          ***REMOVED***)
+            })
             .AddDefaultTokenProviders()
             .AddRoles<IdentityRole<int>>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -101,7 +101,7 @@ public static class ConfigureBuilder
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-          ***REMOVED***)
+            })
             .AddJwtBearer(o =>
             {
                 o.RequireHttpsMetadata = false;
@@ -112,7 +112,7 @@ public static class ConfigureBuilder
                     ValidAudience = jwtConfig.Audience,
                     ClockSkew = TimeSpan.Zero,
                     RoleClaimType = System.Security.Claims.ClaimTypes.Role
-              ***REMOVED***;
+                };
                 o.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
@@ -121,10 +121,10 @@ public static class ConfigureBuilder
                         if (!string.IsNullOrEmpty(accessToken))
                         {
                             context.Token = accessToken;
-                      ***REMOVED***
+                        }
 
                         return Task.CompletedTask;
-                  ***REMOVED***,
+                    },
                     OnChallenge = async context =>
                     {
                         context.HandleResponse();
@@ -132,16 +132,16 @@ public static class ConfigureBuilder
                         context.Response.ContentType = "application/json";
                         var payload = ApiResults.ToProblemDetailsObject(UserErrors.Unauthorized());
                         await context.Response.WriteAsJsonAsync(payload);
-                  ***REMOVED***
-              ***REMOVED***;
-          ***REMOVED***);
+                    }
+                };
+            });
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.Configure<AzureBlobStorageConfig>(options =>
         {
             builder.Configuration.GetSection("AzureBlobStorage").Bind(options);
             ApplyAzureStorageEnvironmentOverrides(builder.Configuration, options);
-      ***REMOVED***);
+        });
         builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AuthMappingProfile>());
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IRoleService, RoleService>();
@@ -165,22 +165,22 @@ public static class ConfigureBuilder
         {
             builder.Configuration.GetSection("Firebase").Bind(options);
             ApplyFirebaseEnvironmentOverrides(builder.Configuration, builder.Environment.ContentRootPath, options);
-      ***REMOVED***);
+        });
         builder.Services.AddHttpClient<IVectorizationClient, VectorizationClient>((sp, c) =>
         {
             var cfg = sp.GetRequiredService<IOptions<MatchingServiceConfig>>().Value;
             c.Timeout = TimeSpan.FromSeconds(cfg.TimeoutSeconds);
-      ***REMOVED***);
+        });
         builder.Services.AddHttpClient<IMatchClient, MatchClient>((sp, c) =>
         {
             var cfg = sp.GetRequiredService<IOptions<MatchingServiceConfig>>().Value;
             c.Timeout = TimeSpan.FromSeconds(cfg.TimeoutSeconds);
-      ***REMOVED***);
+        });
         builder.Services.AddScoped<IMatchingProcessingService, MatchingProcessingService>();
         builder.Services.AddScoped<INotificationService, NotificationService>();
         builder.Services.AddSingleton<IPushNotificationSender, FirebasePushNotificationSender>();
         builder.Services.AddHostedService<MatchingPollerBackgroundService>();
-  ***REMOVED***
+    }
 
     private static void ApplyFirebaseEnvironmentOverrides(
         IConfiguration configuration,
@@ -191,26 +191,26 @@ public static class ConfigureBuilder
         if (!string.IsNullOrWhiteSpace(projectId))
         {
             options.ProjectId = projectId;
-      ***REMOVED***
+        }
 
         var credentialsJson = configuration["FIREBASE_CREDENTIALS_JSON"];
         if (!string.IsNullOrWhiteSpace(credentialsJson))
         {
             options.CredentialsJson = credentialsJson;
-      ***REMOVED***
+        }
 
         var credentialsPath = configuration["FIREBASE_CREDENTIALS_PATH"];
         if (!string.IsNullOrWhiteSpace(credentialsPath))
         {
             options.CredentialsPath = credentialsPath;
-      ***REMOVED***
+        }
 
         if (!string.IsNullOrWhiteSpace(options.CredentialsPath)
             && !Path.IsPathRooted(options.CredentialsPath))
         {
             options.CredentialsPath = Path.GetFullPath(options.CredentialsPath, contentRootPath);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     private static void ApplyAzureStorageEnvironmentOverrides(
         IConfiguration configuration,
@@ -220,13 +220,13 @@ public static class ConfigureBuilder
         if (!string.IsNullOrWhiteSpace(connectionString))
         {
             options.ConnectionString = connectionString;
-      ***REMOVED***
+        }
 
         string? containerName = configuration["AZURE_STORAGE_CONTAINER"];
         if (!string.IsNullOrWhiteSpace(containerName))
         {
             options.ContainerName = containerName;
-      ***REMOVED***
+        }
 
         string? sasLifetimeInMinutes = configuration["AZURE_STORAGE_SAS_LIFETIME_IN_MINUTES"];
         if (!string.IsNullOrWhiteSpace(sasLifetimeInMinutes))
@@ -234,7 +234,7 @@ public static class ConfigureBuilder
             options.SasLifetimeInMinutes = ParsePositiveInt(
                 settingName: "AZURE_STORAGE_SAS_LIFETIME_IN_MINUTES",
                 value: sasLifetimeInMinutes);
-      ***REMOVED***
+        }
 
         string? maxFileSizeInBytes = configuration["AZURE_STORAGE_MAX_FILE_SIZE_IN_BYTES"];
         if (!string.IsNullOrWhiteSpace(maxFileSizeInBytes))
@@ -242,35 +242,35 @@ public static class ConfigureBuilder
             options.MaxFileSizeInBytes = ParsePositiveLong(
                 settingName: "AZURE_STORAGE_MAX_FILE_SIZE_IN_BYTES",
                 value: maxFileSizeInBytes);
-      ***REMOVED***
+        }
 
         string? allowedContentTypes = configuration["AZURE_STORAGE_ALLOWED_CONTENT_TYPES"];
         if (!string.IsNullOrWhiteSpace(allowedContentTypes))
         {
             options.AllowedContentTypes = allowedContentTypes
                 .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     private static int ParsePositiveInt(string settingName, string value)
     {
         if (int.TryParse(value, out int parsedValue) && parsedValue > 0)
         {
             return parsedValue;
-      ***REMOVED***
+        }
 
         throw new InvalidOperationException($"{settingName} must be a positive integer. Value: {value}");
-  ***REMOVED***
+    }
 
     private static long ParsePositiveLong(string settingName, string value)
     {
         if (long.TryParse(value, out long parsedValue) && parsedValue > 0)
         {
             return parsedValue;
-      ***REMOVED***
+        }
 
         throw new InvalidOperationException($"{settingName} must be a positive integer. Value: {value}");
-  ***REMOVED***
+    }
 
     private static void AddSwagger(this WebApplicationBuilder builder)
     {
@@ -287,7 +287,7 @@ public static class ConfigureBuilder
                 Type = SecuritySchemeType.Http,
                 BearerFormat = "JWT",
                 Scheme = "Bearer"
-          ***REMOVED***);
+            });
             option.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
@@ -297,11 +297,11 @@ public static class ConfigureBuilder
                         {
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
-                      ***REMOVED***
-                  ***REMOVED***,
+                        }
+                    },
                     new string[] { }
-              ***REMOVED***
-          ***REMOVED***);
-      ***REMOVED***);
-  ***REMOVED***
+                }
+            });
+        });
+    }
 }

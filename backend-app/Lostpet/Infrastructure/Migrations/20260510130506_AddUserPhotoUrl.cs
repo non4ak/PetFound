@@ -16,7 +16,7 @@ namespace Infrastructure.Migrations
                 type: "character varying(2048)",
                 maxLength: 2048,
                 nullable: true);
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -24,6 +24,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "UserPhotoUrl",
                 table: "AspNetUsers");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

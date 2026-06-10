@@ -22,7 +22,7 @@ public class AdminCommentService : IAdminCommentService
     public AdminCommentService(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<IPagedList<AdminCommentListItemDto>>> ListAsync(
         AdminCommentListQueryModel query,
@@ -39,12 +39,12 @@ public class AdminCommentService : IAdminCommentService
         if (query.AnnouncementId.HasValue)
         {
             q = q.Where(c => c.AnnouncementId == query.AnnouncementId.Value);
-      ***REMOVED***
+        }
 
         if (query.IsDeleted.HasValue)
         {
             q = q.Where(c => c.IsDeleted == query.IsDeleted.Value);
-      ***REMOVED***
+        }
 
         var isAsc = string.Equals(query.SortDirection, "asc", StringComparison.OrdinalIgnoreCase);
         q = isAsc
@@ -73,7 +73,7 @@ public class AdminCommentService : IAdminCommentService
             AnnouncementPetStatusLabel = c.Announcement.PetStatus.GetDisplayName(),
             AnnouncementCity = c.Announcement.City,
             AnnouncementCountry = c.Announcement.Country
-      ***REMOVED***);
+        });
 
         IPagedList<AdminCommentListItemDto> result = new PagedList<AdminCommentListItemDto>(
             currentPage: items,
@@ -83,28 +83,28 @@ public class AdminCommentService : IAdminCommentService
         )
         {
             TotalPages = paged.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<AdminCommentListItemDto>>.Success(result);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> UpdateAsync(int announcementId, int commentId, UpdateCommentModel model)
     {
         if (string.IsNullOrWhiteSpace(model.CommentMessage))
         {
             return Result<bool>.Failure(UserErrors.RequiredField("commentMessage"));
-      ***REMOVED***
+        }
 
         var comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId && c.AnnouncementId == announcementId);
         if (comment is null)
         {
             return Result<bool>.Failure(Error.NotFound("Comment.NotFound", "Comment not found"));
-      ***REMOVED***
+        }
 
         if (comment.IsDeleted)
         {
             return Result<bool>.Failure(Error.Validation("Comment.Deleted", "Cannot edit a deleted comment"));
-      ***REMOVED***
+        }
 
         comment.CommentMessage = model.CommentMessage.Trim();
         comment.ImageUrl = string.IsNullOrWhiteSpace(model.ImageUrl) ? null : model.ImageUrl.Trim();
@@ -115,7 +115,7 @@ public class AdminCommentService : IAdminCommentService
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> SoftDeleteAsync(int announcementId, int commentId)
     {
@@ -123,12 +123,12 @@ public class AdminCommentService : IAdminCommentService
         if (comment is null)
         {
             return Result<bool>.Failure(Error.NotFound("Comment.NotFound", "Comment not found"));
-      ***REMOVED***
+        }
 
         if (comment.IsDeleted)
         {
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
 
         var now = DateTimeOffset.UtcNow;
         comment.IsDeleted = true;
@@ -139,5 +139,5 @@ public class AdminCommentService : IAdminCommentService
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 }

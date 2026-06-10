@@ -20,7 +20,7 @@ public class OnboardingService : IOnboardingService
     {
         _userManager = userManager;
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<OnboardingResponse>> CompleteAsync(int userId, CompleteOnboardingModel model)
     {
@@ -28,7 +28,7 @@ public class OnboardingService : IOnboardingService
         if (user is null)
         {
             return Result<OnboardingResponse>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         if (string.IsNullOrWhiteSpace(model.UserName))
             return Result<OnboardingResponse>.Failure(UserErrors.RequiredField("userName"));
@@ -49,7 +49,7 @@ public class OnboardingService : IOnboardingService
         if (model.NotificationChannelPreference.HasValue)
         {
             user.NotificationChannelPreference = model.NotificationChannelPreference.Value;
-      ***REMOVED***
+        }
 
         var petDataPresent =
             !string.IsNullOrWhiteSpace(model.PetPhotoUrl) ||
@@ -87,10 +87,10 @@ public class OnboardingService : IOnboardingService
                     PetPhotoUrl = string.IsNullOrWhiteSpace(model.PetPhotoUrl) ? null : model.PetPhotoUrl.Trim(),
                     CreatedOn = now,
                     LastModifiedOn = now
-              ***REMOVED***;
+                };
 
                 await _context.Pets.AddAsync(pet);
-          ***REMOVED***
+            }
             else
             {
                 if (!string.IsNullOrWhiteSpace(model.PetName)) pet.PetName = model.PetName.Trim();
@@ -103,25 +103,25 @@ public class OnboardingService : IOnboardingService
                 if (model.Description != null) pet.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description.Trim();
                 if (model.PetPhotoUrl != null) pet.PetPhotoUrl = string.IsNullOrWhiteSpace(model.PetPhotoUrl) ? null : model.PetPhotoUrl.Trim();
                 pet.LastModifiedOn = now;
-          ***REMOVED***
+            }
 
             await _context.SaveChangesAsync();
             petId = pet.Id;
-      ***REMOVED***
+        }
 
         user.IsOnboardingCompleted = true;
         var updateResult = await _userManager.UpdateAsync(user);
         if (!updateResult.Succeeded)
         {
             return Result<OnboardingResponse>.Failure(UserErrors.UserNotCreatedError(updateResult.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<OnboardingResponse>.Success(new OnboardingResponse
         {
             UserId = user.Id,
             IsOnboardingCompleted = user.IsOnboardingCompleted,
             PetId = petId
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 }
 

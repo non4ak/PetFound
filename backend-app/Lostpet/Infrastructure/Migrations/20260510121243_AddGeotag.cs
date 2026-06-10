@@ -28,7 +28,7 @@ namespace Infrastructure.Migrations
                     CreatedByUserId = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-              ***REMOVED***,
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Geotags", x => x.Id);
@@ -38,7 +38,7 @@ namespace Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-              ***REMOVED***);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Geotags_Category",
@@ -54,13 +54,13 @@ namespace Infrastructure.Migrations
                 name: "IX_Geotags_Latitude_Longitude",
                 table: "Geotags",
                 columns: new[] { "Latitude", "Longitude" });
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Geotags");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

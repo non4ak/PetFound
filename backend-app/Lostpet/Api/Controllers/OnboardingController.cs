@@ -19,7 +19,7 @@ public class OnboardingController : ControllerBase
     public OnboardingController(IOnboardingService onboardingService)
     {
         _onboardingService = onboardingService;
-  ***REMOVED***
+    }
 
     [HttpPut]
     public async Task<IActionResult> CompleteAsync([FromBody] CompleteOnboardingModel model)
@@ -28,7 +28,7 @@ public class OnboardingController : ControllerBase
         if (!int.TryParse(id, out var userId))
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _onboardingService.CompleteAsync(userId, model);
         return result.Match(
@@ -37,6 +37,6 @@ public class OnboardingController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 }
 

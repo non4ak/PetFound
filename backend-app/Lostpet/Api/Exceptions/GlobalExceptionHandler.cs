@@ -18,5 +18,5 @@ public class GlobalExceptionHandler : IExceptionHandler
         await httpContext.Response.WriteAsJsonAsync(result, cancellationToken);
 
         return true;
-  ***REMOVED***
+    }
 }

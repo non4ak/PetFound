@@ -20,7 +20,7 @@ public class GeotagsController : ControllerBase
     public GeotagsController(IGeotagService geotagService)
     {
         _geotagService = geotagService;
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetPagedAsync([FromQuery] GeotagListQueryModel query, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
@@ -32,7 +32,7 @@ public class GeotagsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
@@ -44,7 +44,7 @@ public class GeotagsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateGeotagModel model)
@@ -53,7 +53,7 @@ public class GeotagsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _geotagService.CreateAsync(userIdResult.Value, model);
         return result.Match(
@@ -62,7 +62,7 @@ public class GeotagsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UpdateGeotagModel model)
@@ -71,7 +71,7 @@ public class GeotagsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _geotagService.UpdateAsync(userIdResult.Value, User.IsInRole(UserRoles.Admin), id, model);
         return result.Match(
@@ -80,7 +80,7 @@ public class GeotagsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id)
@@ -89,7 +89,7 @@ public class GeotagsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _geotagService.DeleteAsync(userIdResult.Value, User.IsInRole(UserRoles.Admin), id);
         return result.Match(
@@ -98,11 +98,11 @@ public class GeotagsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     private int? TryGetCurrentUserId()
     {
         var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(id, out var userId) ? userId : null;
-  ***REMOVED***
+    }
 }

@@ -19,7 +19,7 @@ public class GeotagService : IGeotagService
     public GeotagService(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<IPagedList<GeotagResponse>>> GetPagedAsync(int pageNumber, int pageSize, GeotagListQueryModel queryModel)
     {
@@ -34,32 +34,32 @@ public class GeotagService : IGeotagService
                 g.Title.ToLower().Contains(search) ||
                 (g.Description != null && g.Description.ToLower().Contains(search)) ||
                 (g.Address != null && g.Address.ToLower().Contains(search)));
-      ***REMOVED***
+        }
 
         if (queryModel.Category.HasValue)
         {
             query = query.Where(g => g.Category == queryModel.Category.Value);
-      ***REMOVED***
+        }
 
         if (queryModel.MinLatitude.HasValue)
         {
             query = query.Where(g => g.Latitude >= queryModel.MinLatitude.Value);
-      ***REMOVED***
+        }
 
         if (queryModel.MaxLatitude.HasValue)
         {
             query = query.Where(g => g.Latitude <= queryModel.MaxLatitude.Value);
-      ***REMOVED***
+        }
 
         if (queryModel.MinLongitude.HasValue)
         {
             query = query.Where(g => g.Longitude >= queryModel.MinLongitude.Value);
-      ***REMOVED***
+        }
 
         if (queryModel.MaxLongitude.HasValue)
         {
             query = query.Where(g => g.Longitude <= queryModel.MaxLongitude.Value);
-      ***REMOVED***
+        }
 
         query = query.OrderByDescending(g => g.CreatedOn).ThenByDescending(g => g.Id);
 
@@ -74,10 +74,10 @@ public class GeotagService : IGeotagService
         )
         {
             TotalPages = pagedEntities.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<GeotagResponse>>.Success(paged);
-  ***REMOVED***
+    }
 
     public async Task<Result<GeotagResponse>> GetByIdAsync(int id)
     {
@@ -88,10 +88,10 @@ public class GeotagService : IGeotagService
         if (geotag is null)
         {
             return Result<GeotagResponse>.Failure(Error.NotFound("Geotag.NotFound", "Geotag not found"));
-      ***REMOVED***
+        }
 
         return Result<GeotagResponse>.Success(MapResponse(geotag));
-  ***REMOVED***
+    }
 
     public async Task<Result<GeotagResponse>> CreateAsync(int userId, CreateGeotagModel model)
     {
@@ -99,7 +99,7 @@ public class GeotagService : IGeotagService
         if (validation is not null)
         {
             return Result<GeotagResponse>.Failure(validation);
-      ***REMOVED***
+        }
 
         var now = DateTimeOffset.UtcNow;
         var geotag = new Geotag
@@ -114,13 +114,13 @@ public class GeotagService : IGeotagService
             CreatedByUserId = userId,
             CreatedOn = now,
             LastModifiedOn = now
-      ***REMOVED***;
+        };
 
         await _context.Geotags.AddAsync(geotag);
         await _context.SaveChangesAsync();
 
         return Result<GeotagResponse>.Success(MapResponse(geotag));
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> UpdateAsync(int userId, bool isAdmin, int id, UpdateGeotagModel model)
     {
@@ -128,18 +128,18 @@ public class GeotagService : IGeotagService
         if (geotag is null)
         {
             return Result<bool>.Failure(Error.NotFound("Geotag.NotFound", "Geotag not found"));
-      ***REMOVED***
+        }
 
         if (!isAdmin && geotag.CreatedByUserId != userId)
         {
             return Result<bool>.Failure(Error.Forbidden("Geotag.Forbidden", "You can only edit your own geotags"));
-      ***REMOVED***
+        }
 
         var validation = Validate(model.Title, model.Latitude, model.Longitude);
         if (validation is not null)
         {
             return Result<bool>.Failure(validation);
-      ***REMOVED***
+        }
 
         geotag.Title = model.Title.Trim();
         geotag.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description.Trim();
@@ -152,7 +152,7 @@ public class GeotagService : IGeotagService
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> DeleteAsync(int userId, bool isAdmin, int id)
     {
@@ -160,17 +160,17 @@ public class GeotagService : IGeotagService
         if (geotag is null)
         {
             return Result<bool>.Failure(Error.NotFound("Geotag.NotFound", "Geotag not found"));
-      ***REMOVED***
+        }
 
         if (!isAdmin && geotag.CreatedByUserId != userId)
         {
             return Result<bool>.Failure(Error.Forbidden("Geotag.Forbidden", "You can only delete your own geotags"));
-      ***REMOVED***
+        }
 
         _context.Geotags.Remove(geotag);
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     private static Error? Validate(string title, decimal latitude, decimal longitude)
     {
@@ -181,7 +181,7 @@ public class GeotagService : IGeotagService
         if (longitude < -180m || longitude > 180m)
             return Error.Validation("Geotag.InvalidLongitude", "Longitude must be between -180 and 180");
         return null;
-  ***REMOVED***
+    }
 
     private static GeotagResponse MapResponse(Geotag g)
     {
@@ -198,6 +198,6 @@ public class GeotagService : IGeotagService
             PhotoUrl = g.PhotoUrl,
             CreatedByUserId = g.CreatedByUserId,
             CreatedOn = g.CreatedOn
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 }

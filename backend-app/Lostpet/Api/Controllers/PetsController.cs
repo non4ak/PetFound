@@ -19,7 +19,7 @@ public class PetsController : ControllerBase
     public PetsController(IPetService petService)
     {
         _petService = petService;
-  ***REMOVED***
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
@@ -28,7 +28,7 @@ public class PetsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _petService.GetByIdAsync(userIdResult.Value, id);
         return result.Match(
@@ -37,7 +37,7 @@ public class PetsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()
@@ -46,7 +46,7 @@ public class PetsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _petService.GetAllByUserAsync(userIdResult.Value);
         return result.Match(
@@ -55,7 +55,7 @@ public class PetsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreatePetModel model)
@@ -64,7 +64,7 @@ public class PetsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _petService.CreateAsync(userIdResult.Value, model);
         return result.Match(
@@ -73,7 +73,7 @@ public class PetsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UpdatePetModel model)
@@ -82,7 +82,7 @@ public class PetsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _petService.UpdateAsync(userIdResult.Value, id, model);
         return result.Match(
@@ -91,7 +91,7 @@ public class PetsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id)
@@ -100,7 +100,7 @@ public class PetsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _petService.DeleteAsync(userIdResult.Value, id);
         return result.Match(
@@ -109,12 +109,12 @@ public class PetsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     private int? TryGetCurrentUserId()
     {
         var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(id, out var userId) ? userId : null;
-  ***REMOVED***
+    }
 }
 

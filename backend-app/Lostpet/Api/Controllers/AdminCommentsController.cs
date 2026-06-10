@@ -18,7 +18,7 @@ public class AdminCommentsController : ControllerBase
     public AdminCommentsController(IAdminCommentService adminCommentService)
     {
         _adminCommentService = adminCommentService;
-  ***REMOVED***
+    }
 
     [HttpGet("comments")]
     public async Task<IActionResult> ListAsync(
@@ -33,7 +33,7 @@ public class AdminCommentsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPut("announcements/{announcementId:int}/comments/{commentId:int}")]
     public async Task<IActionResult> UpdateAsync(
@@ -48,7 +48,7 @@ public class AdminCommentsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpDelete("announcements/{announcementId:int}/comments/{commentId:int}")]
     public async Task<IActionResult> SoftDeleteAsync([FromRoute] int announcementId, [FromRoute] int commentId)
@@ -60,5 +60,5 @@ public class AdminCommentsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 }

@@ -34,8 +34,8 @@ public class EmailService : IEmailService
         if (string.IsNullOrEmpty(_smtpHost))
         {
             _logger.LogWarning("SmtpSettings are not configured. Email sending will fail at runtime.");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task SendForgotPasswordLinkAsync(string email, string passwordToken)
     {
@@ -44,7 +44,7 @@ public class EmailService : IEmailService
         {
             { "passwordToken", passwordToken },
             { "email", email }
-      ***REMOVED***;
+        };
         var callback = QueryHelpers.AddQueryString(link, queryParams);
 
         var body = $"<p>Please proceed with changing your password by clicking <a href=\"{callback}\">here</a>.</p>";
@@ -53,7 +53,7 @@ public class EmailService : IEmailService
             "If you did not request this, you can ignore this email.");
 
         await SendSmtpEmailAsync(email, "Lostpet password change for your account", htmlMessage);
-  ***REMOVED***
+    }
 
     public async Task SendConfirmationLinkAsync(string email, string confirmationToken)
     {
@@ -62,7 +62,7 @@ public class EmailService : IEmailService
         {
             { "token", confirmationToken },
             { "email", email }
-      ***REMOVED***;
+        };
         var callback = QueryHelpers.AddQueryString(link, queryParams);
 
         var body = $"Please confirm your email address by clicking the button below:<br/>" +
@@ -72,7 +72,7 @@ public class EmailService : IEmailService
             "If you did not request this, you can ignore this email.");
 
         await SendSmtpEmailAsync(email, "Confirm your email", htmlMessage);
-  ***REMOVED***
+    }
 
     public async Task SendSuccessfulEmailAsync(string email, string message, string subject)
     {
@@ -80,7 +80,7 @@ public class EmailService : IEmailService
         var htmlMessage = BuildHtmlMessage(subject, body, "Thank you for being part of our community.");
 
         await SendSmtpEmailAsync(email, subject, htmlMessage);
-  ***REMOVED***
+    }
 
     public async Task SendErrorEmailAsync(string email, string message, string subject)
     {
@@ -92,7 +92,7 @@ public class EmailService : IEmailService
             "This is an automated email, please do not reply directly.");
 
         await SendSmtpEmailAsync(email, subject, htmlMessage);
-  ***REMOVED***
+    }
 
     private async Task<Result> SendSmtpEmailAsync(string recipientEmail, string subject, string htmlBody)
     {
@@ -104,7 +104,7 @@ public class EmailService : IEmailService
                 Subject = subject,
                 Body = htmlBody,
                 IsBodyHtml = true
-          ***REMOVED***;
+            };
 
             mailMessage.To.Add(recipientEmail);
 
@@ -114,18 +114,18 @@ public class EmailService : IEmailService
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(_smtpEmail, _smtpPassword),
                 Timeout = 3000
-          ***REMOVED***;
+            };
 
             await client.SendMailAsync(mailMessage);
 
             return Result.Success();
-      ***REMOVED***
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error sending email to {recipientEmail} with subject: {subject}.");
             return Result.Failure(EmailError.EmailNotSent());
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     private string BuildHtmlMessage(string title, string body, string footer = null)
     {
@@ -138,22 +138,22 @@ public class EmailService : IEmailService
                 background-color: #f9f9f9;
                 padding: 20px;
                 color: #333;
-            ***REMOVED***}
+              }}
               .container {{
                 max-width: 600px;
                 background-color: #ffffff;
                 border-radius: 10px;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                 padding: 30px;
-            ***REMOVED***}
+              }}
               h1 {{
                 font-size: 20px;
                 margin-bottom: 20px;
                 color: #2c3e50;
-            ***REMOVED***}
+              }}
               p {{
                 line-height: 1.6;
-            ***REMOVED***}
+              }}
               a.button {{
                 display: inline-block;
                 padding: 10px 20px;
@@ -162,12 +162,12 @@ public class EmailService : IEmailService
                 color: #fff !important;
                 text-decoration: none;
                 border-radius: 5px;
-            ***REMOVED***}
+              }}
               .footer {{
                 margin-top: 30px;
                 font-size: 12px;
                 color: #999;
-            ***REMOVED***}
+              }}
             </style>
           </head>
           <body>
@@ -178,5 +178,5 @@ public class EmailService : IEmailService
             </div>
           </body>
         </html>";
-  ***REMOVED***
+    }
 }

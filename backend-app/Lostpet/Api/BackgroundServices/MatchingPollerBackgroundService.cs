@@ -18,7 +18,7 @@ public class MatchingPollerBackgroundService : BackgroundService
         _scopeFactory = scopeFactory;
         _config = config.Value;
         _logger = logger;
-  ***REMOVED***
+    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -31,20 +31,20 @@ public class MatchingPollerBackgroundService : BackgroundService
                 using var scope = _scopeFactory.CreateScope();
                 var processor = scope.ServiceProvider.GetRequiredService<IMatchingProcessingService>();
                 await processor.ProcessPendingBatchAsync(stoppingToken);
-          ***REMOVED***
+            }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 _logger.LogError(ex, "Matching poller iteration failed");
-          ***REMOVED***
+            }
 
             try
             {
                 await Task.Delay(interval, stoppingToken);
-          ***REMOVED***
+            }
             catch (OperationCanceledException)
             {
                 break;
-          ***REMOVED***
-      ***REMOVED***
-  ***REMOVED***
+            }
+        }
+    }
 }

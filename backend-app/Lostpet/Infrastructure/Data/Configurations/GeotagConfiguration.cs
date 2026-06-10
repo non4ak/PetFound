@@ -26,5 +26,5 @@ public class GeotagConfiguration : IEntityTypeConfiguration<Geotag>
 
         builder.HasIndex(g => g.Category);
         builder.HasIndex(g => new { g.Latitude, g.Longitude });
-  ***REMOVED***
+    }
 }

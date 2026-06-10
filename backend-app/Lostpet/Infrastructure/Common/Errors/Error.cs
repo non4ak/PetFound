@@ -18,7 +18,7 @@ public record Error
         Code = code;
         Description = description;
         Type = type;
-  ***REMOVED***
+    }
 
     public string Code { get; init; }
     public string Description { get; init; }

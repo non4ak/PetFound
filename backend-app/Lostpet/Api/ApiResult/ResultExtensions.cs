@@ -21,16 +21,16 @@ public static class ResultExtensions
                 {
                     Message = message,
                     Data = result.Value
-              ***REMOVED***;
+                };
 
                 return new ObjectResult(body) { StatusCode = successStatusCode };
-          ***REMOVED***
+            }
 
             return new StatusCodeResult(successStatusCode);
-      ***REMOVED***
+        }
 
         return failure != null
             ? failure(result)
             : ApiResults.ToProblemDetails(result);
-  ***REMOVED***
+    }
 }

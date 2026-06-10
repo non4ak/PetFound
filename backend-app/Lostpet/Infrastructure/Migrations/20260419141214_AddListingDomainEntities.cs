@@ -51,7 +51,7 @@ namespace Infrastructure.Migrations
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-              ***REMOVED***,
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pets", x => x.Id);
@@ -61,7 +61,7 @@ namespace Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-              ***REMOVED***);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Announcements",
@@ -80,7 +80,7 @@ namespace Infrastructure.Migrations
                     PetId = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-              ***REMOVED***,
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Announcements", x => x.Id);
@@ -90,7 +90,7 @@ namespace Infrastructure.Migrations
                         principalTable: "Pets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-              ***REMOVED***);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Comments",
@@ -108,7 +108,7 @@ namespace Infrastructure.Migrations
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-              ***REMOVED***,
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
@@ -124,7 +124,7 @@ namespace Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-              ***REMOVED***);
+                });
 
             migrationBuilder.CreateTable(
                 name: "MatchResults",
@@ -138,7 +138,7 @@ namespace Infrastructure.Migrations
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-              ***REMOVED***,
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MatchResults", x => x.Id);
@@ -154,7 +154,7 @@ namespace Infrastructure.Migrations
                         principalTable: "Announcements",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-              ***REMOVED***);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Notifications",
@@ -170,7 +170,7 @@ namespace Infrastructure.Migrations
                     CommentId = table.Column<int>(type: "integer", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-              ***REMOVED***,
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notifications", x => x.Id);
@@ -192,7 +192,7 @@ namespace Infrastructure.Migrations
                         principalTable: "MatchResults",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
-              ***REMOVED***);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Announcements_PetId",
@@ -239,7 +239,7 @@ namespace Infrastructure.Migrations
                 name: "IX_Pets_UserId",
                 table: "Pets",
                 column: "UserId");
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -270,6 +270,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "SocialNetwork",
                 table: "AspNetUsers");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

@@ -7,5 +7,5 @@ public class AuthMappingProfile : Profile
     public AuthMappingProfile()
     {
 
-  ***REMOVED***
+    }
 }

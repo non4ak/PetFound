@@ -10,7 +10,7 @@ public static class RepositoryErrorMapper<T>
         if (ex is DbUpdateConcurrencyException)
         {
             return RepositoryErrors<T>.UpdateError;
-      ***REMOVED***
+        }
 
         if (ex.InnerException is PostgresException pgEx)
         {
@@ -22,13 +22,13 @@ public static class RepositoryErrorMapper<T>
                     if (pgEx.Message.Contains("DELETE", StringComparison.OrdinalIgnoreCase))
                     {
                         return RepositoryErrors<T>.DeleteError;
-                  ***REMOVED***
+                    }
                     return RepositoryErrors<T>.UpdateError;
                 default:
                     return RepositoryErrors<T>.UpdateError;
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         return RepositoryErrors<T>.UpdateError;
-  ***REMOVED***
+    }
 }

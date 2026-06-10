@@ -15,18 +15,18 @@ public class OnboardingRequestExampleOperationFilter : IOperationFilter
         if (!isTargetEndpoint)
         {
             return;
-      ***REMOVED***
+        }
 
         var requestBody = operation.RequestBody;
         if (requestBody?.Content is null)
         {
             return;
-      ***REMOVED***
+        }
 
         if (!requestBody.Content.TryGetValue("application/json", out var mediaType) || mediaType is null)
         {
             return;
-      ***REMOVED***
+        }
 
         mediaType.Example = new OpenApiObject
         {
@@ -45,7 +45,7 @@ public class OnboardingRequestExampleOperationFilter : IOperationFilter
             ["chipNumber"] = new OpenApiString("985112003456789"),
             ["description"] = new OpenApiString("Friendly, wears a blue collar"),
             ["petPhotoUrl"] = new OpenApiString("https://example.com/pet.jpg")
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 }
 

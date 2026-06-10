@@ -45,7 +45,7 @@ namespace Infrastructure.Migrations
                 type: "integer",
                 nullable: false,
                 defaultValue: 0);
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -79,6 +79,6 @@ namespace Infrastructure.Migrations
                 type: "character varying(64)",
                 maxLength: 64,
                 nullable: true);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

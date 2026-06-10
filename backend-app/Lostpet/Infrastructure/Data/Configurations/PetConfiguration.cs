@@ -23,5 +23,5 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .WithMany(u => u.Pets)
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.SetNull);
-  ***REMOVED***
+    }
 }

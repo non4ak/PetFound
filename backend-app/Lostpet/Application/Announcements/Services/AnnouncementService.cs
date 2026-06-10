@@ -20,7 +20,7 @@ public class AnnouncementService : IAnnouncementService
     public AnnouncementService(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<AnnouncementResponse>> CreateAsync(int userId, CreateAnnouncementModel model)
     {
@@ -46,22 +46,22 @@ public class AnnouncementService : IAnnouncementService
             if (existingPet is null)
             {
                 return Result<AnnouncementResponse>.Failure(Error.NotFound("Pet.NotFound", "Pet not found"));
-          ***REMOVED***
+            }
 
             if (model.PetStatus == AnnouncementPetStatus.Lost && existingPet.UserId != userId)
             {
                 return Result<AnnouncementResponse>.Failure(Error.Forbidden("Pet.Forbidden", "Lost announcement requires your own pet"));
-          ***REMOVED***
+            }
 
             petTypeForResponse = existingPet.PetType;
             petPhotoUrlForResponse = existingPet.PetPhotoUrl;
-      ***REMOVED***
+        }
         else
         {
             if (string.IsNullOrWhiteSpace(model.PetName))
             {
                 return Result<AnnouncementResponse>.Failure(UserErrors.RequiredField("petName"));
-          ***REMOVED***
+            }
 
             var nowForPet = DateTimeOffset.UtcNow;
             var generatedPet = new Pet
@@ -77,14 +77,14 @@ public class AnnouncementService : IAnnouncementService
                 PetPhotoUrl = string.IsNullOrWhiteSpace(model.PetPhotoUrl) ? null : model.PetPhotoUrl.Trim(),
                 CreatedOn = nowForPet,
                 LastModifiedOn = nowForPet
-          ***REMOVED***;
+            };
 
             await _context.Pets.AddAsync(generatedPet);
             await _context.SaveChangesAsync();
             petId = generatedPet.Id;
             petTypeForResponse = generatedPet.PetType;
             petPhotoUrlForResponse = generatedPet.PetPhotoUrl;
-      ***REMOVED***
+        }
 
         var now = DateTimeOffset.UtcNow;
         var announcement = new Announcement
@@ -106,7 +106,7 @@ public class AnnouncementService : IAnnouncementService
             ProcessingStatus = AnnouncementProcessingStatus.Pending,
             CreatedOn = now,
             LastModifiedOn = now
-      ***REMOVED***;
+        };
 
         await _context.Announcements.AddAsync(announcement);
         await _context.SaveChangesAsync();
@@ -132,8 +132,8 @@ public class AnnouncementService : IAnnouncementService
             LastSeenLongitude = announcement.LastSeenLongitude,
             IsActive = announcement.IsActive,
             CreatedOn = announcement.CreatedOn
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     public Task<Result<IPagedList<AnnouncementResponse>>> GetPagedAsync(int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
     {
@@ -143,7 +143,7 @@ public class AnnouncementService : IAnnouncementService
             .AsQueryable();
 
         return BuildPagedAnnouncementsAsync(query, pageNumber, pageSize, queryModel);
-  ***REMOVED***
+    }
 
     public Task<Result<IPagedList<AnnouncementResponse>>> GetMyPagedAsync(int userId, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
     {
@@ -154,7 +154,7 @@ public class AnnouncementService : IAnnouncementService
             .AsQueryable();
 
         return BuildPagedAnnouncementsAsync(query, pageNumber, pageSize, queryModel);
-  ***REMOVED***
+    }
 
     private async Task<Result<IPagedList<AnnouncementResponse>>> BuildPagedAnnouncementsAsync(IQueryable<Announcement> query, int pageNumber, int pageSize, AnnouncementListQueryModel queryModel)
     {
@@ -166,44 +166,44 @@ public class AnnouncementService : IAnnouncementService
                 (a.NearLandmark != null && a.NearLandmark.ToLower().Contains(search)) ||
                 (a.City != null && a.City.ToLower().Contains(search)) ||
                 (a.Country != null && a.Country.ToLower().Contains(search)));
-      ***REMOVED***
+        }
 
         if (queryModel.PetStatus.HasValue)
         {
             query = query.Where(a => a.PetStatus == queryModel.PetStatus.Value);
-      ***REMOVED***
+        }
 
         if (queryModel.PetType.HasValue)
         {
             query = query.Where(a => a.Pet.PetType == queryModel.PetType.Value);
-      ***REMOVED***
+        }
 
         if (!string.IsNullOrWhiteSpace(queryModel.Country))
         {
             var country = queryModel.Country.Trim();
             query = query.Where(a => a.Country != null && a.Country.ToLower() == country.ToLower());
-      ***REMOVED***
+        }
 
         if (!string.IsNullOrWhiteSpace(queryModel.City))
         {
             var city = queryModel.City.Trim();
             query = query.Where(a => a.City != null && a.City.ToLower() == city.ToLower());
-      ***REMOVED***
+        }
 
         if (queryModel.CreatedFrom.HasValue)
         {
             query = query.Where(a => a.CreatedOn >= queryModel.CreatedFrom.Value);
-      ***REMOVED***
+        }
 
         if (queryModel.CreatedTo.HasValue)
         {
             query = query.Where(a => a.CreatedOn <= queryModel.CreatedTo.Value);
-      ***REMOVED***
+        }
 
         if (queryModel.IsActive.HasValue)
         {
             query = query.Where(a => a.IsActive == queryModel.IsActive.Value);
-      ***REMOVED***
+        }
 
         query = ApplySorting(query, queryModel.SortBy, queryModel.SortDirection);
 
@@ -226,10 +226,10 @@ public class AnnouncementService : IAnnouncementService
         )
         {
             TotalPages = pagedEntities.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<AnnouncementResponse>>.Success(paged);
-  ***REMOVED***
+    }
 
     public async Task<Result<AnnouncementDetailsResponse>> GetByIdAsync(int id)
     {
@@ -242,7 +242,7 @@ public class AnnouncementService : IAnnouncementService
         if (announcement is null)
         {
             return Result<AnnouncementDetailsResponse>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         return Result<AnnouncementDetailsResponse>.Success(new AnnouncementDetailsResponse
         {
@@ -284,9 +284,9 @@ public class AnnouncementService : IAnnouncementService
                 ChipNumber = announcement.Pet.ChipNumber,
                 Description = announcement.Pet.Description,
                 PetPhotoUrl = announcement.Pet.PetPhotoUrl
-          ***REMOVED***
-      ***REMOVED***);
-  ***REMOVED***
+            }
+        });
+    }
 
     public async Task<Result<bool>> UpdateAsync(int userId, int id, UpdateAnnouncementModel model)
     {
@@ -297,7 +297,7 @@ public class AnnouncementService : IAnnouncementService
         if (announcement is null)
         {
             return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         if (string.IsNullOrWhiteSpace(model.Country))
             return Result<bool>.Failure(UserErrors.RequiredField("country"));
@@ -329,15 +329,15 @@ public class AnnouncementService : IAnnouncementService
         if (announcement.PetStatus == AnnouncementPetStatus.Lost)
         {
             announcement.Pet.UserId = userId;
-      ***REMOVED***
+        }
         else
         {
             announcement.Pet.UserId = null;
-      ***REMOVED***
+        }
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> ArchiveAsync(int userId, int id)
     {
@@ -347,14 +347,14 @@ public class AnnouncementService : IAnnouncementService
         if (announcement is null)
         {
             return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         announcement.IsActive = false;
         announcement.LastModifiedOn = DateTimeOffset.UtcNow;
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> RestoreAsync(int userId, int id)
     {
@@ -364,14 +364,14 @@ public class AnnouncementService : IAnnouncementService
         if (announcement is null)
         {
             return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         announcement.IsActive = true;
         announcement.LastModifiedOn = DateTimeOffset.UtcNow;
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     private static IOrderedQueryable<Announcement> ApplySorting(IQueryable<Announcement> query, string? sortBy, string? sortDirection)
     {
@@ -386,8 +386,8 @@ public class AnnouncementService : IAnnouncementService
             _ => isAsc
                 ? query.OrderBy(a => a.CreatedOn).ThenBy(a => a.Id)
                 : query.OrderByDescending(a => a.CreatedOn).ThenByDescending(a => a.Id)
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 
     private static AnnouncementResponse MapAnnouncementResponse(Announcement a, int commentsCount = 0)
     {
@@ -419,7 +419,7 @@ public class AnnouncementService : IAnnouncementService
             IsActive = a.IsActive,
             CreatedOn = a.CreatedOn,
             CommentsCount = commentsCount
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 }
 

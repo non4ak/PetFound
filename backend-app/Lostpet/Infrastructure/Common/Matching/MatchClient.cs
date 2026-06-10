@@ -22,7 +22,7 @@ public class MatchClient : IMatchClient
         _httpClient = httpClient;
         _config = config.Value;
         _logger = logger;
-  ***REMOVED***
+    }
 
     public async Task<Result<IReadOnlyList<MatchCandidateScore>>> MatchAsync(
         double[] targetVector,
@@ -37,7 +37,7 @@ public class MatchClient : IMatchClient
                 Candidates = candidates
                     .Select(c => new MatchCandidateDto { Id = c.Id, Vector = c.Vector })
                     .ToList()
-          ***REMOVED***;
+            };
 
             var url = $"{_config.MatchBaseUrl.TrimEnd('/')}/match";
             using var response = await _httpClient.PostAsJsonAsync(url, request, ct);
@@ -48,7 +48,7 @@ public class MatchClient : IMatchClient
                 return Result<IReadOnlyList<MatchCandidateScore>>.Failure(Error.InternalServerError(
                     "Match.HttpError",
                     $"Match service returned {(int)response.StatusCode}"));
-          ***REMOVED***
+            }
 
             // NOTE: the /match response shape may change. Mapping is isolated here.
             var scores = await response.Content.ReadFromJsonAsync<List<MatchScoreDto>>(cancellationToken: ct);
@@ -57,20 +57,20 @@ public class MatchClient : IMatchClient
                 return Result<IReadOnlyList<MatchCandidateScore>>.Failure(Error.InternalServerError(
                     "Match.EmptyResponse",
                     "Match service returned an empty body"));
-          ***REMOVED***
+            }
 
             IReadOnlyList<MatchCandidateScore> mapped = scores
                 .Select(s => new MatchCandidateScore(s.Id, s.SimilarityPercentage))
                 .ToList();
 
             return Result<IReadOnlyList<MatchCandidateScore>>.Success(mapped);
-      ***REMOVED***
+        }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
         {
             _logger.LogWarning(ex, "Match request failed");
             return Result<IReadOnlyList<MatchCandidateScore>>.Failure(Error.InternalServerError(
                 "Match.RequestFailed",
                 ex.Message));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

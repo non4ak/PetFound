@@ -19,7 +19,7 @@ public class PhotosController : ControllerBase
     public PhotosController(IPhotoUploadService photoUploadService)
     {
         _photoUploadService = photoUploadService;
-  ***REMOVED***
+    }
 
     [HttpPost("upload-sas")]
     public async Task<IActionResult> CreateUploadSasAsync([FromBody] CreatePhotoUploadSasModel model)
@@ -28,7 +28,7 @@ public class PhotosController : ControllerBase
         if (userId is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _photoUploadService.CreateUploadSasAsync(userId.Value, model);
         return result.Match(
@@ -37,11 +37,11 @@ public class PhotosController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     private int? TryGetCurrentUserId()
     {
         string? id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(id, out int userId) ? userId : null;
-  ***REMOVED***
+    }
 }

@@ -38,5 +38,5 @@ public class AnnouncementConfiguration : IEntityTypeConfiguration<Announcement>
         builder.HasIndex(a => a.ReporterUserId);
         builder.HasIndex(a => a.ProcessingStatus);
         builder.HasIndex(a => new { a.City, a.PetStatus });
-  ***REMOVED***
+    }
 }

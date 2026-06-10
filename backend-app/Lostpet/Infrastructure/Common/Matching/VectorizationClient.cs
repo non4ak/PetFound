@@ -22,7 +22,7 @@ public class VectorizationClient : IVectorizationClient
         _httpClient = httpClient;
         _config = config.Value;
         _logger = logger;
-  ***REMOVED***
+    }
 
     public async Task<Result<double[]>> VectorizeAsync(string imageUrl, CancellationToken ct)
     {
@@ -45,12 +45,12 @@ public class VectorizationClient : IVectorizationClient
                     return Result<double[]>.Failure(Error.Validation(
                         "Vectorization.PhotoRejected",
                         $"Vectorization service rejected the photo with status {statusCode}"));
-              ***REMOVED***
+                }
 
                 return Result<double[]>.Failure(Error.InternalServerError(
                     "Vectorization.HttpError",
                     $"Vectorization service returned {statusCode}"));
-          ***REMOVED***
+            }
 
             var payload = await response.Content.ReadFromJsonAsync<VectorizeResponseDto>(cancellationToken: ct);
             if (payload?.Vector is null)
@@ -58,16 +58,16 @@ public class VectorizationClient : IVectorizationClient
                 return Result<double[]>.Failure(Error.InternalServerError(
                     "Vectorization.EmptyResponse",
                     "Vectorization service returned an empty body"));
-          ***REMOVED***
+            }
 
             return Result<double[]>.Success(payload.Vector);
-      ***REMOVED***
+        }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
         {
             _logger.LogWarning(ex, "Vectorization request failed for {ImageUrl}", imageUrl);
             return Result<double[]>.Failure(Error.InternalServerError(
                 "Vectorization.RequestFailed",
                 ex.Message));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

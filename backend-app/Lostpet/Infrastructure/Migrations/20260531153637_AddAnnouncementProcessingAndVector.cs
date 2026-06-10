@@ -46,7 +46,7 @@ namespace Infrastructure.Migrations
                 name: "IX_Announcements_ProcessingStatus",
                 table: "Announcements",
                 column: "ProcessingStatus");
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -74,6 +74,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "VectorizedOn",
                 table: "Announcements");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

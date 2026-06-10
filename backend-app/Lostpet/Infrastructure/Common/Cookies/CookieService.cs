@@ -30,7 +30,7 @@ public class CookieService : ICookieService
             SameSite = _sameSite,
             Path = "/",
             Expires = DateTimeOffset.UtcNow.AddMinutes(cookieConfig.AccessTokenLifetimeInMinutes)
-      ***REMOVED***;
+        };
 
         _refreshTokenOptions = new CookieOptions
         {
@@ -39,14 +39,14 @@ public class CookieService : ICookieService
             SameSite = _sameSite,
             Path = "/",
             Expires = DateTimeOffset.UtcNow.AddDays(cookieConfig.RefreshTokenLifeTimeInDays)
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 
     public void SetAuthCookies(string accessToken, string refreshToken)
     {
         _httpResponse.Cookies.Append(AppConstants.AccessTokenCookie, accessToken, _accessTokenOptions);
         _httpResponse.Cookies.Append(AppConstants.RefreshTokenCookie, refreshToken, _refreshTokenOptions);
-  ***REMOVED***
+    }
 
     public void ClearAuthCookies()
     {
@@ -57,17 +57,17 @@ public class CookieService : ICookieService
             Secure = _accessTokenOptions.Secure,
             SameSite = _sameSite,
             Path = "/"
-      ***REMOVED***;
+        };
 
         _httpResponse.Cookies.Append(AppConstants.AccessTokenCookie, "", expired);
         _httpResponse.Cookies.Append(AppConstants.RefreshTokenCookie, "", expired);
-  ***REMOVED***
+    }
 
     public string? GetRefreshToken()
     {
         _httpRequest.Cookies.TryGetValue(AppConstants.RefreshTokenCookie, out var token);
         return token;
-  ***REMOVED***
+    }
 
     private static SameSiteMode ParseSameSiteMode(string mode) =>
         mode?.ToLowerInvariant() switch
@@ -75,5 +75,5 @@ public class CookieService : ICookieService
             "none" => SameSiteMode.None,
             "lax" => SameSiteMode.Lax,
             _ => SameSiteMode.Strict,
-      ***REMOVED***;
+        };
 }

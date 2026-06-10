@@ -21,7 +21,7 @@ namespace Infrastructure.Migrations
                     Token = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     ExpiresOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-              ***REMOVED***,
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RefreshTokens", x => x.Id);
@@ -31,7 +31,7 @@ namespace Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-              ***REMOVED***);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_Token",
@@ -43,13 +43,13 @@ namespace Infrastructure.Migrations
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

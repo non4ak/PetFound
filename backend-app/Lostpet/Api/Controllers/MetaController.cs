@@ -15,7 +15,7 @@ public class MetaController : ControllerBase
     public MetaController(IEnumMetadataService enumMetadataService)
     {
         _enumMetadataService = enumMetadataService;
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetEnumsAsync()
@@ -27,6 +27,6 @@ public class MetaController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 }
 

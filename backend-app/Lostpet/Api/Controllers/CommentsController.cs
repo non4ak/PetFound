@@ -19,7 +19,7 @@ public class CommentsController : ControllerBase
     public CommentsController(ICommentService commentService)
     {
         _commentService = commentService;
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetThreadAsync(
@@ -34,7 +34,7 @@ public class CommentsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromRoute] int announcementId, [FromBody] CreateCommentModel model)
@@ -43,7 +43,7 @@ public class CommentsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _commentService.CreateAsync(userIdResult.Value, announcementId, model);
         return result.Match(
@@ -52,7 +52,7 @@ public class CommentsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPut("{commentId:int}")]
     public async Task<IActionResult> UpdateAsync(
@@ -64,7 +64,7 @@ public class CommentsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _commentService.UpdateAsync(userIdResult.Value, announcementId, commentId, model);
         return result.Match(
@@ -73,7 +73,7 @@ public class CommentsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpDelete("{commentId:int}")]
     public async Task<IActionResult> SoftDeleteAsync(
@@ -84,7 +84,7 @@ public class CommentsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _commentService.SoftDeleteAsync(userIdResult.Value, announcementId, commentId);
         return result.Match(
@@ -93,11 +93,11 @@ public class CommentsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     private int? TryGetCurrentUserId()
     {
         var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(id, out var userId) ? userId : null;
-  ***REMOVED***
+    }
 }

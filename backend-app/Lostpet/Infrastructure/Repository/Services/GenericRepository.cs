@@ -17,7 +17,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public GenericRepository(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     protected DbSet<T> Table => _context.Set<T>();
 
@@ -35,17 +35,17 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
                 foreach (var include in includes)
                 {
                     query = include(query);
-              ***REMOVED***
-          ***REMOVED***
+                }
+            }
 
             var result = await query.Where(condition).ToListAsync();
             return Result<IEnumerable<T>>.Success(result);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             return Result<IEnumerable<T>>.Failure(RepositoryErrorMapper<T>.Map(ex));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public virtual async Task<Result<T>> GetSingleByConditionAsync(
         Expression<Func<T, bool>> condition,
@@ -60,23 +60,23 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
                 foreach (var include in includes)
                 {
                     query = include(query);
-              ***REMOVED***
-          ***REMOVED***
+                }
+            }
 
             var result = await query.FirstOrDefaultAsync(condition);
 
             if (result == null)
             {
                 return Result<T>.Failure(RepositoryErrors<T>.NotFoundError);
-          ***REMOVED***
+            }
 
             return Result<T>.Success(result);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             return Result<T>.Failure(RepositoryErrorMapper<T>.Map(ex));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public virtual async Task<Result<int>> AddAsync(T item)
     {
@@ -85,12 +85,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             Table.Add(item);
             await SaveAsync();
             return Result<int>.Success(item.Id);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             return Result<int>.Failure(RepositoryErrorMapper<T>.Map(ex));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public virtual async Task<Result<bool>> AddRangeAsync(IEnumerable<T> items)
     {
@@ -99,12 +99,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             Table.AddRange(items);
             await SaveAsync();
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             return Result<bool>.Failure(RepositoryErrors<T>.AddError);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public virtual async Task<Result<bool>> UpdateAsync(T item)
     {
@@ -113,12 +113,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             Table.Update(item);
             await SaveAsync();
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             return Result<bool>.Failure(RepositoryErrorMapper<T>.Map(ex));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task<Result<bool>> DeleteAsync(Expression<Func<T, bool>> condition)
     {
@@ -128,17 +128,17 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             if (entity == null)
             {
                 return Result<bool>.Failure(RepositoryErrors<T>.NotFoundError);
-          ***REMOVED***
+            }
 
             Table.Remove(entity);
             await SaveAsync();
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             return Result<bool>.Failure(RepositoryErrorMapper<T>.Map(ex));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public virtual async Task<Result<PagedList<T>>> FetchPaginatedByConditions(
         IEnumerable<(Expression<Func<T, bool>> predicate, PredicateOptions options)> conditions,
@@ -165,8 +165,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
                     case PredicateOptions.NOT:
                         predicate.Not(expression.predicate);
                         break;
-              ***REMOVED***
-          ***REMOVED***
+                }
+            }
 
             IQueryable<T> query = Table;
             query = isNoTracking ? query.AsNoTracking() : query;
@@ -176,7 +176,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             foreach (var include in includes)
             {
                 query = include(query);
-          ***REMOVED***
+            }
 
             IOrderedQueryable<T> orderedQuery = orderBy.isDesc
                 ? query.OrderByDescending(orderBy.expression)
@@ -184,12 +184,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
             var result = await PagedList<T>.CreateAsync(orderedQuery, pageNumber, pageSize);
             return Result<PagedList<T>>.Success(result);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             return Result<PagedList<T>>.Failure(RepositoryErrorMapper<T>.Map(ex));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
 
     public async Task SaveAsync()
@@ -205,11 +205,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             if (entry.State == EntityState.Added)
             {
                 entity.CreatedOn = now;
-          ***REMOVED***
+            }
 
             entity.LastModifiedOn = now;
-      ***REMOVED***
+        }
 
         await _context.SaveChangesAsync();
-  ***REMOVED***
+    }
 }

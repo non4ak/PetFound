@@ -19,7 +19,7 @@ public class AdminUserService : IAdminUserService
     public AdminUserService(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
-  ***REMOVED***
+    }
 
     public async Task<Result<IPagedList<AdminUserListItemDto>>> ListUsersAsync(string? search, int pageNumber, int pageSize)
     {
@@ -32,7 +32,7 @@ public class AdminUserService : IAdminUserService
                 (u.UserName != null && u.UserName.ToLower().Contains(s)) ||
                 (u.Email != null && u.Email.ToLower().Contains(s)) ||
                 (u.PhoneNumber != null && u.PhoneNumber.ToLower().Contains(s)));
-      ***REMOVED***
+        }
 
         query = query.OrderByDescending(u => u.RegisteredAt).ThenByDescending(u => u.Id);
 
@@ -58,8 +58,8 @@ public class AdminUserService : IAdminUserService
                 LockoutEnd = u.LockoutEnd,
                 IsDeactivated = u.LockoutEnabled && u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow,
                 Roles = roles
-          ***REMOVED***);
-      ***REMOVED***
+            });
+        }
 
         IPagedList<AdminUserListItemDto> result = new PagedList<AdminUserListItemDto>(
             currentPage: items,
@@ -69,10 +69,10 @@ public class AdminUserService : IAdminUserService
         )
         {
             TotalPages = pagedUsers.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<AdminUserListItemDto>>.Success(result);
-  ***REMOVED***
+    }
 
     public async Task<Result<AdminUserDetailsDto>> GetUserAsync(int id)
     {
@@ -80,7 +80,7 @@ public class AdminUserService : IAdminUserService
         if (user is null)
         {
             return Result<AdminUserDetailsDto>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var roles = await _userManager.GetRolesAsync(user);
 
@@ -103,8 +103,8 @@ public class AdminUserService : IAdminUserService
             AccessFailedCount = user.AccessFailedCount,
             TwoFactorEnabled = user.TwoFactorEnabled,
             Roles = roles
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     public async Task<Result<bool>> UpdateUserAsync(int id, AdminUserUpdateModel model)
     {
@@ -112,7 +112,7 @@ public class AdminUserService : IAdminUserService
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         if (model.Country != null) user.Country = model.Country;
         if (model.City != null) user.City = model.City;
@@ -125,17 +125,17 @@ public class AdminUserService : IAdminUserService
             if (!phoneResult.Succeeded)
             {
                 return Result<bool>.Failure(UserErrors.UserNotCreatedError(phoneResult.Errors.First().Description));
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         var updateResult = await _userManager.UpdateAsync(user);
         if (!updateResult.Succeeded)
         {
             return Result<bool>.Failure(UserErrors.UserNotCreatedError(updateResult.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> DeactivateUserAsync(int id)
     {
@@ -143,7 +143,7 @@ public class AdminUserService : IAdminUserService
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         user.LockoutEnabled = true;
         user.LockoutEnd = DateTimeOffset.MaxValue;
@@ -152,10 +152,10 @@ public class AdminUserService : IAdminUserService
         if (!res.Succeeded)
         {
             return Result<bool>.Failure(UserErrors.UserNotCreatedError(res.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> ActivateUserAsync(int id)
     {
@@ -163,7 +163,7 @@ public class AdminUserService : IAdminUserService
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         user.LockoutEnd = null;
 
@@ -171,10 +171,10 @@ public class AdminUserService : IAdminUserService
         if (!res.Succeeded)
         {
             return Result<bool>.Failure(UserErrors.UserNotCreatedError(res.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> MakeAdminAsync(int id)
     {
@@ -182,21 +182,21 @@ public class AdminUserService : IAdminUserService
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         if (await _userManager.IsInRoleAsync(user, UserRoles.Admin))
         {
             return Result<bool>.Failure(UserErrors.UserAlreadyAdmin());
-      ***REMOVED***
+        }
 
         var result = await _userManager.AddToRoleAsync(user, UserRoles.Admin);
         if (!result.Succeeded)
         {
             return Result<bool>.Failure(UserErrors.UserNotCreatedError(result.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> DeleteUserAsync(int id)
     {
@@ -204,15 +204,15 @@ public class AdminUserService : IAdminUserService
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var res = await _userManager.DeleteAsync(user);
         if (!res.Succeeded)
         {
             return Result<bool>.Failure(UserErrors.UserNotCreatedError(res.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 }
 

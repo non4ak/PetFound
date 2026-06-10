@@ -77,7 +77,7 @@ namespace Infrastructure.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.SetNull);
-      ***REMOVED***
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -115,6 +115,6 @@ namespace Infrastructure.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

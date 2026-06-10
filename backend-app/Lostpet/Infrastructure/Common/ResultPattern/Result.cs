@@ -8,7 +8,7 @@ public class Result
     {
         IsSuccess = isSuccess;
         Error = error;
-  ***REMOVED***
+    }
 
     public bool IsSuccess { get; protected set; }
 
@@ -17,12 +17,12 @@ public class Result
     public static Result Success()
     {
         return new Result(true, null);
-  ***REMOVED***
+    }
 
     public static Result Failure(Error error)
     {
         return new Result(false, error);
-  ***REMOVED***
+    }
 }
 
 public class Result<T> : Result
@@ -33,15 +33,15 @@ public class Result<T> : Result
         : base(isSuccess, error)
     {
         Value = value;
-  ***REMOVED***
+    }
 
     public static Result<T> Success(T value, string message = "success")
     {
         return new Result<T>(true, value, null);
-  ***REMOVED***
+    }
 
     public static Result<T> Failure(Error error, T value = default)
     {
         return new Result<T>(false, value, error);
-  ***REMOVED***
+    }
 }

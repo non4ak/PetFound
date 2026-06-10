@@ -19,7 +19,7 @@ public class AnnouncementsController : ControllerBase
     public AnnouncementsController(IAnnouncementService announcementService)
     {
         _announcementService = announcementService;
-  ***REMOVED***
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UpdateAnnouncementModel model)
@@ -28,7 +28,7 @@ public class AnnouncementsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _announcementService.UpdateAsync(userIdResult.Value, id, model);
         return result.Match(
@@ -37,7 +37,7 @@ public class AnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/archive")]
     public async Task<IActionResult> ArchiveAsync([FromRoute] int id)
@@ -46,7 +46,7 @@ public class AnnouncementsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _announcementService.ArchiveAsync(userIdResult.Value, id);
         return result.Match(
@@ -55,7 +55,7 @@ public class AnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/restore")]
     public async Task<IActionResult> RestoreAsync([FromRoute] int id)
@@ -64,7 +64,7 @@ public class AnnouncementsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _announcementService.RestoreAsync(userIdResult.Value, id);
         return result.Match(
@@ -73,7 +73,7 @@ public class AnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
@@ -85,7 +85,7 @@ public class AnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetPagedAsync([FromQuery] AnnouncementListQueryModel query, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
@@ -97,7 +97,7 @@ public class AnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet("mine")]
     public async Task<IActionResult> GetMineAsync([FromQuery] AnnouncementListQueryModel query, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
@@ -106,7 +106,7 @@ public class AnnouncementsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _announcementService.GetMyPagedAsync(userIdResult.Value, pageNumber, pageSize, query);
         return result.Match(
@@ -115,7 +115,7 @@ public class AnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateAnnouncementModel model)
@@ -124,7 +124,7 @@ public class AnnouncementsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _announcementService.CreateAsync(userIdResult.Value, model);
         return result.Match(
@@ -133,12 +133,12 @@ public class AnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     private int? TryGetCurrentUserId()
     {
         var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(id, out var userId) ? userId : null;
-  ***REMOVED***
+    }
 }
 

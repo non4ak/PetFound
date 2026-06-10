@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
         _configuration = configuration;
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpPost("login")]
@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpPost("login/mobile")]
@@ -48,7 +48,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpPost("google")]
@@ -62,7 +62,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpPost("google/mobile")]
@@ -76,7 +76,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpGet("refresh")]
@@ -87,10 +87,10 @@ public class AuthController : ControllerBase
         if (!result.IsSuccess)
         {
             return ApiResults.ToProblemDetails(result);
-      ***REMOVED***
+        }
 
         return new StatusCodeResult(StatusCodes.Status200OK);
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpPost("refresh/mobile")]
@@ -104,7 +104,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpPost("register")]
@@ -118,7 +118,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [Authorize]
     [HttpGet("logout")]
@@ -128,7 +128,7 @@ public class AuthController : ControllerBase
         if (!int.TryParse(id, out var userId))
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _authService.LogoutAsync(userId);
 
@@ -138,7 +138,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [Authorize]
     [HttpGet("profile")]
@@ -153,7 +153,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [Authorize]
     [HttpPut("profile")]
@@ -163,7 +163,7 @@ public class AuthController : ControllerBase
         if (!int.TryParse(id, out var userId))
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _authService.UpdateUserProfile(userId, model);
         return result.Match(
@@ -172,7 +172,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [Authorize]
     [HttpPut("device-key")]
@@ -182,7 +182,7 @@ public class AuthController : ControllerBase
         if (!int.TryParse(id, out var userId))
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _authService.UpdateDeviceKeyAsync(userId, model.DeviceKey);
         return result.Match(
@@ -191,7 +191,7 @@ public class AuthController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpGet("email-confirmation")]
@@ -200,7 +200,7 @@ public class AuthController : ControllerBase
         await _authService.ConfirmEmailAsync(email, token);
 
         return Redirect(_configuration["ApplicationURLs:FrontEnd"]);
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpGet("forgot-password")]
@@ -213,7 +213,7 @@ public class AuthController : ControllerBase
             includeBody: false,
             message: "null",
             failure: ApiResults.ToProblemDetails);
-  ***REMOVED***
+    }
 
     [AllowAnonymous]
     [HttpPost("change-password")]
@@ -226,5 +226,5 @@ public class AuthController : ControllerBase
             includeBody: false,
             message: "null",
             failure: ApiResults.ToProblemDetails);
-  ***REMOVED***
+    }
 }

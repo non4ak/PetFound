@@ -14,7 +14,7 @@ public static class PredicateBuilderExtensions
             Expression.Invoke(right, param)
         );
         return Expression.Lambda<Func<T, bool>>(body, param);
-  ***REMOVED***
+    }
 
     public static Expression<Func<T, bool>> Or<T>(
         this Expression<Func<T, bool>> left,
@@ -26,5 +26,5 @@ public static class PredicateBuilderExtensions
             Expression.Invoke(right, param)
         );
         return Expression.Lambda<Func<T, bool>>(body, param);
-  ***REMOVED***
+    }
 }

@@ -11,7 +11,7 @@ public class PagedList<T> : IPagedList<T>
         PageSize = pageSize;
         TotalCount = count;
         Items = currentPage;
-  ***REMOVED***
+    }
 
     public int CurrentPage { get; set; }
 
@@ -28,5 +28,5 @@ public class PagedList<T> : IPagedList<T>
         var count = await source.CountAsync();
         var items = await source.Skip(pageNumber * pageSize).Take(pageSize).ToListAsync();
         return new PagedList<T>(items, count, pageNumber, pageSize);
-  ***REMOVED***
+    }
 }

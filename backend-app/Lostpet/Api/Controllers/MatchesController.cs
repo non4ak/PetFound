@@ -19,7 +19,7 @@ public class MatchesController : ControllerBase
     public MatchesController(INotificationService notificationService)
     {
         _notificationService = notificationService;
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetMineAsync(
@@ -31,7 +31,7 @@ public class MatchesController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _notificationService.GetMyMatchesAsync(userIdResult.Value, pageNumber, pageSize, status);
         return result.Match(
@@ -40,7 +40,7 @@ public class MatchesController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/approve")]
     public async Task<IActionResult> ApproveAsync([FromRoute] int id)
@@ -49,7 +49,7 @@ public class MatchesController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _notificationService.ApproveMatchAsync(userIdResult.Value, id);
         return result.Match(
@@ -58,7 +58,7 @@ public class MatchesController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/reject")]
     public async Task<IActionResult> RejectAsync([FromRoute] int id)
@@ -67,7 +67,7 @@ public class MatchesController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _notificationService.RejectMatchAsync(userIdResult.Value, id);
         return result.Match(
@@ -76,11 +76,11 @@ public class MatchesController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     private int? TryGetCurrentUserId()
     {
         var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(id, out var userId) ? userId : null;
-  ***REMOVED***
+    }
 }

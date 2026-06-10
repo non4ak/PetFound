@@ -18,7 +18,7 @@ public class AdminAnnouncementsController : ControllerBase
     public AdminAnnouncementsController(IAdminAnnouncementService adminAnnouncementService)
     {
         _adminAnnouncementService = adminAnnouncementService;
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> ListAsync([FromQuery] AdminAnnouncementListQueryModel query, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
@@ -30,7 +30,7 @@ public class AdminAnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
@@ -42,7 +42,7 @@ public class AdminAnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UpdateAnnouncementModel model)
@@ -54,7 +54,7 @@ public class AdminAnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/archive")]
     public async Task<IActionResult> ArchiveAsync([FromRoute] int id)
@@ -66,7 +66,7 @@ public class AdminAnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/restore")]
     public async Task<IActionResult> RestoreAsync([FromRoute] int id)
@@ -78,5 +78,5 @@ public class AdminAnnouncementsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 }

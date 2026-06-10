@@ -17,16 +17,16 @@ public static class ApiResults
             Extensions = new Dictionary<string, object?>
             {
                 { "errors", new[] { error } }
-          ***REMOVED***
-      ***REMOVED***;
-  ***REMOVED***
+            }
+        };
+    }
 
     public static IActionResult ToProblemDetails(Result result)
     {
         if (result.IsSuccess)
         {
             throw new InvalidOperationException();
-      ***REMOVED***
+        }
 
         var problemDetails = new ProblemDetails
         {
@@ -37,11 +37,11 @@ public static class ApiResults
             Extensions = new Dictionary<string, object?>
             {
                 { "errors", new[] { result.Error } }
-          ***REMOVED***
-      ***REMOVED***;
+            }
+        };
 
         return new ObjectResult(problemDetails);
-  ***REMOVED***
+    }
 
     public static int GetStatusCode(ErrorType errorType) =>
         errorType switch
@@ -52,7 +52,7 @@ public static class ApiResults
             ErrorType.Conflict => StatusCodes.Status409Conflict,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status500InternalServerError,
-      ***REMOVED***;
+        };
 
     public static string GetType(ErrorType errorType) =>
         errorType switch
@@ -63,5 +63,5 @@ public static class ApiResults
             ErrorType.Conflict => "https://tools.ietf.org/html/rfc7231#section-6.5.8",
             ErrorType.Unauthorized => "https://tools.ietf.org/html/rfc7235#section-3.1",
             _ => "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-      ***REMOVED***;
+        };
 }

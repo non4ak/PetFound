@@ -17,7 +17,7 @@ public class AdminUsersController : ControllerBase
     public AdminUsersController(IAdminUserService adminUserService)
     {
         _adminUserService = adminUserService;
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> ListAsync([FromQuery] string? search, [FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 20)
@@ -30,7 +30,7 @@ public class AdminUsersController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetAsync([FromRoute] int id)
@@ -43,7 +43,7 @@ public class AdminUsersController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] AdminUserUpdateModel model)
@@ -56,7 +56,7 @@ public class AdminUsersController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/deactivate")]
     public async Task<IActionResult> DeactivateAsync([FromRoute] int id)
@@ -69,7 +69,7 @@ public class AdminUsersController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/activate")]
     public async Task<IActionResult> ActivateAsync([FromRoute] int id)
@@ -82,7 +82,7 @@ public class AdminUsersController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     // Development helper to bootstrap an admin account quickly.
     [AllowAnonymous]
@@ -97,7 +97,7 @@ public class AdminUsersController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id)
@@ -110,6 +110,6 @@ public class AdminUsersController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 }
 

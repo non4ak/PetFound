@@ -23,14 +23,14 @@ public class PetService : IPetService
     {
         _userManager = userManager;
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<PetResponse>> CreateAsync(int userId, CreatePetModel model)
     {
         if (!await UserExistsAsync(userId))
         {
             return Result<PetResponse>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         if (string.IsNullOrWhiteSpace(model.PetName))
             return Result<PetResponse>.Failure(UserErrors.RequiredField("petName"));
@@ -50,7 +50,7 @@ public class PetService : IPetService
             PetPhotoUrl = string.IsNullOrWhiteSpace(model.PetPhotoUrl) ? null : model.PetPhotoUrl.Trim(),
             CreatedOn = now,
             LastModifiedOn = now
-      ***REMOVED***;
+        };
 
         await _context.Pets.AddAsync(pet);
         await _context.SaveChangesAsync();
@@ -72,15 +72,15 @@ public class PetService : IPetService
             Description = pet.Description,
             PetPhotoUrl = pet.PetPhotoUrl,
             CreatedOn = pet.CreatedOn
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     public async Task<Result<IEnumerable<PetResponse>>> GetAllByUserAsync(int userId)
     {
         if (!await UserExistsAsync(userId))
         {
             return Result<IEnumerable<PetResponse>>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var petEntities = await _context.Pets
             .AsNoTracking()
@@ -92,14 +92,14 @@ public class PetService : IPetService
             .ToList();
 
         return Result<IEnumerable<PetResponse>>.Success(pets);
-  ***REMOVED***
+    }
 
     public async Task<Result<PetResponse>> GetByIdAsync(int userId, int petId)
     {
         if (!await UserExistsAsync(userId))
         {
             return Result<PetResponse>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var pet = await _context.Pets
             .AsNoTracking()
@@ -108,28 +108,28 @@ public class PetService : IPetService
         if (pet is null)
         {
             return Result<PetResponse>.Failure(Error.NotFound("Pet.NotFound", "Pet not found"));
-      ***REMOVED***
+        }
 
         return Result<PetResponse>.Success(MapPetResponse(pet));
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> UpdateAsync(int userId, int petId, UpdatePetModel model)
     {
         if (!await UserExistsAsync(userId))
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var pet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId && p.UserId == userId);
         if (pet is null)
         {
             return Result<bool>.Failure(Error.NotFound("Pet.NotFound", "Pet not found"));
-      ***REMOVED***
+        }
 
         if (string.IsNullOrWhiteSpace(model.PetName))
         {
             return Result<bool>.Failure(UserErrors.RequiredField("petName"));
-      ***REMOVED***
+        }
 
         pet.PetName = model.PetName.Trim();
         pet.PetType = model.PetType ?? default;
@@ -159,35 +159,35 @@ public class PetService : IPetService
                 announcement.ProcessingRetryCount = 0;
                 announcement.VectorizedOn = null;
                 announcement.LastModifiedOn = DateTimeOffset.UtcNow;
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> DeleteAsync(int userId, int petId)
     {
         if (!await UserExistsAsync(userId))
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var pet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId && p.UserId == userId);
         if (pet is null)
         {
             return Result<bool>.Failure(Error.NotFound("Pet.NotFound", "Pet not found"));
-      ***REMOVED***
+        }
 
         _context.Pets.Remove(pet);
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     private Task<bool> UserExistsAsync(int userId)
     {
         return _userManager.Users.AnyAsync(u => u.Id == userId);
-  ***REMOVED***
+    }
 
     private static PetResponse MapPetResponse(Pet p)
     {
@@ -208,7 +208,7 @@ public class PetService : IPetService
             Description = p.Description,
             PetPhotoUrl = p.PetPhotoUrl,
             CreatedOn = p.CreatedOn
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 }
 

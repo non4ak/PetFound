@@ -49,7 +49,7 @@ public class AuthService : IAuthService
         _cookieService = cookieService;
         _context = context;
         _configuration = configuration;
-  ***REMOVED***
+    }
 
     public async Task<Result<int>> GetIdByEmail(string email)
     {
@@ -58,7 +58,7 @@ public class AuthService : IAuthService
             return Result<int>.Failure(UserErrors.UserNotFoundError());
 
         return Result<int>.Success(user.Id);
-  ***REMOVED***
+    }
 
     public async Task<Result<IEnumerable<string>>> GetRolesByEmail(string email)
     {
@@ -67,10 +67,10 @@ public class AuthService : IAuthService
         {
             var roles = await _userManager.GetRolesAsync(user);
             return Result<IEnumerable<string>>.Success(roles);
-      ***REMOVED***
+        }
 
         return Result<IEnumerable<string>>.Failure(UserErrors.UserNotFoundError());
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> RegisterAsync(RegisterModel registerModel)
     {
@@ -84,7 +84,7 @@ public class AuthService : IAuthService
                 EmailConfirmed = true,
                 RegisteredAt = DateTimeOffset.UtcNow,
                 IsOnboardingCompleted = false,
-          ***REMOVED***;
+            };
 
             var userResult = await _userManager.CreateAsync(appUser, registerModel.Password);
 
@@ -92,7 +92,7 @@ public class AuthService : IAuthService
             {
                 await _context.Database.RollbackTransactionAsync();
                 return Result<bool>.Failure(UserErrors.UserNotCreatedError(userResult.Errors.First().Description));
-          ***REMOVED***
+            }
 
             var resRolesResult = await _roleService.AddToRolesAsync(appUser, UserRoles.User);
 
@@ -100,17 +100,17 @@ public class AuthService : IAuthService
             {
                 await _context.Database.RollbackTransactionAsync();
                 return Result<bool>.Failure(UserErrors.UserNotAssignedToRole());
-          ***REMOVED***
+            }
 
             await _context.Database.CommitTransactionAsync();
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
         catch (DbUpdateException ex)
         {
             await _context.Database.RollbackTransactionAsync();
             return Result<bool>.Failure(RepositoryErrorMapper<ApplicationUser>.Map(ex));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginModel loginModel)
     {
@@ -120,7 +120,7 @@ public class AuthService : IAuthService
         if (user is null)
         {
             return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
         if (!result)
@@ -128,10 +128,10 @@ public class AuthService : IAuthService
             if (await _userManager.IsLockedOutAsync(user))
             {
                 return Result<LoginResponse>.Failure(UserErrors.UserLockedOut());
-          ***REMOVED***
+            }
 
             return Result<LoginResponse>.Failure(UserErrors.UserInvalidCredentials());
-      ***REMOVED***
+        }
 
         await using var tx = await _context.Database.BeginTransactionAsync();
         RefreshToken refreshTokenEntity;
@@ -146,16 +146,16 @@ public class AuthService : IAuthService
                 User = user,
                 Token = refreshTokenDto.Bytes,
                 ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
-          ***REMOVED***;
+            };
             _context.RefreshTokens.Add(refreshTokenEntity);
             await _context.SaveChangesAsync();
             await tx.CommitAsync();
-      ***REMOVED***
+        }
         catch (DbUpdateException)
         {
             await tx.RollbackAsync();
             return Result<LoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
-      ***REMOVED***
+        }
 
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = _tokenService.GenerateAuthToken(user, roles);
@@ -168,8 +168,8 @@ public class AuthService : IAuthService
             UserName = user.UserName!,
             Email = user.Email!,
             Role = role
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     public async Task<Result<MobileLoginResponse>> LoginMobileAsync(LoginModel loginModel)
     {
@@ -179,7 +179,7 @@ public class AuthService : IAuthService
         if (user is null)
         {
             return Result<MobileLoginResponse>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
         if (!result)
@@ -187,10 +187,10 @@ public class AuthService : IAuthService
             if (await _userManager.IsLockedOutAsync(user))
             {
                 return Result<MobileLoginResponse>.Failure(UserErrors.UserLockedOut());
-          ***REMOVED***
+            }
 
             return Result<MobileLoginResponse>.Failure(UserErrors.UserInvalidCredentials());
-      ***REMOVED***
+        }
 
         await using var tx = await _context.Database.BeginTransactionAsync();
         try
@@ -204,7 +204,7 @@ public class AuthService : IAuthService
                 User = user,
                 Token = refreshTokenDto.Bytes,
                 ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
-          ***REMOVED***;
+            };
             _context.RefreshTokens.Add(refreshTokenEntity);
             await _context.SaveChangesAsync();
             await tx.CommitAsync();
@@ -220,27 +220,27 @@ public class AuthService : IAuthService
                 Role = role,
                 AccessToken = accessToken,
                 RefreshToken = refreshTokenEntity.Token
-          ***REMOVED***);
-      ***REMOVED***
+            });
+        }
         catch (DbUpdateException)
         {
             await tx.RollbackAsync();
             return Result<MobileLoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task<Result<UserProfileResponse>> GetUserProfile(string? email)
     {
         if (string.IsNullOrWhiteSpace(email))
         {
             return Result<UserProfileResponse>.Failure(UserErrors.Unauthorized());
-      ***REMOVED***
+        }
 
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
         {
             return Result<UserProfileResponse>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var petEntities = await _context.Pets
             .AsNoTracking()
@@ -262,7 +262,7 @@ public class AuthService : IAuthService
                 PetAgeCategoryLabel = p.PetAgeCategory.GetDisplayName(),
                 Breed = p.Breed,
                 PetPhotoUrl = p.PetPhotoUrl
-          ***REMOVED***)
+            })
             .ToList();
 
         return Result<UserProfileResponse>.Success(new UserProfileResponse
@@ -277,8 +277,8 @@ public class AuthService : IAuthService
             NotificationChannelPreference = user.NotificationChannelPreference,
             NotificationChannelPreferenceLabel = user.NotificationChannelPreference.GetDisplayName(),
             Pets = pets
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     public async Task<Result<bool>> UpdateUserProfile(int userId, UpdateProfileModel model)
     {
@@ -286,90 +286,90 @@ public class AuthService : IAuthService
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         if (model.PhoneNumber is not null)
         {
             if (string.IsNullOrWhiteSpace(model.PhoneNumber))
             {
                 return Result<bool>.Failure(UserErrors.RequiredField("phoneNumber"));
-          ***REMOVED***
+            }
 
             var phoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber.Trim());
             if (!phoneResult.Succeeded)
             {
                 return Result<bool>.Failure(UserErrors.UserNotCreatedError(phoneResult.Errors.First().Description));
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         if (model.SocialNetwork is not null)
         {
             user.SocialNetwork = string.IsNullOrWhiteSpace(model.SocialNetwork) ? null : model.SocialNetwork.Trim();
-      ***REMOVED***
+        }
 
         if (model.UserPhotoUrl is not null)
         {
             user.UserPhotoUrl = string.IsNullOrWhiteSpace(model.UserPhotoUrl) ? null : model.UserPhotoUrl.Trim();
-      ***REMOVED***
+        }
 
         if (model.Country is not null)
         {
             if (string.IsNullOrWhiteSpace(model.Country))
             {
                 return Result<bool>.Failure(UserErrors.RequiredField("country"));
-          ***REMOVED***
+            }
 
             user.Country = model.Country.Trim();
-      ***REMOVED***
+        }
 
         if (model.City is not null)
         {
             if (string.IsNullOrWhiteSpace(model.City))
             {
                 return Result<bool>.Failure(UserErrors.RequiredField("city"));
-          ***REMOVED***
+            }
 
             user.City = model.City.Trim();
-      ***REMOVED***
+        }
 
         if (model.NotificationChannelPreference.HasValue)
         {
             user.NotificationChannelPreference = model.NotificationChannelPreference.Value;
-      ***REMOVED***
+        }
 
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
         {
             return Result<bool>.Failure(UserErrors.UserNotCreatedError(result.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> UpdateDeviceKeyAsync(int userId, string deviceKey)
     {
         if (string.IsNullOrWhiteSpace(deviceKey))
         {
             return Result<bool>.Failure(UserErrors.RequiredField("deviceKey"));
-      ***REMOVED***
+        }
 
         var normalizedDeviceKey = deviceKey.Trim();
         if (normalizedDeviceKey.Length > 4096)
         {
             return Result<bool>.Failure(
                 UserErrors.UserNotCreatedError("deviceKey must not exceed 4096 characters"));
-      ***REMOVED***
+        }
 
         var user = await _userManager.FindByIdAsync(userId.ToString());
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         if (user.DeviceKey == normalizedDeviceKey)
         {
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
 
         user.DeviceKey = normalizedDeviceKey;
         var result = await _userManager.UpdateAsync(user);
@@ -377,10 +377,10 @@ public class AuthService : IAuthService
         {
             return Result<bool>.Failure(
                 UserErrors.UserNotCreatedError(result.Errors.First().Description));
-      ***REMOVED***
+        }
 
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result> RefreshToken()
     {
@@ -390,7 +390,7 @@ public class AuthService : IAuthService
             await _signInManager.SignOutAsync();
             _cookieService.ClearAuthCookies();
             return Result.Failure(UserErrors.InvalidOrExpiredRefreshToken());
-      ***REMOVED***
+        }
 
         var stored = await _context.RefreshTokens
             .Include(r => r.User)
@@ -401,7 +401,7 @@ public class AuthService : IAuthService
             await _signInManager.SignOutAsync();
             _cookieService.ClearAuthCookies();
             return Result.Failure(UserErrors.InvalidOrExpiredRefreshToken());
-      ***REMOVED***
+        }
 
         await using var tx = await _context.Database.BeginTransactionAsync();
         try
@@ -417,7 +417,7 @@ public class AuthService : IAuthService
                 User = user,
                 Token = refreshTokenDto.Bytes,
                 ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
-          ***REMOVED***;
+            };
             _context.RefreshTokens.Add(newRefreshToken);
             await _context.SaveChangesAsync();
             await tx.CommitAsync();
@@ -427,20 +427,20 @@ public class AuthService : IAuthService
             _cookieService.SetAuthCookies(accessToken, newRefreshToken.Token);
 
             return Result.Success();
-      ***REMOVED***
+        }
         catch (DbUpdateException)
         {
             await tx.RollbackAsync();
             return Result.Failure(RepositoryErrors<RefreshToken>.AddError);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task<Result<MobileLoginResponse>> RefreshTokenMobile(string refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
         {
             return Result<MobileLoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
-      ***REMOVED***
+        }
 
         var stored = await _context.RefreshTokens
             .Include(r => r.User)
@@ -449,7 +449,7 @@ public class AuthService : IAuthService
         if (stored is null || stored.ExpiresOnUtc < DateTime.UtcNow)
         {
             return Result<MobileLoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
-      ***REMOVED***
+        }
 
         await using var tx = await _context.Database.BeginTransactionAsync();
         try
@@ -465,7 +465,7 @@ public class AuthService : IAuthService
                 User = user,
                 Token = refreshTokenDto.Bytes,
                 ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays),
-          ***REMOVED***;
+            };
             _context.RefreshTokens.Add(newRefreshToken);
             await _context.SaveChangesAsync();
             await tx.CommitAsync();
@@ -481,14 +481,14 @@ public class AuthService : IAuthService
                 Role = role,
                 AccessToken = accessToken,
                 RefreshToken = newRefreshToken.Token
-          ***REMOVED***);
-      ***REMOVED***
+            });
+        }
         catch (DbUpdateException)
         {
             await tx.RollbackAsync();
             return Result<MobileLoginResponse>.Failure(RepositoryErrors<RefreshToken>.AddError);
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task<Result> ConfirmEmailAsync(string email, string token)
     {
@@ -498,7 +498,7 @@ public class AuthService : IAuthService
             await _emailService.SendErrorEmailAsync(email, "User account wasn't found to be activated",
                 "Account NOT activated");
             return Result.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var confirmResult = await _userManager.ConfirmEmailAsync(user, token);
         if (!confirmResult.Succeeded)
@@ -506,12 +506,12 @@ public class AuthService : IAuthService
             await _emailService.SendErrorEmailAsync(email,
                 "Account wasn't activated because the token either invalid or expired.", "Account NOT activated");
             return Result.Failure(EmailError.InvalidOrExpiredToken());
-      ***REMOVED***
+        }
 
         await _emailService.SendSuccessfulEmailAsync(email, "Account was successfully activated", "Account activated");
 
         return Result.Success();
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> LogoutAsync(int userId)
     {
@@ -521,14 +521,14 @@ public class AuthService : IAuthService
             var existing = await _context.RefreshTokens.Where(r => r.UserId == userId).ToListAsync();
             _context.RefreshTokens.RemoveRange(existing);
             await _context.SaveChangesAsync();
-      ***REMOVED***
+        }
         catch (DbUpdateException)
         {
             return Result<bool>.Failure(RepositoryErrors<RefreshToken>.DeleteError);
-      ***REMOVED***
+        }
         _cookieService.ClearAuthCookies();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> ForgotPassword(string email)
     {
@@ -539,19 +539,19 @@ public class AuthService : IAuthService
             if (user is null)
             {
                 return Result<bool>.Failure(UserErrors.UserNotFoundError());
-          ***REMOVED***
+            }
 
             var passwordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             await _emailService.SendForgotPasswordLinkAsync(email, passwordToken);
 
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
         catch (Exception)
         {
             return Result<bool>.Failure(EmailError.EmailNotSent());
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task<Result<bool>> ResetPasswordAsync(string email, string token, string newPassword)
     {
@@ -560,17 +560,17 @@ public class AuthService : IAuthService
         if (user is null)
         {
             return Result<bool>.Failure(UserErrors.UserNotFoundError());
-      ***REMOVED***
+        }
 
         var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
 
         if (result.Succeeded)
         {
             return Result<bool>.Success(true);
-      ***REMOVED***
+        }
 
         return Result<bool>.Failure(PasswordErrors.PasswordNotChangedError());
-  ***REMOVED***
+    }
 
     public async Task<Result<LoginResponse>> LoginWithGoogleTokenAsync(string idToken)
     {
@@ -587,19 +587,19 @@ public class AuthService : IAuthService
                 Picture = payload.Picture,
                 FirstName = payload.GivenName,
                 LastName = payload.FamilyName
-          ***REMOVED***;
+            };
 
             var loginResult = await LoginWithGoogleAsync(userInfo);
             if (!loginResult.IsSuccess)
             {
                 return Result<LoginResponse>.Failure(loginResult.Error);
-          ***REMOVED***
+            }
 
             var user = await _userManager.FindByEmailAsync(userInfo.Email);
             if (user is null)
             {
                 return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
-          ***REMOVED***
+            }
 
             var roles = await _userManager.GetRolesAsync(user);
             var accessToken = _tokenService.GenerateAuthToken(user, roles);
@@ -612,7 +612,7 @@ public class AuthService : IAuthService
             if (refreshToken is null)
             {
                 return Result<LoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
-          ***REMOVED***
+            }
 
             _cookieService.SetAuthCookies(accessToken, refreshToken.Token);
 
@@ -623,13 +623,13 @@ public class AuthService : IAuthService
                 UserName = user.UserName!,
                 Email = user.Email!,
                 Role = role
-          ***REMOVED***);
-      ***REMOVED***
+            });
+        }
         catch (Exception ex)
         {
             return Result<LoginResponse>.Failure(GoogleAuthErrors.InvalidGoogleToken(ex.Message));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     public async Task<Result<MobileLoginResponse>> LoginWithGoogleTokenMobileAsync(string idToken)
     {
@@ -646,19 +646,19 @@ public class AuthService : IAuthService
                 Picture = payload.Picture,
                 FirstName = payload.GivenName,
                 LastName = payload.FamilyName
-          ***REMOVED***;
+            };
 
             var loginResult = await LoginWithGoogleAsync(userInfo);
             if (!loginResult.IsSuccess)
             {
                 return Result<MobileLoginResponse>.Failure(loginResult.Error);
-          ***REMOVED***
+            }
 
             var user = await _userManager.FindByEmailAsync(userInfo.Email);
             if (user is null)
             {
                 return Result<MobileLoginResponse>.Failure(UserErrors.UserNotFoundError());
-          ***REMOVED***
+            }
 
             var refreshToken = await _context.RefreshTokens
                 .Where(r => r.UserId == user.Id)
@@ -668,7 +668,7 @@ public class AuthService : IAuthService
             if (refreshToken is null)
             {
                 return Result<MobileLoginResponse>.Failure(UserErrors.InvalidOrExpiredRefreshToken());
-          ***REMOVED***
+            }
 
             var roles = await _userManager.GetRolesAsync(user);
             var accessToken = _tokenService.GenerateAuthToken(user, roles);
@@ -680,13 +680,13 @@ public class AuthService : IAuthService
                 Role = roles.Contains(UserRoles.Admin) ? UserRoles.Admin : UserRoles.User,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token
-          ***REMOVED***);
-      ***REMOVED***
+            });
+        }
         catch (Exception ex)
         {
             return Result<MobileLoginResponse>.Failure(GoogleAuthErrors.InvalidGoogleToken(ex.Message));
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     private Google.Apis.Auth.GoogleJsonWebSignature.ValidationSettings GetGoogleValidationSettings()
     {
@@ -700,8 +700,8 @@ public class AuthService : IAuthService
         return new Google.Apis.Auth.GoogleJsonWebSignature.ValidationSettings
         {
             Audience = audiences
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 
     private async Task<Result> LoginWithGoogleAsync(GoogleUserInfo userInfo)
     {
@@ -725,21 +725,21 @@ public class AuthService : IAuthService
                         RegisteredAt = DateTimeOffset.UtcNow,
                         IsOnboardingCompleted = false,
                         UserPhotoUrl = userInfo.Picture
-                  ***REMOVED***;
+                    };
 
                     var userResult = await _userManager.CreateAsync(newUser);
                     if (!userResult.Succeeded)
                     {
                         await tx.RollbackAsync();
                         return Result.Failure(UserErrors.UserNotCreatedError(userResult.Errors.First().Description));
-                  ***REMOVED***
+                    }
 
                     var rolesResult = await _roleService.AddToRolesAsync(newUser, UserRoles.User);
                     if (!rolesResult)
                     {
                         await tx.RollbackAsync();
                         return Result.Failure(UserErrors.UserNotAssignedToRole());
-                  ***REMOVED***
+                    }
 
                     var loginInfo = new UserLoginInfo(loginProvider, userInfo.Sub, loginProvider);
                     var addLoginResult = await _userManager.AddLoginAsync(newUser, loginInfo);
@@ -747,17 +747,17 @@ public class AuthService : IAuthService
                     {
                         await tx.RollbackAsync();
                         return Result.Failure(GoogleAuthErrors.UserNotAssignedExternalLoginError());
-                  ***REMOVED***
+                    }
 
                     await tx.CommitAsync();
                     user = newUser;
-              ***REMOVED***
+                }
                 catch
                 {
                     await tx.RollbackAsync();
                     throw;
-              ***REMOVED***
-          ***REMOVED***
+                }
+            }
             else
             {
                 var loginInfo = new UserLoginInfo(loginProvider, userInfo.Sub, loginProvider);
@@ -765,16 +765,16 @@ public class AuthService : IAuthService
                 if (!addLoginResult.Succeeded)
                 {
                     return Result.Failure(GoogleAuthErrors.UserNotAssignedExternalLoginError());
-              ***REMOVED***
+                }
 
                 user = emailUser;
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         if (await _userManager.IsLockedOutAsync(user))
         {
             return Result.Failure(UserErrors.UserLockedOut());
-      ***REMOVED***
+        }
 
         await using var refreshTx = await _context.Database.BeginTransactionAsync();
         try
@@ -788,17 +788,17 @@ public class AuthService : IAuthService
                 User = user,
                 Token = refreshTokenDto.Bytes,
                 ExpiresOnUtc = DateTime.UtcNow.AddDays(refreshTokenDto.ExpirationTimeInDays)
-          ***REMOVED***;
+            };
             _context.RefreshTokens.Add(refreshTokenEntity);
             await _context.SaveChangesAsync();
             await refreshTx.CommitAsync();
-      ***REMOVED***
+        }
         catch (DbUpdateException)
         {
             await refreshTx.RollbackAsync();
             return Result.Failure(RepositoryErrors<RefreshToken>.AddError);
-      ***REMOVED***
+        }
 
         return Result.Success();
-  ***REMOVED***
+    }
 }

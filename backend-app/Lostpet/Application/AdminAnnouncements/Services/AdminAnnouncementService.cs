@@ -22,7 +22,7 @@ public class AdminAnnouncementService : IAdminAnnouncementService
     public AdminAnnouncementService(ApplicationDbContext context)
     {
         _context = context;
-  ***REMOVED***
+    }
 
     public async Task<Result<IPagedList<AdminAnnouncementListItemDto>>> ListAsync(
         AdminAnnouncementListQueryModel query,
@@ -43,49 +43,49 @@ public class AdminAnnouncementService : IAdminAnnouncementService
                 (a.NearLandmark != null && a.NearLandmark.ToLower().Contains(s)) ||
                 (a.City != null && a.City.ToLower().Contains(s)) ||
                 (a.Country != null && a.Country.ToLower().Contains(s)));
-      ***REMOVED***
+        }
 
         if (query.PetStatus.HasValue)
         {
             q = q.Where(a => a.PetStatus == query.PetStatus.Value);
-      ***REMOVED***
+        }
 
         if (query.PetType.HasValue)
         {
             q = q.Where(a => a.Pet.PetType == query.PetType.Value);
-      ***REMOVED***
+        }
 
         if (!string.IsNullOrWhiteSpace(query.Country))
         {
             var country = query.Country.Trim();
             q = q.Where(a => a.Country != null && a.Country.ToLower() == country.ToLower());
-      ***REMOVED***
+        }
 
         if (!string.IsNullOrWhiteSpace(query.City))
         {
             var city = query.City.Trim();
             q = q.Where(a => a.City != null && a.City.ToLower() == city.ToLower());
-      ***REMOVED***
+        }
 
         if (query.CreatedFrom.HasValue)
         {
             q = q.Where(a => a.CreatedOn >= query.CreatedFrom.Value);
-      ***REMOVED***
+        }
 
         if (query.CreatedTo.HasValue)
         {
             q = q.Where(a => a.CreatedOn <= query.CreatedTo.Value);
-      ***REMOVED***
+        }
 
         if (query.IsActive.HasValue)
         {
             q = q.Where(a => a.IsActive == query.IsActive.Value);
-      ***REMOVED***
+        }
 
         if (query.ReporterUserId.HasValue)
         {
             q = q.Where(a => a.ReporterUserId == query.ReporterUserId.Value);
-      ***REMOVED***
+        }
 
         q = ApplySorting(q, query.SortBy, query.SortDirection);
 
@@ -105,7 +105,7 @@ public class AdminAnnouncementService : IAdminAnnouncementService
             ReporterUserId = a.ReporterUserId,
             ReporterUserName = a.ReporterUser.UserName,
             ReporterEmail = a.ReporterUser.Email
-      ***REMOVED***);
+        });
 
         IPagedList<AdminAnnouncementListItemDto> paged = new PagedList<AdminAnnouncementListItemDto>(
             currentPage: items,
@@ -115,10 +115,10 @@ public class AdminAnnouncementService : IAdminAnnouncementService
         )
         {
             TotalPages = pagedEntities.TotalPages
-      ***REMOVED***;
+        };
 
         return Result<IPagedList<AdminAnnouncementListItemDto>>.Success(paged);
-  ***REMOVED***
+    }
 
     public async Task<Result<AdminAnnouncementDetailsDto>> GetByIdAsync(int id)
     {
@@ -131,7 +131,7 @@ public class AdminAnnouncementService : IAdminAnnouncementService
         if (announcement is null)
         {
             return Result<AdminAnnouncementDetailsDto>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         var commentsCount = await _context.Comments.CountAsync(c => c.AnnouncementId == id);
 
@@ -169,15 +169,15 @@ public class AdminAnnouncementService : IAdminAnnouncementService
                 ChipNumber = announcement.Pet.ChipNumber,
                 Description = announcement.Pet.Description,
                 PetPhotoUrl = announcement.Pet.PetPhotoUrl
-          ***REMOVED***,
+            },
             ReporterUserId = announcement.ReporterUserId,
             ReporterUserName = announcement.ReporterUser.UserName ?? string.Empty,
             ReporterEmail = announcement.ReporterUser.Email,
             CommentsCount = commentsCount
-      ***REMOVED***;
+        };
 
         return Result<AdminAnnouncementDetailsDto>.Success(dto);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> UpdateAsync(int id, UpdateAnnouncementModel model)
     {
@@ -188,7 +188,7 @@ public class AdminAnnouncementService : IAdminAnnouncementService
         if (announcement is null)
         {
             return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         if (string.IsNullOrWhiteSpace(model.Country))
             return Result<bool>.Failure(UserErrors.RequiredField("country"));
@@ -220,15 +220,15 @@ public class AdminAnnouncementService : IAdminAnnouncementService
         if (announcement.PetStatus == AnnouncementPetStatus.Lost)
         {
             announcement.Pet.UserId = reporterId;
-      ***REMOVED***
+        }
         else
         {
             announcement.Pet.UserId = null;
-      ***REMOVED***
+        }
 
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> ArchiveAsync(int id)
     {
@@ -236,13 +236,13 @@ public class AdminAnnouncementService : IAdminAnnouncementService
         if (announcement is null)
         {
             return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         announcement.IsActive = false;
         announcement.LastModifiedOn = DateTimeOffset.UtcNow;
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     public async Task<Result<bool>> RestoreAsync(int id)
     {
@@ -250,13 +250,13 @@ public class AdminAnnouncementService : IAdminAnnouncementService
         if (announcement is null)
         {
             return Result<bool>.Failure(Error.NotFound("Announcement.NotFound", "Announcement not found"));
-      ***REMOVED***
+        }
 
         announcement.IsActive = true;
         announcement.LastModifiedOn = DateTimeOffset.UtcNow;
         await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
-  ***REMOVED***
+    }
 
     private static IOrderedQueryable<Announcement> ApplySorting(IQueryable<Announcement> query, string? sortBy, string? sortDirection)
     {
@@ -271,6 +271,6 @@ public class AdminAnnouncementService : IAdminAnnouncementService
             _ => isAsc
                 ? query.OrderBy(a => a.CreatedOn).ThenBy(a => a.Id)
                 : query.OrderByDescending(a => a.CreatedOn).ThenByDescending(a => a.Id)
-      ***REMOVED***;
-  ***REMOVED***
+        };
+    }
 }

@@ -15,7 +15,7 @@ public static class ConfigureApp
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-      ***REMOVED***
+        }
 
         using (var scope = app.Services.CreateScope())
         {
@@ -24,7 +24,7 @@ public static class ConfigureApp
 
             var seeder = new DatabaseSeeder(scope);
             await seeder.SeedAsync();
-      ***REMOVED***
+        }
 
         app.UseHttpsRedirection();
 
@@ -40,11 +40,11 @@ public static class ConfigureApp
                 .AllowAnyHeader()
                 .AllowCredentials()
                 .WithOrigins(origins);
-      ***REMOVED***);
+        });
 
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
-  ***REMOVED***
+    }
 }

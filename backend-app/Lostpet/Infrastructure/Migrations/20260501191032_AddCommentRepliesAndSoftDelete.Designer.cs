@@ -95,7 +95,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ReporterUserId");
 
                     b.ToTable("Announcements");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Auth.ApplicationUser", b =>
                 {
@@ -185,7 +185,7 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Auth.RefreshToken", b =>
                 {
@@ -213,7 +213,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Comment", b =>
                 {
@@ -277,7 +277,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AnnouncementId", "CommentedAt");
 
                     b.ToTable("Comments");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.MatchResult", b =>
                 {
@@ -314,7 +314,7 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("MatchResults");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Notification", b =>
                 {
@@ -359,7 +359,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Pet", b =>
                 {
@@ -420,7 +420,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Pets");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
                 {
@@ -449,7 +449,7 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -473,7 +473,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
@@ -497,7 +497,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
@@ -518,7 +518,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins", (string)null);
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
@@ -533,7 +533,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
@@ -552,7 +552,7 @@ namespace Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Announcement", b =>
                 {
@@ -571,7 +571,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("Pet");
 
                     b.Navigation("ReporterUser");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Auth.RefreshToken", b =>
                 {
@@ -582,7 +582,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Comment", b =>
                 {
@@ -608,7 +608,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("ParentComment");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.MatchResult", b =>
                 {
@@ -627,7 +627,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("FoundAnnouncement");
 
                     b.Navigation("LostAnnouncement");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Notification", b =>
                 {
@@ -652,7 +652,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("MatchResult");
 
                     b.Navigation("User");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Pet", b =>
                 {
@@ -662,7 +662,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -671,7 +671,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
@@ -680,7 +680,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
@@ -689,7 +689,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
@@ -704,7 +704,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
@@ -713,7 +713,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Announcement", b =>
                 {
@@ -722,7 +722,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("MatchResultsAsFound");
 
                     b.Navigation("MatchResultsAsLost");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Auth.ApplicationUser", b =>
                 {
@@ -731,25 +731,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Pets");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Comment", b =>
                 {
                     b.Navigation("Notifications");
 
                     b.Navigation("Replies");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.MatchResult", b =>
                 {
                     b.Navigation("Notifications");
-              ***REMOVED***);
+                });
 
             modelBuilder.Entity("Domain.Models.Pet", b =>
                 {
                     b.Navigation("Announcements");
-              ***REMOVED***);
+                });
 #pragma warning restore 612, 618
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 }

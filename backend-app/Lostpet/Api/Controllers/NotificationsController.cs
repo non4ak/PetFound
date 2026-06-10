@@ -18,7 +18,7 @@ public class NotificationsController : ControllerBase
     public NotificationsController(INotificationService notificationService)
     {
         _notificationService = notificationService;
-  ***REMOVED***
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetMineAsync(
@@ -30,7 +30,7 @@ public class NotificationsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _notificationService.GetMyPagedAsync(userIdResult.Value, pageNumber, pageSize, unreadOnly);
         return result.Match(
@@ -39,7 +39,7 @@ public class NotificationsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpPost("{id:int}/read")]
     public async Task<IActionResult> MarkAsReadAsync([FromRoute] int id)
@@ -48,7 +48,7 @@ public class NotificationsController : ControllerBase
         if (userIdResult is null)
         {
             return ApiResults.ToProblemDetails(Result.Failure(UserErrors.Unauthorized()));
-      ***REMOVED***
+        }
 
         var result = await _notificationService.MarkAsReadAsync(userIdResult.Value, id);
         return result.Match(
@@ -57,11 +57,11 @@ public class NotificationsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     private int? TryGetCurrentUserId()
     {
         var id = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(id, out var userId) ? userId : null;
-  ***REMOVED***
+    }
 }

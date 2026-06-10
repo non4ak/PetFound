@@ -34,7 +34,7 @@ public class MatchingProcessingService : IMatchingProcessingService
         _pushNotificationSender = pushNotificationSender;
         _config = config.Value;
         _logger = logger;
-  ***REMOVED***
+    }
 
     public async Task ProcessPendingBatchAsync(CancellationToken ct)
     {
@@ -51,17 +51,17 @@ public class MatchingProcessingService : IMatchingProcessingService
             if (ct.IsCancellationRequested)
             {
                 return;
-          ***REMOVED***
+            }
 
             try
             {
                 await ProcessOneAsync(announcement, ct);
-          ***REMOVED***
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to process announcement {Id}", announcement.Id);
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         // Recovery: announcements that were vectorized but matching did not complete
         // (e.g. /match was unavailable). Re-run only the matching stage.
@@ -78,18 +78,18 @@ public class MatchingProcessingService : IMatchingProcessingService
             if (ct.IsCancellationRequested)
             {
                 return;
-          ***REMOVED***
+            }
 
             try
             {
                 await RunMatchingAsync(announcement, ct);
-          ***REMOVED***
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to run matching for announcement {Id}", announcement.Id);
-          ***REMOVED***
-      ***REMOVED***
-  ***REMOVED***
+            }
+        }
+    }
 
     private async Task ProcessOneAsync(Announcement announcement, CancellationToken ct)
     {
@@ -99,7 +99,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             // No photo to vectorize - leave as Pending until a photo appears.
             _logger.LogInformation("Announcement {Id} has no pet photo, skipping vectorization", announcement.Id);
             return;
-      ***REMOVED***
+        }
 
         var vectorResult = await _vectorizationClient.VectorizeAsync(photoUrl, ct);
 
@@ -113,18 +113,18 @@ public class MatchingProcessingService : IMatchingProcessingService
                 announcement.LastModifiedOn = DateTimeOffset.UtcNow;
                 await _context.SaveChangesAsync(ct);
                 return;
-          ***REMOVED***
+            }
 
             announcement.ProcessingRetryCount++;
             if (announcement.ProcessingRetryCount >= _config.MaxRetries)
             {
                 MarkPhotoFailed(announcement);
-          ***REMOVED***
+            }
 
             announcement.LastModifiedOn = DateTimeOffset.UtcNow;
             await _context.SaveChangesAsync(ct);
             return;
-      ***REMOVED***
+        }
 
         var vector = vectorResult.Value;
         if (vector.Length == 0 || vector.All(v => v == 0d))
@@ -134,7 +134,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             announcement.LastModifiedOn = DateTimeOffset.UtcNow;
             await _context.SaveChangesAsync(ct);
             return;
-      ***REMOVED***
+        }
 
         announcement.Vector = vector;
         announcement.ProcessingStatus = AnnouncementProcessingStatus.Vectorized;
@@ -144,7 +144,7 @@ public class MatchingProcessingService : IMatchingProcessingService
         await _context.SaveChangesAsync(ct);
 
         await RunMatchingAsync(announcement, ct);
-  ***REMOVED***
+    }
 
     private async Task RunMatchingAsync(Announcement target, CancellationToken ct)
     {
@@ -154,7 +154,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             target.LastModifiedOn = DateTimeOffset.UtcNow;
             await _context.SaveChangesAsync(ct);
             return;
-      ***REMOVED***
+        }
 
         var opposite = target.PetStatus == AnnouncementPetStatus.Lost
             ? AnnouncementPetStatus.Found
@@ -179,7 +179,7 @@ public class MatchingProcessingService : IMatchingProcessingService
         if (target.Pet.PetSex != PetSex.Unknown)
         {
             query = query.Where(a => a.Pet.PetSex == target.Pet.PetSex);
-      ***REMOVED***
+        }
 
         var candidatesRaw = await query
             .Select(a => new { a.Id, a.Vector })
@@ -191,7 +191,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             target.LastModifiedOn = DateTimeOffset.UtcNow;
             await _context.SaveChangesAsync(ct);
             return;
-      ***REMOVED***
+        }
 
         var candidates = candidatesRaw
             .Select(c => new MatchCandidateRequest(c.Id, c.Vector!))
@@ -203,7 +203,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             // Leave the announcement as Vectorized so the recovery branch retries matching later.
             _logger.LogWarning("Matching call failed for announcement {Id}, will retry", target.Id);
             return;
-      ***REMOVED***
+        }
 
         var strong = matchResult.Value
             .Where(s => s.SimilarityPercentage >= _config.SimilarityThresholdPercent)
@@ -214,14 +214,14 @@ public class MatchingProcessingService : IMatchingProcessingService
         {
             var createdNotifications = await CreateMatchAsync(target, score, ct);
             pendingPushNotifications.AddRange(createdNotifications);
-      ***REMOVED***
+        }
 
         target.ProcessingStatus = AnnouncementProcessingStatus.Matched;
         target.LastModifiedOn = DateTimeOffset.UtcNow;
         await _context.SaveChangesAsync(ct);
 
         await SendMatchPushNotificationsAsync(pendingPushNotifications, ct);
-  ***REMOVED***
+    }
 
     private async Task<IReadOnlyList<PendingMatchPushNotification>> CreateMatchAsync(
         Announcement target,
@@ -234,26 +234,26 @@ public class MatchingProcessingService : IMatchingProcessingService
         {
             lostId = target.Id;
             foundId = score.Id;
-      ***REMOVED***
+        }
         else
         {
             lostId = score.Id;
             foundId = target.Id;
-      ***REMOVED***
+        }
 
         var exists = await _context.MatchResults
             .AnyAsync(m => m.LostAnnouncementId == lostId && m.FoundAnnouncementId == foundId, ct);
         if (exists)
         {
             return Array.Empty<PendingMatchPushNotification>();
-      ***REMOVED***
+        }
 
         var lost = await _context.Announcements.FirstOrDefaultAsync(a => a.Id == lostId, ct);
         var found = await _context.Announcements.FirstOrDefaultAsync(a => a.Id == foundId, ct);
         if (lost is null || found is null)
         {
             return Array.Empty<PendingMatchPushNotification>();
-      ***REMOVED***
+        }
 
         var now = DateTimeOffset.UtcNow;
         var match = new MatchResult
@@ -264,7 +264,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             Status = MatchResultStatus.Pending,
             CreatedOn = now,
             LastModifiedOn = now
-      ***REMOVED***;
+        };
         await _context.MatchResults.AddAsync(match, ct);
 
         var percentLabel = Math.Round(score.SimilarityPercentage);
@@ -279,7 +279,7 @@ public class MatchingProcessingService : IMatchingProcessingService
                 found.ReporterUserId,
                 lostId,
                 pushBody)
-      ***REMOVED***
+        }
         .DistinctBy(notification => notification.UserId)
         .ToList();
 
@@ -293,11 +293,11 @@ public class MatchingProcessingService : IMatchingProcessingService
                 IsRead = false,
                 CreatedOn = now,
                 LastModifiedOn = now
-          ***REMOVED***);
-      ***REMOVED***
+            });
+        }
 
         return recipients;
-  ***REMOVED***
+    }
 
     private async Task SendMatchPushNotificationsAsync(
         IReadOnlyList<PendingMatchPushNotification> pendingNotifications,
@@ -306,7 +306,7 @@ public class MatchingProcessingService : IMatchingProcessingService
         if (pendingNotifications.Count == 0)
         {
             return;
-      ***REMOVED***
+        }
 
         var userIds = pendingNotifications
             .Select(notification => notification.UserId)
@@ -322,7 +322,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             if (!deviceKeys.TryGetValue(pendingNotification.UserId, out var deviceKey))
             {
                 continue;
-          ***REMOVED***
+            }
 
             var data = new Dictionary<string, string>
             {
@@ -331,7 +331,7 @@ public class MatchingProcessingService : IMatchingProcessingService
                 ["notificationType"] = ((int)NotificationType.MatchFound).ToString(),
                 ["oppositeAnnouncementId"] = pendingNotification.OppositeAnnouncementId.ToString(),
                 ["announcementId"] = pendingNotification.OppositeAnnouncementId.ToString()
-          ***REMOVED***;
+            };
             var notification = new PushNotificationMessage(
                 deviceKey,
                 "Possible match found",
@@ -347,12 +347,12 @@ public class MatchingProcessingService : IMatchingProcessingService
                         pendingNotification.UserId,
                         deviceKey,
                         ct);
-              ***REMOVED***
-          ***REMOVED***
+                }
+            }
             catch (OperationCanceledException) when (ct.IsCancellationRequested)
             {
                 throw;
-          ***REMOVED***
+            }
             catch (Exception ex)
             {
                 _logger.LogError(
@@ -361,9 +361,9 @@ public class MatchingProcessingService : IMatchingProcessingService
                     pendingNotification.UserId,
                     pendingNotification.OppositeAnnouncementId,
                     deviceKey.Length);
-          ***REMOVED***
-      ***REMOVED***
-  ***REMOVED***
+            }
+        }
+    }
 
     private async Task ClearInvalidDeviceKeyAsync(
         int userId,
@@ -380,7 +380,7 @@ public class MatchingProcessingService : IMatchingProcessingService
             "Cleared an invalid Firebase device key. UserId: {UserId}, DeviceKeyLength: {DeviceKeyLength}",
             userId,
             invalidDeviceKey.Length);
-  ***REMOVED***
+    }
 
     private void MarkPhotoFailed(Announcement announcement)
     {
@@ -394,8 +394,8 @@ public class MatchingProcessingService : IMatchingProcessingService
             IsRead = false,
             CreatedOn = now,
             LastModifiedOn = now
-      ***REMOVED***);
-  ***REMOVED***
+        });
+    }
 
     private sealed record PendingMatchPushNotification(
         int UserId,

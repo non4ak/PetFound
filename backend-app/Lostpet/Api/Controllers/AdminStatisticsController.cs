@@ -16,7 +16,7 @@ public class AdminStatisticsController : ControllerBase
     public AdminStatisticsController(IAdminStatisticsService statisticsService)
     {
         _statisticsService = statisticsService;
-  ***REMOVED***
+    }
 
     [HttpGet("summary")]
     public async Task<IActionResult> GetSummaryAsync()
@@ -28,7 +28,7 @@ public class AdminStatisticsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 
     [HttpGet("timeseries")]
     public async Task<IActionResult> GetTimeseriesAsync([FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to)
@@ -43,5 +43,5 @@ public class AdminStatisticsController : ControllerBase
             message: "null",
             failure: ApiResults.ToProblemDetails
         );
-  ***REMOVED***
+    }
 }
