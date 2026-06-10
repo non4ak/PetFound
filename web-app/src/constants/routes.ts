@@ -9,6 +9,7 @@ export const ROUTES = {
     ANNOUNCEMENTS: "/announcements",
     COMMENTS: "/comments",
     GEOTAGS: "/geotags",
+    STATISTICS: "/statistics",
 }
 
 export type RouteKey = keyof typeof ROUTES;
