@@ -42,9 +42,9 @@ export default function EditPetScreen() {
       petSex: OnboardingPetSex.Male,
       petSize: OnboardingPetSize.Medium,
       petType: OnboardingPetType.Dog,
-  ***REMOVED***,
+    },
     resolver: zodResolver(onboardingPetSchema),
-***REMOVED***);
+  });
 
   useEffect(() => {
     if (pet === undefined) return;
@@ -60,8 +60,8 @@ export default function EditPetScreen() {
       petSex: pet.petSex,
       petSize: pet.petSize,
       petType: pet.petType,
-  ***REMOVED***);
-***REMOVED***, [pet, reset]);
+    });
+  }, [pet, reset]);
 
   const hasMicrochip = watch("hasMicrochip");
 
@@ -84,10 +84,10 @@ export default function EditPetScreen() {
         ...(values.petPhotoUrl.trim().length > 0
           ? { petPhotoUrl: values.petPhotoUrl }
           : {}),
-    ***REMOVED***,
-  ***REMOVED***);
+      },
+    });
     router.back();
-***REMOVED***;
+  };
 
   return (
     <AppScreenScaffold
@@ -100,7 +100,7 @@ export default function EditPetScreen() {
           size="lg"
           variant="primary"
         />
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -110,7 +110,7 @@ export default function EditPetScreen() {
             <Ionicons name="arrow-back" size={22} color="#1E1E1E" />
           </TouchableOpacity>
         </View>
-    ***REMOVED***
+      }
       contentClassName="py-0"
     >
       <View className="gap-2 mb-8 px-6">

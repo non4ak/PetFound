@@ -20,17 +20,17 @@ const ALERT_STYLES: Record<NotificationType, AlertStyle> = {
     backgroundColor: "#FFF8E1",
     iconColor: "#9A6A00",
     iconName: "chatbubble-outline",
-***REMOVED***,
+  },
   [NotificationType.MatchFound]: {
     backgroundColor: "#F1F3FF",
     iconColor: "#5330FF",
     iconName: "git-compare-outline",
-***REMOVED***,
+  },
   [NotificationType.PhotoProcessingFailed]: {
     backgroundColor: "#FFF1F2",
     iconColor: "#D95068",
     iconName: "warning-outline",
-***REMOVED***,
+  },
 };
 
 function getAlertTitle(item: Notification): string {
@@ -47,16 +47,16 @@ function formatReceivedAt(value: string): string {
 
   if (Number.isNaN(receivedAt.getTime())) {
     return "Received time unavailable";
-***REMOVED***
+  }
 
   const date: string = receivedAt.toLocaleDateString("en-US", {
     day: "numeric",
     month: "short",
-***REMOVED***);
+  });
   const time: string = receivedAt.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
-***REMOVED***);
+  });
 
   return `Received ${date}, ${time}`;
 }

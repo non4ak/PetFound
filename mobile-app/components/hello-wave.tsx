@@ -9,10 +9,10 @@ export function HelloWave() {
         marginTop: -6,
         animationName: {
           '50%': { transform: [{ rotate: '25deg' }] },
-      ***REMOVED***,
+        },
         animationIterationCount: 4,
         animationDuration: '300ms',
-    ***REMOVED***}>
+      }}>
       👋
     </Animated.Text>
   );

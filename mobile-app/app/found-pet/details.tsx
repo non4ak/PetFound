@@ -26,14 +26,14 @@ export default function FoundPetDetailsScreen() {
     getValues,
     handleSubmit,
     reset,
-***REMOVED*** = useForm<FoundPetDetailsFormValues>({
+  } = useForm<FoundPetDetailsFormValues>({
     defaultValues: details,
     resolver: zodResolver(foundPetDetailsSchema),
-***REMOVED***);
+  });
 
   useEffect(() => {
     reset(details);
-***REMOVED***, [details, reset]);
+  }, [details, reset]);
 
   const saveCurrentFormValues = (): void => {
     const values: FoundPetDetailsFormValues = getValues();
@@ -48,13 +48,13 @@ export default function FoundPetDetailsScreen() {
       showPhone: values.showPhone,
       showTelegram: values.showTelegram,
       timeApproximate: values.timeApproximate.trim(),
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   const handleChooseLocationPress = (): void => {
     saveCurrentFormValues();
     router.push("/found-pet/location-picker");
-***REMOVED***;
+  };
 
   const handlePreviewPress = (values: FoundPetDetailsFormValues): void => {
     updateDetails({
@@ -67,9 +67,9 @@ export default function FoundPetDetailsScreen() {
       showPhone: values.showPhone,
       showTelegram: values.showTelegram,
       timeApproximate: values.timeApproximate.trim(),
-  ***REMOVED***);
+    });
     router.push("/found-pet/preview");
-***REMOVED***;
+  };
 
   return (
     <AppScreenScaffold
@@ -82,12 +82,12 @@ export default function FoundPetDetailsScreen() {
             size="md"
             trailingIcon={
               <Ionicons name="arrow-forward" size={18} color="#1E1E1E" />
-          ***REMOVED***
+            }
             variant="primary"
           />
           <OnboardingProgress activeStep={3} totalSteps={4} />
         </View>
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -98,7 +98,7 @@ export default function FoundPetDetailsScreen() {
           </TouchableOpacity>
           <View className="w-10" />
         </View>
-    ***REMOVED***
+      }
     >
       <Stepper
         currentPage={3}

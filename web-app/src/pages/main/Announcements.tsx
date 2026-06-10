@@ -33,11 +33,11 @@ export const Announcements = () => {
     
     const handleNextPage = async () => {
         if ((pageNumber+1) < totalPages) setPageNumber(pageNumber+1);
-  ***REMOVED***
+    }
 
     const handlePrevPage = async () => {
         if (pageNumber > 0) setPageNumber(pageNumber-1);
-  ***REMOVED***
+    }
 
     const loadAnnouncementById = async (id: number) => {
         try {
@@ -45,31 +45,31 @@ export const Announcements = () => {
             setSelectedAnnouncement(data);
             const commentsData = await getCommentsByAnnouncementId(id);
             setComments(commentsData.items);
-      ***REMOVED*** catch {
+        } catch {
     
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     const handleCancelDetails = () => {
         setSelectedAnnouncement(null);
         setComments(null);
-  ***REMOVED***
+    }
 
     const handleArchive = async (id: number) => {
         await archiveAnnouncement(id);
         handleCancelDetails();
-  ***REMOVED***
+    }
 
     const handleRestore = async (id: number) => {
         await restoreAnnouncement(id);
         handleCancelDetails();
-  ***REMOVED***
+    }
 
     const handleEdit = async (id: number, petStatus: number, city: string, country: string, petDetails: string, lastDateWhenSeen: string, approximateTime: string, isPhonePublic: boolean, isTelegramActive: boolean, nearLandmark: string, latitude: number, longitude: number) => {
         await editAnnouncement(id, petStatus, city, country, petDetails, lastDateWhenSeen, approximateTime, isPhonePublic, isTelegramActive, nearLandmark, latitude, longitude);
         setSelectedAnnouncement(null);
         loadAnnouncementById(id);
-  ***REMOVED***
+    }
 
     useEffect(() => {
         const fetchAnnouncements = async () => {
@@ -77,10 +77,10 @@ export const Announcements = () => {
             setAnnouncements(data.items);
             setTotalAnnouncements(data.totalCount);
             setTotalPages(data.totalPages);
-      ***REMOVED***;
+        };
 
         fetchAnnouncements();
-  ***REMOVED***, [selectedAnnouncement, petTypeFilter, statusFilter, isActiveFilter, cityFilter, countryFilter, pageNumber, pageSize]);
+    }, [selectedAnnouncement, petTypeFilter, statusFilter, isActiveFilter, cityFilter, countryFilter, pageNumber, pageSize]);
 
     return ( 
         <div className="bg-white shadow rounded-lg p-6">
@@ -199,7 +199,7 @@ export const Announcements = () => {
                             announcement.country && announcement.city
                             ? `${announcement.country}, ${announcement.city}`
                             : announcement.country || announcement.city || ""    
-                      ***REMOVED***</p>
+                        }</p>
                         {announcement.isActive ? <p className="text-green-600 text-mb">Active</p> : <p className="text-red-600 text-mb">Archived</p>}
                         <p className="text-gray-600 text-sm mt-1">Reporter:</p>
                         <p className="text-gray-900 text-mb">{announcement.reporterUserName}</p>
@@ -227,7 +227,7 @@ export const Announcements = () => {
                     handleRestore={handleRestore}
                     handleEdit={handleEdit}
                 />
-          ***REMOVED***
+            }
         </div>
     );
 }

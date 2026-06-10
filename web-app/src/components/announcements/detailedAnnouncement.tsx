@@ -38,7 +38,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
     const handleSave = () => {
         handleEdit(selectedAnnouncement.id, parseInt(petStatusRef.current?.value), cityRef.current?.value, countryRef.current?.value, petDetailsRef.current?.value, lastDateWhenSeenRef.current?.value, approximateTimeRef.current?.value, isPhonePublic, isTelegramActive, nearLandmarkRef.current?.value, parseFloat(lastSeenLatitudeRef.current?.value), parseFloat(lastSeenLongitudeRef.current?.value));
         setEditMode(false);
-  ***REMOVED***
+    }
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -65,7 +65,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : (
                                 selectedAnnouncement.petStatusLabel
                             )
-                      ***REMOVED*** 
+                        } 
                             <span className="text-gray-600">
                                 {showIds && !editMode && ` | ${selectedAnnouncement.petStatus}`}
                             </span>
@@ -85,7 +85,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : (
                                 new Date(selectedAnnouncement.lastDateWhenSeen).toLocaleDateString()
                             )
-                      ***REMOVED***</p>
+                        }</p>
                         <p className="text-gray-900">
                             <span className="text-gray-600 text-sm">Time: </span>
                             {
@@ -101,7 +101,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : (
                                 selectedAnnouncement.approximateTime
                             )
-                      ***REMOVED***</p>
+                        }</p>
                         <p className="text-gray-900">
                             <span className="text-gray-600 text-sm">Details: </span>
                             {
@@ -116,7 +116,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : (
                                 selectedAnnouncement.petDetails
                             )
-                      ***REMOVED***</p>
+                        }</p>
                         <p className="text-gray-900 text-lg font-semibold mt-2">Pet details</p>
                         <div className="grid grid-cols-2">
                                             
@@ -238,7 +238,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 </div>
                             ) : 
                             (<p className="text-gray-900">{selectedAnnouncement.city}, {selectedAnnouncement.country}</p>)
-                      ***REMOVED***
+                        }
                         <p className="text-gray-900">
                             <span className="text-gray-600 text-sm">Near: </span>
                             {
@@ -254,7 +254,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : (
                                 selectedAnnouncement.nearLandmark
                             )
-                      ***REMOVED***</p>
+                        }</p>
                         <p className="text-gray-900">
                             <span className="text-gray-600 text-sm">Latitude: </span>
                             {
@@ -270,7 +270,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : (
                                 selectedAnnouncement.lastSeenLatitude
                             )
-                      ***REMOVED***</p>
+                        }</p>
                         <p className="text-gray-900">
                             <span className="text-gray-600 text-sm">Longitude: </span>
                             {
@@ -286,7 +286,7 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                             ) : (
                                 selectedAnnouncement.lastSeenLongitude
                             )
-                      ***REMOVED***</p>
+                        }</p>
                         {selectedAnnouncement.lastSeenLatitude && selectedAnnouncement.lastSeenLongitude &&
                         <div className="mt-1">
                             <MapContainer 
@@ -306,18 +306,18 @@ export const DetailedAnnouncement = ({ selectedAnnouncement, comments, cancel, s
                                 </Marker>
                             </MapContainer>
                         </div>
-                      ***REMOVED***
+                        }
                         {selectedAnnouncement.isActive ? 
                             ( <Button variant="danger" className="mb-2" onClick={() => setAction("archive")}>Archive</Button> ) :
                             ( <Button variant="danger" className="mb-2" onClick={() => setAction("restore")}>Restore</Button> )
-                      ***REMOVED***
+                        }
                         {editMode ? 
                             ( <div className="grid grid-cols-2 gap-2">
                                 <Button variant="secondary" className="mb-3" fullWidth={true} onClick={() => setAction("cancelEdit")}>Cancel</Button>
                                 <Button variant="danger" className="mb-3" fullWidth={true} onClick={() => setAction("saveEdit")}>Save</Button>
                             </div> ) :
                             ( <Button variant="edit" className="mb-3" onClick={() => setEditMode(true)}>Edit</Button> )
-                      ***REMOVED***
+                        }
                     </div>
                 </div>
                                 

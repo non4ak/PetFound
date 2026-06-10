@@ -23,11 +23,11 @@ export default function AllSetOnboardingScreen() {
 
       startTransition(() => {
         router.replace("/(tabs)");
-    ***REMOVED***);
-  ***REMOVED*** catch {
+      });
+    } catch {
       return;
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   return (
     <OnboardingScaffold
@@ -35,7 +35,7 @@ export default function AllSetOnboardingScreen() {
       onBackPress={() => router.back()}
       onPrimaryActionPress={() => {
         void handleGoToHomePress();
-    ***REMOVED***}
+      }}
       primaryActionDisabled={submitOnboardingMutation.isPending}
       primaryActionButtonVariant="outline"
       primaryActionErrorText={
@@ -45,10 +45,10 @@ export default function AllSetOnboardingScreen() {
               "Unable to finish onboarding right now.",
             )
           : undefined
-    ***REMOVED***
+      }
       primaryActionLabel={
         submitOnboardingMutation.isPending ? "Finishing..." : "Go to Home"
-    ***REMOVED***
+      }
       title="You're all set!"
     >
       <View className="items-center px-6 py-10">

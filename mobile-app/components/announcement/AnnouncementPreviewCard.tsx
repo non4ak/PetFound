@@ -25,12 +25,12 @@ const STATUS_STYLES: Record<
     bgClass: "bg-[#D4EDDA]",
     label: "FOUND",
     textClass: "text-[#28A745]",
-***REMOVED***,
+  },
   lost: {
     bgClass: "bg-[#FFDCE1]",
     label: "LOST",
     textClass: "text-[#D95068]",
-***REMOVED***,
+  },
 };
 
 export function AnnouncementPreviewCard({

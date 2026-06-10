@@ -75,11 +75,11 @@ export function PasswordInput(props: PasswordInputProps) {
                     variant="secondary"
                     onClick={() => {
                         setIsVisible((currentValue) => !currentValue);
-                  ***REMOVED***}
+                    }}
                 >
                     {isVisible ? <EyeClosedIcon /> : <EyeOpenIcon />}
                 </Button>
-          ***REMOVED***
+            }
             error={error}
             helperText={helperText}
             label={label}

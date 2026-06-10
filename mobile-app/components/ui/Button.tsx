@@ -17,22 +17,22 @@ const buttonVariants = cva(
         secondary: "bg-heading-text",
         outline: "bg-white border border-primary",
         ghost: "bg-transparent",
-    ***REMOVED***,
+      },
       size: {
         sm: "py-2 px-4",
         md: "py-4 px-6",
         lg: "py-6 px-8",
         "icon-only": "p-3",
-    ***REMOVED***,
+      },
       fullWidth: {
         true: "w-full",
-    ***REMOVED***,
-  ***REMOVED***,
+      },
+    },
     defaultVariants: {
       variant: "primary",
       size: "md",
-  ***REMOVED***,
-***REMOVED***,
+    },
+  },
 );
 
 const buttonTextVariants = cva("font-semibold", {
@@ -42,18 +42,18 @@ const buttonTextVariants = cva("font-semibold", {
       secondary: "text-white font-bold",
       outline: "text-heading-text font-medium",
       ghost: "text-heading-text font-bold",
-  ***REMOVED***,
+    },
     size: {
       sm: "text-[14px]",
       md: "text-[18px]",
       lg: "text-[20px]",
       "icon-only": "text-[16px]",
-  ***REMOVED***,
-***REMOVED***,
+    },
+  },
   defaultVariants: {
     variant: "primary",
     size: "md",
-***REMOVED***,
+  },
 });
 
 export interface ButtonProps

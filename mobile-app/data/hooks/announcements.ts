@@ -14,21 +14,21 @@ export const useGetAnnouncements = (query?: AnnouncementQueryFilter) => {
   return useQuery({
     queryKey: ["announcements", query],
     queryFn: () => getAllAnnouncements(query),
-***REMOVED***);
+  });
 };
 
 export const useGetAnnouncementById = (id: number) => {
   return useQuery({
     queryKey: ["announcements", id],
     queryFn: () => getAnnouncementById(id),
-***REMOVED***);
+  });
 };
 
 export const useGetMyAnnouncements = (query?: AnnouncementQueryFilter) => {
   return useQuery({
     queryKey: ["my-announcements", query],
     queryFn: () => getMyAnnouncements(query),
-***REMOVED***);
+  });
 };
 
 export const useArchiveAnnouncement = () => {
@@ -37,8 +37,8 @@ export const useArchiveAnnouncement = () => {
     mutationFn: (id: number) => archiveAnnouncementQuery(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-announcements"] });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 };
 
 export const useRestoreAnnouncement = () => {
@@ -47,8 +47,8 @@ export const useRestoreAnnouncement = () => {
     mutationFn: (id: number) => restoreAnnouncementQuery(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-announcements"] });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 };
 
 export const useUpdateAnnouncement = (id: number) => {
@@ -59,6 +59,6 @@ export const useUpdateAnnouncement = (id: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-announcements"] });
       queryClient.invalidateQueries({ queryKey: ["announcements", id] });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 };

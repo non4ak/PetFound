@@ -5,7 +5,7 @@ import type { LoginResponseBody, RegisterRequest } from "@/types/auth";
 export async function loginQuery(data: SignInSchema) {
     const response = await axiosClient.post<LoginResponseBody>("/Auth/login", data, {
         skipAuthRefresh: true,
-  ***REMOVED***);
+    });
 
     return response.data.data;
 }
@@ -15,21 +15,21 @@ export async function registerQuery(data: SignUpSchema) {
         email: data.email,
         password: data.password,
         userName: data.username,
-  ***REMOVED***;
+    };
 
     return axiosClient.post("/Auth/register", requestBody, {
         skipAuthRefresh: true,
-  ***REMOVED***);
+    });
 }
 
 export async function logoutQuery() {
     return axiosClient.get("/Auth/logout", {
         skipAuthRefresh: true,
-  ***REMOVED***);
+    });
 }
 
 export async function refreshSessionQuery() {
     return axiosClient.get("/Auth/refresh", {
         skipAuthRefresh: true,
-  ***REMOVED***);
+    });
 }

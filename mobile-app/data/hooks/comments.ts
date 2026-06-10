@@ -7,7 +7,7 @@ export const useGetComments = (announcementId: number) => {
     queryKey: ["comments", announcementId],
     queryFn: () => getComments(announcementId),
     enabled: announcementId > 0,
-***REMOVED***);
+  });
 };
 
 export const useCreateComment = (announcementId: number) => {
@@ -17,6 +17,6 @@ export const useCreateComment = (announcementId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", announcementId] });
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 };

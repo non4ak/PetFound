@@ -17,11 +17,11 @@ const typographyVariants = cva("text-black", {
       "body-small": "text-[16px] font-normal leading-[1.5] text-paragraph-text",
       "body-medium":
         "text-[18px] font-medium leading-[1.5] text-paragraph-text",
-  ***REMOVED***,
-***REMOVED***,
+    },
+  },
   defaultVariants: {
     variant: "body-regular",
-***REMOVED***,
+  },
 });
 
 export interface TypographyProps

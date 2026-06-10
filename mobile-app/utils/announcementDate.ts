@@ -15,9 +15,9 @@ export function isValidAnnouncementDate(dateText: string): boolean {
   try {
     toAnnouncementDateTimeOffset(dateText);
     return true;
-***REMOVED*** catch {
+  } catch {
     return false;
-***REMOVED***
+  }
 }
 
 function createUtcDateString(year: number, month: number, day: number): string {
@@ -29,7 +29,7 @@ function createUtcDateString(year: number, month: number, day: number): string {
     date.getUTCDate() !== day
   ) {
     throw new Error("Date last seen is invalid.");
-***REMOVED***
+  }
 
   return date.toISOString();
 }
@@ -39,7 +39,7 @@ export function toAnnouncementDateTimeOffset(dateText: string): string {
 
   if (ISO_DATE_PATTERN.test(trimmedDateText)) {
     return `${trimmedDateText}T00:00:00.000Z`;
-***REMOVED***
+  }
 
   const slashDateMatch = SLASH_DATE_PATTERN.exec(trimmedDateText);
   if (slashDateMatch !== null) {
@@ -47,7 +47,7 @@ export function toAnnouncementDateTimeOffset(dateText: string): string {
     const month = Number(slashDateMatch[2]);
     const year = Number(slashDateMatch[3]);
     return createUtcDateString(year, month, day);
-***REMOVED***
+  }
 
   const dotDateMatch = DOT_DATE_PATTERN.exec(trimmedDateText);
   if (dotDateMatch !== null) {
@@ -55,12 +55,12 @@ export function toAnnouncementDateTimeOffset(dateText: string): string {
     const month = Number(dotDateMatch[2]);
     const year = Number(dotDateMatch[3]);
     return createUtcDateString(year, month, day);
-***REMOVED***
+  }
 
   const parsedDate = new Date(trimmedDateText);
   if (Number.isNaN(parsedDate.getTime())) {
     throw new Error("Date last seen must be a valid date.");
-***REMOVED***
+  }
 
   return parsedDate.toISOString();
 }

@@ -20,16 +20,16 @@ export function getMapTargetCoordinate(
 ): MapTargetCoordinate | null {
   if (typeof latitude !== "number" || typeof longitude !== "number") {
     return null;
-***REMOVED***
+  }
 
   if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
     return null;
-***REMOVED***
+  }
 
   return {
     latitude,
     longitude,
-***REMOVED***;
+  };
 }
 
 function parseMapTargetRouteValue(
@@ -37,13 +37,13 @@ function parseMapTargetRouteValue(
 ): number | null {
   if (typeof value !== "string") {
     return null;
-***REMOVED***
+  }
 
   const parsedValue: number = Number(value);
 
   if (!Number.isFinite(parsedValue)) {
     return null;
-***REMOVED***
+  }
 
   return parsedValue;
 }
@@ -63,5 +63,5 @@ export function getMapTargetParams(
   return {
     targetLatitude: String(coordinate.latitude),
     targetLongitude: String(coordinate.longitude),
-***REMOVED***;
+  };
 }

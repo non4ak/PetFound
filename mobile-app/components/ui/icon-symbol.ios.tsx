@@ -24,7 +24,7 @@ export function IconSymbol({
         {
           width: size,
           height: size,
-      ***REMOVED***,
+        },
         style,
       ]}
     />

@@ -76,16 +76,16 @@ export const onboardingPetSchema = z
     petSex: z.nativeEnum(OnboardingPetSex),
     petSize: z.nativeEnum(OnboardingPetSize),
     petType: z.nativeEnum(OnboardingPetType),
-***REMOVED***)
+  })
   .superRefine((data, context) => {
     if (data.hasMicrochip && data.chipNumber.length === 0) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Chip number is required when microchip is enabled',
         path: ['chipNumber'],
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***);
+      });
+    }
+  });
 
 export const onboardingStayInLoopSchema = z.object({
   matchFoundEnabled: z.boolean(),

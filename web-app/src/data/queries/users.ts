@@ -9,7 +9,7 @@ export async function getAllUsers(params: GetUsers) {
         search: params.search,
         pageNumber: params.pageNumber,
         pageSize: params.pageSize,
-  ***REMOVED***;*/
+    };*/
 
     const response = await axiosClient.get<GetUsersRespond<PagedList<UserDto>>>("/admin/users", {params: {search: params.search, pageNumber: params.pageNumber, pageSize: params.pageSize}});
 

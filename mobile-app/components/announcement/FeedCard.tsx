@@ -56,7 +56,7 @@ export function FeedCard({ item, onPress }: FeedCardProps) {
         shadowOpacity: 0.15,
         shadowRadius: 10,
         elevation: 3,
-    ***REMOVED***}
+      }}
     >
       <View className="flex-row gap-3">
         {/* Pet photo */}

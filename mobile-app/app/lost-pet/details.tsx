@@ -26,20 +26,20 @@ export default function LostPetDetailsScreen() {
     getValues,
     handleSubmit,
     reset,
-***REMOVED*** = useForm<LostPetDetailsFormValues>({
+  } = useForm<LostPetDetailsFormValues>({
     defaultValues: details,
     resolver: zodResolver(lostPetDetailsSchema),
-***REMOVED***);
+  });
 
   useEffect(() => {
     if (selectedPet === null) {
       router.replace("/lost-pet");
-  ***REMOVED***
-***REMOVED***, [router, selectedPet]);
+    }
+  }, [router, selectedPet]);
 
   useEffect(() => {
     reset(details);
-***REMOVED***, [details, reset]);
+  }, [details, reset]);
 
   const saveCurrentFormValues = (): void => {
     const values: LostPetDetailsFormValues = getValues();
@@ -54,13 +54,13 @@ export default function LostPetDetailsScreen() {
       showPhone: values.showPhone,
       showTelegram: values.showTelegram,
       timeApproximate: values.timeApproximate.trim(),
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   const handleChooseLocationPress = (): void => {
     saveCurrentFormValues();
     router.push("/lost-pet/location-picker");
-***REMOVED***;
+  };
 
   const handlePreviewPress = (values: LostPetDetailsFormValues): void => {
     updateDetails({
@@ -73,9 +73,9 @@ export default function LostPetDetailsScreen() {
       showPhone: values.showPhone,
       showTelegram: values.showTelegram,
       timeApproximate: values.timeApproximate.trim(),
-  ***REMOVED***);
+    });
     router.push("/lost-pet/preview");
-***REMOVED***;
+  };
 
   return (
     <AppScreenScaffold
@@ -88,12 +88,12 @@ export default function LostPetDetailsScreen() {
             size="md"
             trailingIcon={
               <Ionicons name="arrow-forward" size={18} color="#1E1E1E" />
-          ***REMOVED***
+            }
             variant="primary"
           />
           <OnboardingProgress activeStep={2} totalSteps={3} />
         </View>
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -104,7 +104,7 @@ export default function LostPetDetailsScreen() {
           </TouchableOpacity>
           <View className="w-10" />
         </View>
-    ***REMOVED***
+      }
     >
       <Stepper
         currentPage={2}

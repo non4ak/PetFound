@@ -8,11 +8,11 @@ export default function AuthLayout() {
 
   if (isInitializing) {
     return <FullscreenLoader />;
-***REMOVED***
+  }
 
   if (isAuthenticated) {
     return <Redirect href={isOnboardingActive ? '/(onboarding)/profile' : '/(tabs)'} />;
-***REMOVED***
+  }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

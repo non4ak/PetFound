@@ -14,7 +14,7 @@ function mapProfile(response: ProfileApiResponse): Profile {
     socialNetwork: response.socialNetwork ?? '',
     userPhotoUrl: response.userPhotoUrl ?? '',
     userName: response.userName ?? '',
-***REMOVED***;
+  };
 }
 
 export async function getProfileQuery(): Promise<Profile> {

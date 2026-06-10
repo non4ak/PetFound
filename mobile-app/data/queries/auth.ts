@@ -14,13 +14,13 @@ function mapAuthSession(response: MobileAuthResponse): AuthSession {
     tokens: {
       accessToken: response.accessToken,
       refreshToken: response.refreshToken,
-  ***REMOVED***,
+    },
     user: {
       email: response.email,
       role: response.role,
       userName: response.userName,
-  ***REMOVED***,
-***REMOVED***;
+    },
+  };
 }
 
 export async function loginQuery(credentials: LoginRequest): Promise<AuthSession> {
@@ -29,7 +29,7 @@ export async function loginQuery(credentials: LoginRequest): Promise<AuthSession
     credentials,
     {
       skipAuthRefresh: true,
-  ***REMOVED***,
+    },
   );
 
   return mapAuthSession(response.data.data);
@@ -41,7 +41,7 @@ export async function googleLoginQuery(request: GoogleLoginRequest): Promise<Aut
     request,
     {
       skipAuthRefresh: true,
-  ***REMOVED***,
+    },
   );
 
   return mapAuthSession(response.data.data);
@@ -52,10 +52,10 @@ export async function refreshSessionQuery(refreshToken: string): Promise<AuthSes
     '/Auth/refresh/mobile',
     {
       refreshToken,
-  ***REMOVED***,
+    },
     {
       skipAuthRefresh: true,
-  ***REMOVED***,
+    },
   );
 
   return mapAuthSession(response.data.data);
@@ -64,7 +64,7 @@ export async function refreshSessionQuery(refreshToken: string): Promise<AuthSes
 export async function registerQuery(request: RegisterRequest): Promise<void> {
   await axiosClient.post('/Auth/register', request, {
     skipAuthRefresh: true,
-***REMOVED***);
+  });
 }
 
 export async function logoutQuery(): Promise<void> {

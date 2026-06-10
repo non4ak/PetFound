@@ -32,7 +32,7 @@ function createStayInLoopDefaultValues(): OnboardingStayInLoopFormValues {
     nearbyPostsEnabled: true,
     newCommentEnabled: true,
     notificationChannelPreference: NotificationChannelPreference.Push,
-***REMOVED***;
+  };
 }
 
 export default function StayInLoopOnboardingScreen() {
@@ -44,11 +44,11 @@ export default function StayInLoopOnboardingScreen() {
     formState: { errors },
     getValues,
     handleSubmit,
-***REMOVED*** = useForm<OnboardingStayInLoopFormValues>({
+  } = useForm<OnboardingStayInLoopFormValues>({
     defaultValues:
       onboardingDraft.stayInLoop ?? createStayInLoopDefaultValues(),
     resolver: zodResolver(onboardingStayInLoopSchema),
-***REMOVED***);
+  });
 
   const handleContinuePress = async (
     values: OnboardingStayInLoopFormValues,
@@ -57,21 +57,21 @@ export default function StayInLoopOnboardingScreen() {
 
     startTransition(() => {
       router.push("./all-set");
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   const handleBackPress = (): void => {
     saveStayInLoopStep(getValues());
     router.back();
-***REMOVED***;
+  };
 
   const handleSkipPress = (): void => {
     clearStayInLoopStep();
 
     startTransition(() => {
       router.replace("./all-set");
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   return (
     <OnboardingScaffold

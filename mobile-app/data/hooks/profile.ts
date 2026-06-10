@@ -15,7 +15,7 @@ export function useProfileQuery(): UseQueryResult<Profile, Error> {
   return useQuery({
     queryFn: getProfileQuery,
     queryKey: profileQueryKey,
-***REMOVED***);
+  });
 }
 
 export function useUpdateProfileMutation(): UseMutationResult<
@@ -38,10 +38,10 @@ export function useUpdateProfileMutation(): UseMutationResult<
         socialNetwork: variables.socialNetwork,
         userPhotoUrl: variables.userPhotoUrl ?? cachedProfile?.userPhotoUrl ?? '',
         userName: cachedProfile?.userName ?? '',
-    ***REMOVED***;
+      };
 
       queryClient.setQueryData(profileQueryKey, nextProfile);
       await queryClient.invalidateQueries({ queryKey: profileQueryKey });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 }

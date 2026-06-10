@@ -18,22 +18,22 @@ export const MainRouter: RouteObject = {
         {
             path: ROUTES.HOME,
             element: <Home />,
-      ***REMOVED***,
+        },
         {
             path: ROUTES.SETTINGS,
             element: <Settings />,
-      ***REMOVED***,
+        },
         {
             path: ROUTES.USERS,
             element: <Users />,
-      ***REMOVED***,
+        },
         {
             path: ROUTES.ANNOUNCEMENTS,
             element: <Announcements />,
-      ***REMOVED***,
+        },
         {
             path: ROUTES.COMMENTS,
             element: <Comments />,
-      ***REMOVED***
+        }
     ],
 };

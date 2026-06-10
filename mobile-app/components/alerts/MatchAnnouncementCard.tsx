@@ -19,26 +19,26 @@ const MATCH_STATUS_STYLES: Record<MatchResultStatus, BadgeStyle> = {
   [MatchResultStatus.Pending]: {
     backgroundClassName: "bg-[#FFF1C7]",
     textClassName: "text-[#8A6414]",
-***REMOVED***,
+  },
   [MatchResultStatus.Rejected]: {
     backgroundClassName: "bg-[#FFE1E2]",
     textClassName: "text-[#D95068]",
-***REMOVED***,
+  },
   [MatchResultStatus.Approved]: {
     backgroundClassName: "bg-[#DDF5E7]",
     textClassName: "text-[#237A4B]",
-***REMOVED***,
+  },
 };
 
 const PET_STATUS_STYLES: Record<number, BadgeStyle> = {
   0: {
     backgroundClassName: "bg-[#FFE1E2]",
     textClassName: "text-[#FF4853]",
-***REMOVED***,
+  },
   1: {
     backgroundClassName: "bg-[#D2DBFF]",
     textClassName: "text-[#5330FF]",
-***REMOVED***,
+  },
 };
 
 function getLocation(item: MatchResult): string {
@@ -47,7 +47,7 @@ function getLocation(item: MatchResult): string {
     item.oppositeAnnouncement.country,
   ].filter((value: string | null): value is string => {
     return typeof value === "string" && value.trim().length > 0;
-***REMOVED***);
+  });
 
   return locationParts.join(", ");
 }
@@ -77,7 +77,7 @@ export function MatchAnnouncementCard({
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.15,
         shadowRadius: 10,
-    ***REMOVED***}
+      }}
     >
       <View className="flex-row gap-3">
         <View className="h-[100px] w-[100px] items-center justify-center overflow-hidden rounded-[8px] border-2 border-primary bg-background">

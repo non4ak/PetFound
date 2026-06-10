@@ -32,14 +32,14 @@ function createPetDefaultValues(): OnboardingPetFormValues {
     petSex: OnboardingPetSex.Male,
     petSize: OnboardingPetSize.Medium,
     petType: OnboardingPetType.Dog,
-***REMOVED***;
+  };
 }
 
 function createPetStepData(values: OnboardingPetFormValues): OnboardingPetStepData {
   return {
     ...values,
     description: values.description ?? "",
-***REMOVED***;
+  };
 }
 
 export default function PetOnboardingScreen() {
@@ -51,10 +51,10 @@ export default function PetOnboardingScreen() {
     getValues,
     handleSubmit,
     watch,
-***REMOVED*** = useForm<OnboardingPetFormValues>({
+  } = useForm<OnboardingPetFormValues>({
     defaultValues: onboardingDraft.pet ?? createPetDefaultValues(),
     resolver: zodResolver(onboardingPetSchema),
-***REMOVED***);
+  });
   const hasMicrochip: boolean = watch("hasMicrochip");
 
   const handleContinuePress = async (
@@ -64,21 +64,21 @@ export default function PetOnboardingScreen() {
 
     startTransition(() => {
       router.push("./stay-in-loop");
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   const handleBackPress = (): void => {
     savePetStep(createPetStepData(getValues()));
     router.back();
-***REMOVED***;
+  };
 
   const handleSkipPress = (): void => {
     clearPetStep();
 
     startTransition(() => {
       router.replace("./stay-in-loop");
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   return (
     <OnboardingScaffold

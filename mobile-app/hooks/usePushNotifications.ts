@@ -37,13 +37,13 @@ type DeviceKeyUpdateResult = "updated" | "endpoint-unavailable";
 function wait(durationInMilliseconds: number): Promise<void> {
   return new Promise((resolve: () => void): void => {
     setTimeout(resolve, durationInMilliseconds);
-***REMOVED***);
+  });
 }
 
 function isRetryableDeviceKeyError(error: unknown): boolean {
   if (!isAxiosError(error)) {
     return true;
-***REMOVED***
+  }
 
   const statusCode: number | undefined = error.response?.status;
   return (
@@ -67,7 +67,7 @@ async function updateDeviceKeyWithRetry(
     try {
       await updateDeviceKeyQuery({ deviceKey });
       return "updated";
-  ***REMOVED*** catch (error: unknown) {
+    } catch (error: unknown) {
       lastError = error;
       const statusCode: number | undefined = isAxiosError(error)
         ? error.response?.status
@@ -79,31 +79,31 @@ async function updateDeviceKeyWithRetry(
           {
             deviceKeyLength: deviceKey.length,
             statusCode,
-        ***REMOVED***,
+          },
         );
         return "endpoint-unavailable";
-    ***REMOVED***
+      }
 
       console.warn("Failed to update the push notification device key.", {
         attemptNumber,
         deviceKeyLength: deviceKey.length,
         responseBody: isAxiosError(error) ? error.response?.data : undefined,
         statusCode,
-    ***REMOVED***);
+      });
 
       if (!isRetryableDeviceKeyError(error)) {
         break;
-    ***REMOVED***
+      }
 
       if (attemptNumber < DEVICE_KEY_UPDATE_ATTEMPTS) {
         await wait(DEVICE_KEY_RETRY_DELAY_MS);
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+      }
+    }
+  }
 
   if (lastError instanceof Error) {
     throw lastError;
-***REMOVED***
+  }
 
   throw new Error("Failed to update the push notification device key.");
 }
@@ -111,13 +111,13 @@ async function updateDeviceKeyWithRetry(
 function parsePositiveInteger(value: unknown): number | null {
   if (typeof value !== "string" && typeof value !== "number") {
     return null;
-***REMOVED***
+  }
 
   const parsedValue: number = Number(value);
 
   if (!Number.isInteger(parsedValue) || parsedValue <= 0) {
     return null;
-***REMOVED***
+  }
 
   return parsedValue;
 }
@@ -125,34 +125,34 @@ function parsePositiveInteger(value: unknown): number | null {
 function parseMatchData(value: unknown): Record<string, unknown> | null {
   if (typeof value === "object" && value !== null) {
     return value as Record<string, unknown>;
-***REMOVED***
+  }
 
   if (typeof value !== "string" || value.trim().length === 0) {
     return null;
-***REMOVED***
+  }
 
   try {
     const parsedValue: unknown = JSON.parse(value);
     return typeof parsedValue === "object" && parsedValue !== null
       ? (parsedValue as Record<string, unknown>)
       : null;
-***REMOVED*** catch (error: unknown) {
+  } catch (error: unknown) {
     console.warn("Invalid match data in push notification.", {
       error,
       value,
-  ***REMOVED***);
+    });
     return null;
-***REMOVED***
+  }
 }
 
 function isMatchFoundType(value: unknown): boolean {
   if (typeof value === "number") {
     return value === 1;
-***REMOVED***
+  }
 
   if (typeof value !== "string") {
     return false;
-***REMOVED***
+  }
 
   const normalizedValue: string = value
     .trim()
@@ -177,8 +177,8 @@ function getAnnouncementIdFromData(
     const announcementId: number | null = parsePositiveInteger(candidate);
     if (announcementId !== null) {
       return announcementId;
-  ***REMOVED***
-***REMOVED***
+    }
+  }
 
   const isMatchFound: boolean = [
     data.type,
@@ -189,7 +189,7 @@ function getAnnouncementIdFromData(
 
   if (!isMatchFound && matchData === null) {
     return null;
-***REMOVED***
+  }
 
   const announcementCandidates: unknown[] = [
     data.announcementId,
@@ -200,8 +200,8 @@ function getAnnouncementIdFromData(
     const announcementId: number | null = parsePositiveInteger(candidate);
     if (announcementId !== null) {
       return announcementId;
-  ***REMOVED***
-***REMOVED***
+    }
+  }
 
   return null;
 }
@@ -225,7 +225,7 @@ function mapRemoteMessage(
       remoteMessage.messageId ??
       `${announcementId}-${remoteMessage.sentTime ?? Date.now()}`,
     title: remoteMessage.notification?.title?.trim() || DEFAULT_MATCH_TITLE,
-***REMOVED***;
+  };
 }
 
 function getNotifeeAnnouncementId(notification: Notification): number | null {
@@ -241,7 +241,7 @@ async function displayMatchNotification(
     name: "Possible matches",
     sound: "default",
     visibility: AndroidVisibility.PUBLIC,
-***REMOVED***);
+  });
 
   const data: Record<string, string> =
     notification.announcementId === null
@@ -255,11 +255,11 @@ async function displayMatchNotification(
       largeIcon: "ic_launcher",
       pressAction: {
         id: DEFAULT_PRESS_ACTION_ID,
-    ***REMOVED***,
+      },
       smallIcon: "ic_notification",
       sound: "default",
       visibility: AndroidVisibility.PUBLIC,
-  ***REMOVED***,
+    },
     body: notification.body,
     data,
     id: notification.id,
@@ -268,10 +268,10 @@ async function displayMatchNotification(
         banner: true,
         list: true,
         sound: true,
-    ***REMOVED***,
-  ***REMOVED***,
+      },
+    },
     title: notification.title,
-***REMOVED***);
+  });
 }
 
 export function usePushNotifications(): PushNotificationsState {
@@ -284,8 +284,8 @@ export function usePushNotifications(): PushNotificationsState {
     router.dismissTo({
       pathname: "/(tabs)/alerts",
       params: { view: "matches" },
-  ***REMOVED***);
-***REMOVED***, [router]);
+    });
+  }, [router]);
 
   const openAnnouncement = useCallback(
     (announcementId: number): void => {
@@ -294,9 +294,9 @@ export function usePushNotifications(): PushNotificationsState {
         router.push({
           pathname: "/pet/[id]",
           params: { id: String(announcementId) },
-      ***REMOVED***);
-    ***REMOVED***);
-  ***REMOVED***,
+        });
+      });
+    },
     [openMatches, router],
   );
 
@@ -304,7 +304,7 @@ export function usePushNotifications(): PushNotificationsState {
     (notification: Notification | undefined): void => {
       if (notification === undefined) {
         return;
-    ***REMOVED***
+      }
 
       const announcementId: number | null =
         getNotifeeAnnouncementId(notification);
@@ -312,10 +312,10 @@ export function usePushNotifications(): PushNotificationsState {
       if (announcementId === null) {
         openMatches();
         return;
-    ***REMOVED***
+      }
 
       openAnnouncement(announcementId);
-  ***REMOVED***,
+    },
     [openAnnouncement, openMatches],
   );
 
@@ -326,10 +326,10 @@ export function usePushNotifications(): PushNotificationsState {
         event.type !== EventType.ACTION_PRESS
       ) {
         return;
-    ***REMOVED***
+      }
 
       openNotifeeNotification(event.detail.notification);
-  ***REMOVED***,
+    },
     [openNotifeeNotification],
   );
 
@@ -342,35 +342,35 @@ export function usePushNotifications(): PushNotificationsState {
 
       if (!isAuthorized) {
         return;
-    ***REMOVED***
+      }
 
       const nextToken: string = await messaging().getToken();
       setToken(nextToken);
-  ***REMOVED***
+    }
 
     void initializeMessaging().catch((error: unknown) => {
       console.warn("Failed to initialize push notifications.", { error });
-  ***REMOVED***);
-***REMOVED***, []);
+    });
+  }, []);
 
   useEffect(() => {
     return messaging().onTokenRefresh((nextToken: string): void => {
       setToken(nextToken);
-  ***REMOVED***);
-***REMOVED***, []);
+    });
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated || token === null) {
       return;
-  ***REMOVED***
+    }
 
     void updateDeviceKeyWithRetry(token).catch((error: unknown) => {
       console.error("Could not persist the push notification device key.", {
         error,
         deviceKeyLength: token.length,
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***, [isAuthenticated, token]);
+      });
+    });
+  }, [isAuthenticated, token]);
 
   useEffect(() => {
     const unsubscribeForeground = messaging().onMessage(
@@ -382,16 +382,16 @@ export function usePushNotifications(): PushNotificationsState {
           console.warn("Failed to display foreground match notification.", {
             error,
             messageId: remoteMessage.messageId,
-        ***REMOVED***);
-      ***REMOVED***);
+          });
+        });
         void queryClient.invalidateQueries({ queryKey: ["alerts"] });
         void queryClient.invalidateQueries({ queryKey: ["matches"] });
-    ***REMOVED***,
+      },
     );
     return () => {
       unsubscribeForeground();
-  ***REMOVED***;
-***REMOVED***, [queryClient]);
+    };
+  }, [queryClient]);
 
   useEffect(() => {
     const unsubscribeNotifee = notifee.onForegroundEvent(handleNotifeeEvent);
@@ -401,18 +401,18 @@ export function usePushNotifications(): PushNotificationsState {
       .then((initialNotification: InitialNotification | null): void => {
         if (initialNotification !== null) {
           openNotifeeNotification(initialNotification.notification);
-      ***REMOVED***
-    ***REMOVED***)
+        }
+      })
       .catch((error: unknown) => {
         console.warn("Failed to read the initial Notifee notification.", {
           error,
-      ***REMOVED***);
-    ***REMOVED***);
+        });
+      });
 
     return unsubscribeNotifee;
-***REMOVED***, [handleNotifeeEvent, openNotifeeNotification]);
+  }, [handleNotifeeEvent, openNotifeeNotification]);
 
   return {
     token,
-***REMOVED***;
+  };
 }

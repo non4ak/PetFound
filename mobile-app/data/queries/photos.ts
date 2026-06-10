@@ -23,7 +23,7 @@ async function getFileSizeInBytes(uri: string, fallbackFileSizeInBytes: number):
 
   if (fileInfo.exists && typeof fileInfo.size === "number" && fileInfo.size > 0) {
     return fileInfo.size;
-***REMOVED***
+  }
 
   return fallbackFileSizeInBytes;
 }
@@ -36,13 +36,13 @@ async function uploadPhotoToBlobStorage(
     headers: sasResponse.requiredHeaders,
     httpMethod: "PUT",
     uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
-***REMOVED***);
+  });
 
   if (uploadResult.status < 200 || uploadResult.status >= 300) {
     throw new Error(
       `Azure Blob upload failed. Status: ${uploadResult.status}. Body: ${uploadResult.body}`,
     );
-***REMOVED***
+  }
 }
 
 export async function uploadPhotoFromUriQuery(
@@ -56,7 +56,7 @@ export async function uploadPhotoFromUriQuery(
     contentType: request.contentType,
     fileName: request.fileName,
     fileSizeInBytes,
-***REMOVED***);
+  });
 
   await uploadPhotoToBlobStorage(sasResponse, request.uri);
 

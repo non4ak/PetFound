@@ -9,7 +9,7 @@ export const MainLayout = () => {
 
     const handleLogout = async (): Promise<void> => {
         await logout();
-  ***REMOVED***;
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col w-full">
@@ -55,7 +55,7 @@ export const MainLayout = () => {
                                 className="ml-4"
                                 onClick={() => {
                                     void handleLogout();
-                              ***REMOVED***}
+                                }}
                                 size="sm"
                                 variant="danger"
                             >

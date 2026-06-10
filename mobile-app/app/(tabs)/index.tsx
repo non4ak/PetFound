@@ -52,11 +52,11 @@ function mergeUniqueAnnouncements(
 
   for (const item of currentItems) {
     announcementsById.set(item.id, item);
-***REMOVED***
+  }
 
   for (const item of nextItems) {
     announcementsById.set(item.id, item);
-***REMOVED***
+  }
 
   return Array.from(announcementsById.values());
 }
@@ -79,16 +79,16 @@ export default function HomeScreen() {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
       setDebouncedSearch(searchText.trim());
-  ***REMOVED***, 400);
+    }, 400);
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
-  ***REMOVED***;
-***REMOVED***, [searchText]);
+    };
+  }, [searchText]);
 
   useEffect(() => {
     setPageNumber(0);
     setAllItems([]);
-***REMOVED***, [debouncedSearch]);
+  }, [debouncedSearch]);
 
   const query: AnnouncementQueryFilter = {
     pageNumber,
@@ -98,7 +98,7 @@ export default function HomeScreen() {
     ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(STATUS_MAP[statusFilter] !== undefined ? { petStatus: STATUS_MAP[statusFilter] } : {}),
     ...(PET_TYPE_MAP[petTypeFilter] !== undefined ? { petType: PET_TYPE_MAP[petTypeFilter] } : {}),
-***REMOVED***;
+  };
 
   const { data, isFetching, isError } = useGetAnnouncements(query);
 
@@ -110,11 +110,11 @@ export default function HomeScreen() {
 
     if (pageNumber === 0) {
       setAllItems(mergeUniqueAnnouncements([], nextItems));
-  ***REMOVED*** else {
+    } else {
       setAllItems((prev) => mergeUniqueAnnouncements(prev, nextItems));
-  ***REMOVED***
+    }
     setIsFetchingMore(false);
-***REMOVED***, [data, pageNumber]);
+  }, [data, pageNumber]);
 
   const handleFilterChange = useCallback(
     (newStatus: StatusFilter, newPetType: PetTypeFilter) => {
@@ -122,7 +122,7 @@ export default function HomeScreen() {
       setPetTypeFilter(newPetType);
       setPageNumber(0);
       setAllItems([]);
-  ***REMOVED***,
+    },
     [],
   );
 
@@ -135,7 +135,7 @@ export default function HomeScreen() {
     if (pageNumber >= data.totalPages - 1) return;
     setIsFetchingMore(true);
     setPageNumber((p) => p + 1);
-***REMOVED***;
+  };
 
   const activeFilterCount =
     (statusFilter !== "all" ? 1 : 0) + (petTypeFilter !== "all" ? 1 : 0);
@@ -207,13 +207,13 @@ export default function HomeScreen() {
                       statusFilter === opt.value
                         ? "border-primary bg-primary"
                         : "border-[#E6EAF0] bg-white"
-                  ***REMOVED***`}
+                    }`}
                   >
                     <Typography
                       variant="body-small"
                       className={`text-[14px] font-medium ${
                         statusFilter === opt.value ? "text-heading-text" : "text-secondary-text"
-                    ***REMOVED***`}
+                      }`}
                     >
                       {opt.label}
                     </Typography>
@@ -235,13 +235,13 @@ export default function HomeScreen() {
                       petTypeFilter === opt.value
                         ? "border-primary bg-primary"
                         : "border-[#E6EAF0] bg-white"
-                  ***REMOVED***`}
+                    }`}
                   >
                     <Typography
                       variant="body-small"
                       className={`text-[14px] font-medium ${
                         petTypeFilter === opt.value ? "text-heading-text" : "text-secondary-text"
-                    ***REMOVED***`}
+                      }`}
                     >
                       {opt.label}
                     </Typography>
@@ -313,14 +313,14 @@ export default function HomeScreen() {
                   No announcements found.{"\n"}Try adjusting your filters.
                 </Typography>
               </View>
-          ***REMOVED***
+            }
             ListFooterComponent={
               isFetchingMore ? (
                 <View className="py-4 items-center">
                   <ActivityIndicator size="small" color="#F2C94C" />
                 </View>
               ) : null
-          ***REMOVED***
+            }
           />
         )}
       </View>

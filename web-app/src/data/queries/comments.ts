@@ -32,7 +32,7 @@ export async function editComment(announcementId: number, commentId: number, com
         latitude: latitude,
         longitude: longitude,
         locationDescription: locationDescription
-  ***REMOVED***;
+    };
     
     return await axiosClient.put(`/admin/announcements/${announcementId}/comments/${commentId}`, requestBody);
 }

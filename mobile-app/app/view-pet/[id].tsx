@@ -30,11 +30,11 @@ export default function ViewPetScreen() {
           onPress: async () => {
             await deletePetMutation.mutateAsync(petId);
             router.back();
-        ***REMOVED***,
-      ***REMOVED***,
+          },
+        },
       ],
     );
-***REMOVED***;
+  };
 
   const chips: string[] = pet
     ? [
@@ -59,7 +59,7 @@ export default function ViewPetScreen() {
           </TouchableOpacity>
           <View className="w-11" />
         </View>
-    ***REMOVED***
+      }
       scrollContentClassName="pb-10 px-4"
     >
       {pet !== undefined && (

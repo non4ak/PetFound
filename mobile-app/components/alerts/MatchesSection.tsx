@@ -14,7 +14,7 @@ export function MatchesSection() {
   const query = {
     pageNumber: 0,
     pageSize: PAGE_SIZE,
-***REMOVED***;
+  };
   const { data, isError, isLoading, isRefetching, refetch } =
     useGetMatches(query);
 
@@ -49,7 +49,7 @@ export function MatchesSection() {
                 No matches found for this status.
               </Typography>
             </View>
-        ***REMOVED***
+          }
           onRefresh={refetch}
           refreshing={isRefetching}
           renderItem={({ item }: { item: MatchResult }) => (
@@ -57,7 +57,7 @@ export function MatchesSection() {
               item={item}
               onPress={(): void =>
                 router.push(`/pet/${item.oppositeAnnouncementId}`)
-            ***REMOVED***
+              }
             />
           )}
           showsVerticalScrollIndicator={false}

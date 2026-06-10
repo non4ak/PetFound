@@ -24,7 +24,7 @@ export default function MapScreen(): React.JSX.Element {
     onUserLocationChange,
     searchBarRef,
     showsUserLocation,
-***REMOVED*** = useLostPetMapController();
+  } = useLostPetMapController();
 
   return (
     <View className="flex-1 bg-[#f2efe9]">

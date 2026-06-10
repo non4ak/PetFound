@@ -15,7 +15,7 @@ export function useMyPetsQuery(): UseQueryResult<Pet[], Error> {
   return useQuery({
     queryFn: getMyPetsQuery,
     queryKey: myPetsQueryKey,
-***REMOVED***);
+  });
 }
 
 export function useCreatePetMutation(): UseMutationResult<Pet, Error, CreatePetRequest> {
@@ -25,8 +25,8 @@ export function useCreatePetMutation(): UseMutationResult<Pet, Error, CreatePetR
     mutationFn: createPetQuery,
     onSuccess: async () => {
       await queryClient.refetchQueries({ queryKey: myPetsQueryKey });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 }
 
 export function useDeletePetMutation(): UseMutationResult<void, Error, number> {
@@ -36,8 +36,8 @@ export function useDeletePetMutation(): UseMutationResult<void, Error, number> {
     mutationFn: deletePetQuery,
     onSuccess: async () => {
       await queryClient.refetchQueries({ queryKey: myPetsQueryKey });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 }
 
 export function useUpdatePetMutation(): UseMutationResult<
@@ -51,6 +51,6 @@ export function useUpdatePetMutation(): UseMutationResult<
     mutationFn: ({ id, data }) => updatePetQuery(id, data),
     onSuccess: async () => {
       await queryClient.refetchQueries({ queryKey: myPetsQueryKey });
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 }

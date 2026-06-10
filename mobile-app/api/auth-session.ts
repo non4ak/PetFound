@@ -6,7 +6,7 @@ const authSessionListeners = new Set<(session: AuthSession | null) => void>();
 function notifyAuthSessionListeners(session: AuthSession | null): void {
   authSessionListeners.forEach((listener) => {
     listener(session);
-***REMOVED***);
+  });
 }
 
 export function clearCurrentAuthSession(): void {
@@ -30,5 +30,5 @@ export function subscribeToAuthSession(
 
   return (): void => {
     authSessionListeners.delete(listener);
-***REMOVED***;
+  };
 }

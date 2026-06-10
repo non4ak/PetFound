@@ -8,21 +8,21 @@ export const useAuthLogin = (options?: Partial<UseMutationOptions<AuthUser, Axio
     return useMutation({
         mutationFn: loginQuery,
         ...options,
-  ***REMOVED***);
+    });
 };
 
 export const useAuthRegister = (options?: Partial<UseMutationOptions<AxiosResponse, AxiosError, SignUpSchema>>) => {
     return useMutation({
         mutationFn: registerQuery,
         ...options,
-  ***REMOVED***);
+    });
 };
 
 export const useAuthLogout = (options?: Partial<UseMutationOptions<AxiosResponse, AxiosError, void>>) => {
     return useMutation({
         mutationFn: logoutQuery,
         ...options,
-  ***REMOVED***);
+    });
 };
 
 export const useAuthRefresh = () => {
@@ -31,5 +31,5 @@ export const useAuthRefresh = () => {
         queryKey: ["auth", "refresh"],
         refetchOnWindowFocus: false,
         retry: false,
-  ***REMOVED***);
+    });
 };

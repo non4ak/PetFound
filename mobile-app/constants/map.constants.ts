@@ -36,97 +36,97 @@ export const CUSTOM_MAP_STYLE: MapStyleElement[] = [
   {
     elementType: "geometry",
     stylers: [{ color: "#f2efe9" }],
-***REMOVED***,
+  },
   {
     elementType: "labels.icon",
     stylers: [{ visibility: "off" }],
-***REMOVED***,
+  },
   {
     elementType: "labels.text.fill",
     stylers: [{ color: "#b0aaa0" }],
-***REMOVED***,
+  },
   {
     elementType: "labels.text.stroke",
     stylers: [{ color: "#f2efe9" }],
-***REMOVED***,
+  },
   {
     featureType: "administrative",
     elementType: "geometry.stroke",
     stylers: [{ color: "#c9c3b8" }],
-***REMOVED***,
+  },
   {
     featureType: "administrative.land_parcel",
     stylers: [{ visibility: "off" }],
-***REMOVED***,
+  },
   {
     featureType: "administrative.neighborhood",
     stylers: [{ visibility: "off" }],
-***REMOVED***,
+  },
   {
     featureType: "poi",
     stylers: [{ visibility: "off" }],
-***REMOVED***,
+  },
   {
     featureType: "poi.business",
     stylers: [{ visibility: "off" }],
-***REMOVED***,
+  },
   {
     featureType: "road",
     elementType: "geometry",
     stylers: [{ color: "#dcd8d2" }],
-***REMOVED***,
+  },
   {
     featureType: "road",
     elementType: "labels",
     stylers: [{ visibility: "simplified" }],
-***REMOVED***,
+  },
   {
     featureType: "road",
     elementType: "labels.icon",
     stylers: [{ visibility: "off" }],
-***REMOVED***,
+  },
   {
     featureType: "road.arterial",
     elementType: "geometry",
     stylers: [{ color: "#dcd8d2" }],
-***REMOVED***,
+  },
   {
     featureType: "road.highway",
     elementType: "geometry",
     stylers: [{ color: "#d4d0c9" }],
-***REMOVED***,
+  },
   {
     featureType: "road.highway",
     elementType: "geometry.stroke",
     stylers: [{ color: "#c9c3b8" }],
-***REMOVED***,
+  },
   {
     featureType: "road.local",
     elementType: "geometry",
     stylers: [{ color: "#e8e4dd" }],
-***REMOVED***,
+  },
   {
     featureType: "transit",
     stylers: [{ visibility: "off" }],
-***REMOVED***,
+  },
   {
     featureType: "water",
     elementType: "geometry",
     stylers: [{ color: "#d4e4ed" }],
-***REMOVED***,
+  },
   {
     featureType: "water",
     elementType: "labels.text.fill",
     stylers: [{ color: "#9eb8cc" }],
-***REMOVED***,
+  },
   {
     featureType: "landscape.man_made",
     elementType: "geometry",
     stylers: [{ color: "#eceae4" }],
-***REMOVED***,
+  },
   {
     featureType: "landscape.natural",
     elementType: "geometry",
     stylers: [{ color: "#e8e5de" }],
-***REMOVED***,
+  },
 ];

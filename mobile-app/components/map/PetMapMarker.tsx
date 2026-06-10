@@ -21,7 +21,7 @@ export function PetMapMarker({ marker, onPress }: PetMapMarkerProps) {
 
   const handlePress = () => {
     onPress(marker.id);
-***REMOVED***;
+  };
 
   return (
     <Marker
@@ -39,7 +39,7 @@ export function PetMapMarker({ marker, onPress }: PetMapMarkerProps) {
             uri: !marker.imageUri?.startsWith("http")
               ? MAP_DEFAULT_PET_IMAGE_URI
               : marker.imageUri,
-        ***REMOVED***}
+          }}
           style={petMarkerStyles.image}
         />
       </View>

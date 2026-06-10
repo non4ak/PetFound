@@ -19,34 +19,34 @@ export default function LostPetPreviewScreen(): React.JSX.Element | null {
   useEffect(() => {
     if (selectedPet === null) {
       router.replace("/lost-pet");
-  ***REMOVED***
-***REMOVED***, [router, selectedPet]);
+    }
+  }, [router, selectedPet]);
 
   const createRequest = useCallback((): CreateAnnouncementRequest | null => {
     if (selectedPet === null) {
       return null;
-  ***REMOVED***
+    }
 
     return createLostPetAnnouncementRequest(details, selectedPet);
-***REMOVED***, [details, selectedPet]);
+  }, [details, selectedPet]);
 
   const { isPosting, onBackPress, onOpenMapPress, onPostPress } =
     useAnnouncementPreviewActions({
       createRequest,
       details,
       resetDraft,
-  ***REMOVED***);
+    });
 
   if (selectedPet === null) {
     return null;
-***REMOVED***
+  }
 
   const badges: string[] = getAnnouncementPreviewBadges({
     breed: selectedPet.breed,
     petSex: selectedPet.petSex,
     petSize: selectedPet.petSize,
     petType: selectedPet.petType,
-***REMOVED***);
+  });
 
   return (
     <AnnouncementPreviewScaffold

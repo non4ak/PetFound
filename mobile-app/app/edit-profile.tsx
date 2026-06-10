@@ -62,15 +62,15 @@ export default function EditProfileScreen() {
     reset,
     setValue,
     watch,
-***REMOVED*** = useForm<EditProfileFormValues>({
+  } = useForm<EditProfileFormValues>({
     defaultValues: editProfileDefaults,
     resolver: zodResolver(editProfileSchema),
-***REMOVED***);
+  });
 
   useEffect(() => {
     if (profileQuery.data === undefined) {
       return;
-  ***REMOVED***
+    }
 
     reset({
       ...editProfileDefaults,
@@ -82,8 +82,8 @@ export default function EditProfileScreen() {
       socialNetwork: profileQuery.data.socialNetwork,
       userPhotoUrl: profileQuery.data.userPhotoUrl,
       userName: profileQuery.data.userName,
-  ***REMOVED***);
-***REMOVED***, [profileQuery.data, reset]);
+    });
+  }, [profileQuery.data, reset]);
 
   const isPhonePublic = watch("isPhonePublic");
   const isSocialPublic = watch("isSocialPublic");
@@ -98,9 +98,9 @@ export default function EditProfileScreen() {
       country: values.country.trim(),
       city: values.city.trim(),
       notificationChannelPreference: values.notificationChannel,
-  ***REMOVED***);
+    });
     router.back();
-***REMOVED***;
+  };
 
   return (
     <AppScreenScaffold
@@ -126,7 +126,7 @@ export default function EditProfileScreen() {
             </Typography>
           </TouchableOpacity>
         </View>
-    ***REMOVED***
+      }
       scrollContentClassName="pb-10"
     >
       <View className=" items-center">

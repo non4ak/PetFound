@@ -36,13 +36,13 @@ export default function ParallaxScrollView({
             [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
             [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
           ),
-      ***REMOVED***,
+        },
         {
           scale: interpolate(scrollOffset.value, [-HEADER_HEIGHT, 0, HEADER_HEIGHT], [2, 1, 1]),
-      ***REMOVED***,
+        },
       ],
-  ***REMOVED***;
-***REMOVED***);
+    };
+  });
 
   return (
     <Animated.ScrollView
@@ -65,15 +65,15 @@ export default function ParallaxScrollView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-***REMOVED***,
+  },
   header: {
     height: HEADER_HEIGHT,
     overflow: 'hidden',
-***REMOVED***,
+  },
   content: {
     flex: 1,
     padding: 32,
     gap: 16,
     overflow: 'hidden',
-***REMOVED***,
+  },
 });

@@ -16,16 +16,16 @@ export const signUpSchema = z
       .min(6, 'Password must be at least 6 characters long')
       .refine((value: string) => /[a-z]/.test(value), {
         message: 'Password must contain at least one lowercase letter',
-    ***REMOVED***)
+      })
       .refine((value: string) => /[A-Z]/.test(value), {
         message: 'Password must contain at least one uppercase letter',
-    ***REMOVED***)
+      })
       .refine((value: string) => /\d/.test(value), {
         message: 'Password must contain at least one digit',
-    ***REMOVED***)
+      })
       .refine((value: string) => new Set(value).size >= 3, {
         message: 'Password must contain at least 3 unique characters',
-    ***REMOVED***),
+      }),
     username: z
       .string()
       .trim()
@@ -34,11 +34,11 @@ export const signUpSchema = z
         allowedUserNamePattern,
         'Username can contain only letters, numbers, and - . _ @ + symbols',
       ),
-***REMOVED***)
+  })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ['confirmPassword'],
-***REMOVED***);
+  });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type SignUpFormValues = z.infer<typeof signUpSchema>;

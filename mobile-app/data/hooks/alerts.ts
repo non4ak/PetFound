@@ -14,5 +14,5 @@ export function useGetAlerts(query?: AlertsQuery) {
   return useQuery({
     queryKey: ["alerts", resolvedQuery],
     queryFn: () => getAlerts(resolvedQuery),
-***REMOVED***);
+  });
 }

@@ -20,7 +20,7 @@ function createSubmitOnboardingRequest(draft: OnboardingDraft): SubmitOnboarding
     ...(stayInLoop !== null
       ? {
           notificationChannelPreference: stayInLoop.notificationChannelPreference,
-      ***REMOVED***
+        }
       : {}),
     ...(pet !== null
       ? {
@@ -37,9 +37,9 @@ function createSubmitOnboardingRequest(draft: OnboardingDraft): SubmitOnboarding
           ...(pet.petPhotoUrl.trim().length > 0
             ? { petPhotoUrl: pet.petPhotoUrl.trim() }
             : {}),
-      ***REMOVED***
+        }
       : {}),
-***REMOVED***;
+  };
 }
 
 export async function submitOnboardingQuery(draft: OnboardingDraft): Promise<void> {

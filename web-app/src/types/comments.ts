@@ -27,7 +27,7 @@ export interface CommentDto {
     author: {
         id: number;
         userName: string;
-  ***REMOVED***;
+    };
     replies: CommentDto[];
 }
 

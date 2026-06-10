@@ -12,11 +12,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function isAuthSession(value: unknown): value is AuthSession {
   if (!isRecord(value)) {
     return false;
-***REMOVED***
+  }
 
   if (!isRecord(value.user) || !isRecord(value.tokens)) {
     return false;
-***REMOVED***
+  }
 
   return (
     typeof value.user.email === 'string' &&
@@ -32,7 +32,7 @@ function parseAuthSession(value: string): AuthSession {
 
   if (!isAuthSession(parsedValue)) {
     throw new Error('Stored auth session has an invalid shape.');
-***REMOVED***
+  }
 
   return parsedValue;
 }
@@ -46,7 +46,7 @@ export async function readStoredAuthSession(): Promise<AuthSession | null> {
 
   if (storedValue === null) {
     return null;
-***REMOVED***
+  }
 
   return parseAuthSession(storedValue);
 }
@@ -66,11 +66,11 @@ export async function readStoredOnboardingActive(): Promise<boolean> {
 
   if (storedValue === null) {
     return false;
-***REMOVED***
+  }
 
   if (storedValue !== 'true' && storedValue !== 'false') {
     throw new Error('Stored onboarding state has an invalid shape.');
-***REMOVED***
+  }
 
   return storedValue === 'true';
 }

@@ -32,10 +32,10 @@ export default function FoundPetInfoScreen() {
     control,
     formState: { errors },
     handleSubmit,
-***REMOVED*** = useForm<FoundPetInfoFormValues>({
+  } = useForm<FoundPetInfoFormValues>({
     defaultValues: info,
     resolver: zodResolver(foundPetInfoSchema),
-***REMOVED***);
+  });
 
   const handleContinue = (values: FoundPetInfoFormValues): void => {
     updateInfo({
@@ -46,9 +46,9 @@ export default function FoundPetInfoScreen() {
       petSex: values.petSex,
       petSize: values.petSize,
       petType: values.petType,
-  ***REMOVED***);
+    });
     router.push("/found-pet/details");
-***REMOVED***;
+  };
 
   return (
     <AppScreenScaffold
@@ -61,12 +61,12 @@ export default function FoundPetInfoScreen() {
             size="md"
             trailingIcon={
               <Ionicons name="arrow-forward" size={18} color="#1E1E1E" />
-          ***REMOVED***
+            }
             variant="outline"
           />
           <OnboardingProgress activeStep={2} totalSteps={4} />
         </View>
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -77,7 +77,7 @@ export default function FoundPetInfoScreen() {
           </TouchableOpacity>
           <View className="w-10" />
         </View>
-    ***REMOVED***
+      }
     >
       <Stepper
         currentPage={2}
@@ -171,7 +171,7 @@ export default function FoundPetInfoScreen() {
             ) : (
               <View />
             )
-        ***REMOVED***
+          }
         />
       </View>
     </AppScreenScaffold>

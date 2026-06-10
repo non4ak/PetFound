@@ -30,7 +30,7 @@ function createInitialInfo(): FoundPetInfo {
     petSex: null,
     petSize: null,
     petType: null,
-***REMOVED***;
+  };
 }
 
 function createInitialDetails(): FoundPetDetails {
@@ -44,7 +44,7 @@ function createInitialDetails(): FoundPetDetails {
     showPhone: true,
     showTelegram: true,
     timeApproximate: "",
-***REMOVED***;
+  };
 }
 
 const FoundPetFlowContext =
@@ -61,7 +61,7 @@ export function FoundPetFlowProvider({ children }: { children: ReactNode }) {
     setInfo(createInitialInfo());
     setDetails(createInitialDetails());
     setPhotoUri(null);
-***REMOVED***;
+  };
 
   const value: FoundPetFlowContextValue = {
     details,
@@ -71,7 +71,7 @@ export function FoundPetFlowProvider({ children }: { children: ReactNode }) {
     setPhotoUri,
     updateDetails: setDetails,
     updateInfo: setInfo,
-***REMOVED***;
+  };
 
   return (
     <FoundPetFlowContext.Provider value={value}>
@@ -88,7 +88,7 @@ export function useFoundPetFlow(): FoundPetFlowContextValue {
     throw new Error(
       "useFoundPetFlow must be used within a FoundPetFlowProvider"
     );
-***REMOVED***
+  }
 
   return context;
 }

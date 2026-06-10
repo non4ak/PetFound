@@ -33,7 +33,7 @@ function getTrimmedValue(value: string): string | null {
 
   if (trimmedValue.length === 0) {
     return null;
-***REMOVED***
+  }
 
   return trimmedValue;
 }
@@ -59,7 +59,7 @@ function createBaseAnnouncementRequest(
     ...(details.lastSeenLongitude !== null
       ? { lastSeenLongitude: details.lastSeenLongitude }
       : {}),
-***REMOVED***;
+  };
 }
 
 export function createLostPetAnnouncementRequest(
@@ -69,7 +69,7 @@ export function createLostPetAnnouncementRequest(
   return {
     ...createBaseAnnouncementRequest(details, AnnouncementPetStatus.Lost),
     petId: selectedPet.id,
-***REMOVED***;
+  };
 }
 
 export function createFoundPetAnnouncementRequest(
@@ -94,7 +94,7 @@ export function createFoundPetAnnouncementRequest(
     ...(info.petSex !== null ? { petSex: info.petSex } : {}),
     ...(info.petSize !== null ? { petSize: info.petSize } : {}),
     ...(info.petType !== null ? { petType: info.petType } : {}),
-***REMOVED***;
+  };
 }
 
 export function getAnnouncementPreviewBadges(
@@ -107,15 +107,15 @@ export function getAnnouncementPreviewBadges(
 
   if (breed !== null) {
     badges.push(breed);
-***REMOVED***
+  }
 
   if (sexLabel !== null) {
     badges.push(sexLabel);
-***REMOVED***
+  }
 
   if (sizeLabel !== null) {
     badges.push(sizeLabel);
-***REMOVED***
+  }
 
   return badges;
 }

@@ -25,9 +25,9 @@ export async function getAllAnnouncements(query?: AnnouncementQueryFilter) {
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== "") {
         params[key] = value;
-    ***REMOVED***
-  ***REMOVED***);
-***REMOVED***
+      }
+    });
+  }
 
   const response = await axiosClient.get<AnnouncementQueryFilterResponse>(
     `/announcements`,
@@ -53,9 +53,9 @@ export async function getMyAnnouncements(query?: AnnouncementQueryFilter) {
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== "") {
         params[key] = value;
-    ***REMOVED***
-  ***REMOVED***);
-***REMOVED***
+      }
+    });
+  }
 
   const response = await axiosClient.get<AnnouncementQueryFilterResponse>(
     `/announcements/mine`,

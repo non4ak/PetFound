@@ -22,29 +22,29 @@ export const Comments = () => {
         setComments(commentsData.items);
         setTotalComments(commentsData.totalCount);
         setTotalPages(commentsData.totalPages);
-  ***REMOVED***;
+    };
     
     const handleNextPage = async () => {
         if ((pageNumber+1) < totalPages) setPageNumber(pageNumber+1);
-  ***REMOVED***
+    }
 
     const handlePrevPage = async () => {
         if (pageNumber > 0) setPageNumber(pageNumber-1);
-  ***REMOVED***
+    }
 
     const handleDeleteComment = async (announcementId: number, commentId: number) => {
         await deleteComment(announcementId, commentId);
         fetchComments();
-  ***REMOVED***
+    }
 
     const handleEditComment = async (announcementId: number, commentId: number, commentMessage: string, imageUrl: string | null, latitude: number | null, longitude: number | null, locationDescription: string | null) => {
         await editComment(announcementId, commentId, commentMessage, imageUrl, latitude, longitude, locationDescription);
         fetchComments();
-  ***REMOVED***
+    }
 
     useEffect(() => {
         fetchComments();
-  ***REMOVED***, [pageNumber, pageSize, searchId, statusFilter]);
+    }, [pageNumber, pageSize, searchId, statusFilter]);
 
     return (
         <div className="bg-white shadow rounded-lg p-6">

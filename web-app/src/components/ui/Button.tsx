@@ -44,7 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         type,
         variant,
         ...restProps
-  ***REMOVED*** = props;
+    } = props;
 
     const resolvedVariant: ButtonVariant = variant ?? "primary";
     const resolvedSize: ButtonSize = size ?? "md";
@@ -76,7 +76,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
                 <span className="sr-only">{children}</span>
             </button>
         );
-  ***REMOVED***
+    }
 
     const buttonClassName = cn(
         baseClassName,

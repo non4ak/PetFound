@@ -43,7 +43,7 @@ export interface ControlledMediaUploadProps<T extends FieldValues> {
 function getAssetFileName(asset: ImagePicker.ImagePickerAsset): string {
   if (typeof asset.fileName === "string" && asset.fileName.trim().length > 0) {
     return asset.fileName.trim();
-***REMOVED***
+  }
 
   return DEFAULT_FILE_NAME;
 }
@@ -51,7 +51,7 @@ function getAssetFileName(asset: ImagePicker.ImagePickerAsset): string {
 function getAssetContentType(asset: ImagePicker.ImagePickerAsset): string {
   if (typeof asset.mimeType === "string" && asset.mimeType.trim().length > 0) {
     return asset.mimeType.trim();
-***REMOVED***
+  }
 
   return DEFAULT_CONTENT_TYPE;
 }
@@ -59,7 +59,7 @@ function getAssetContentType(asset: ImagePicker.ImagePickerAsset): string {
 function getAssetFileSizeInBytes(asset: ImagePicker.ImagePickerAsset): number {
   if (typeof asset.fileSize === "number" && asset.fileSize > 0) {
     return asset.fileSize;
-***REMOVED***
+  }
 
   return DEFAULT_FILE_SIZE_IN_BYTES;
 }
@@ -72,7 +72,7 @@ async function requestMediaLibraryAccess(
 
   if (permissionResult.granted) {
     return true;
-***REMOVED***
+  }
 
   Alert.alert(permissionDeniedTitle, permissionDeniedMessage);
   return false;
@@ -86,7 +86,7 @@ async function requestCameraAccess(
 
   if (permissionResult.granted) {
     return true;
-***REMOVED***
+  }
 
   Alert.alert(permissionDeniedTitle, permissionDeniedMessage);
   return false;
@@ -103,11 +103,11 @@ async function pickMediaFromLibrary(
     aspect: [aspect[0], aspect[1]],
     mediaTypes,
     quality: pickerQuality,
-***REMOVED***);
+  });
 
   if (pickerResult.canceled || pickerResult.assets.length === 0) {
     return null;
-***REMOVED***
+  }
 
   return pickerResult.assets[0];
 }
@@ -123,11 +123,11 @@ async function takeMediaWithCamera(
     aspect: [aspect[0], aspect[1]],
     mediaTypes,
     quality: pickerQuality,
-***REMOVED***);
+  });
 
   if (pickerResult.canceled || pickerResult.assets.length === 0) {
     return null;
-***REMOVED***
+  }
 
   return pickerResult.assets[0];
 }
@@ -135,11 +135,11 @@ async function takeMediaWithCamera(
 function chooseMediaSource(sourceMode: MediaUploadSourceMode): Promise<"camera" | "library" | null> {
   if (sourceMode === "camera") {
     return Promise.resolve("camera");
-***REMOVED***
+  }
 
   if (sourceMode === "library") {
     return Promise.resolve("library");
-***REMOVED***
+  }
 
   return new Promise((resolve) => {
     Alert.alert(
@@ -149,19 +149,19 @@ function chooseMediaSource(sourceMode: MediaUploadSourceMode): Promise<"camera" 
         {
           text: "Take photo",
           onPress: () => resolve("camera"),
-      ***REMOVED***,
+        },
         {
           text: "Choose from gallery",
           onPress: () => resolve("library"),
-      ***REMOVED***,
+        },
         {
           style: "cancel",
           text: "Cancel",
           onPress: () => resolve(null),
-      ***REMOVED***,
+        },
       ],
     );
-***REMOVED***);
+  });
 }
 
 export function ControlledMediaUpload<T extends FieldValues>({
@@ -198,7 +198,7 @@ export function ControlledMediaUpload<T extends FieldValues>({
 
           if (mediaSource === null) {
             return;
-        ***REMOVED***
+          }
 
           const hasAccess: boolean =
             mediaSource === "camera"
@@ -213,7 +213,7 @@ export function ControlledMediaUpload<T extends FieldValues>({
 
           if (!hasAccess) {
             return;
-        ***REMOVED***
+          }
 
           const selectedAsset =
             mediaSource === "camera"
@@ -232,7 +232,7 @@ export function ControlledMediaUpload<T extends FieldValues>({
 
           if (selectedAsset === null) {
             return;
-        ***REMOVED***
+          }
 
           setIsUploading(true);
           setLocalPreviewUri(selectedAsset.uri);
@@ -243,24 +243,24 @@ export function ControlledMediaUpload<T extends FieldValues>({
               fileName: getAssetFileName(selectedAsset),
               fileSizeInBytes: getAssetFileSizeInBytes(selectedAsset),
               uri: selectedAsset.uri,
-          ***REMOVED***);
+            });
 
             onChange(uploadedMediaUrl);
             onUploaded?.(uploadedMediaUrl);
-        ***REMOVED*** catch (uploadError: unknown) {
+          } catch (uploadError: unknown) {
             Alert.alert(
               uploadFailedTitle,
               getApiErrorMessage(uploadError, uploadFailedFallbackMessage),
             );
-        ***REMOVED*** finally {
+          } finally {
             setIsUploading(false);
-        ***REMOVED***
-      ***REMOVED***;
+          }
+        };
 
         const handleRemovePress = (): void => {
           setLocalPreviewUri("");
           onChange("");
-      ***REMOVED***;
+        };
 
         return children({
           errorText: displayedErrorText,
@@ -269,8 +269,8 @@ export function ControlledMediaUpload<T extends FieldValues>({
           remove: handleRemovePress,
           select: handleSelectPress,
           value: uploadedUrl,
-      ***REMOVED***);
-    ***REMOVED***}
+        });
+      }}
     />
   );
 }

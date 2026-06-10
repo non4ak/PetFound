@@ -8,16 +8,16 @@ export function getApiErrorMessage(error: unknown, fallbackMessage: string): str
 
     if (typeof detail === 'string' && detail.trim().length > 0) {
       return detail;
-  ***REMOVED***
+    }
 
     if (typeof error.message === 'string' && error.message.trim().length > 0) {
       return error.message;
-  ***REMOVED***
-***REMOVED***
+    }
+  }
 
   if (error instanceof Error && error.message.trim().length > 0) {
     return error.message;
-***REMOVED***
+  }
 
   return fallbackMessage;
 }
@@ -25,7 +25,7 @@ export function getApiErrorMessage(error: unknown, fallbackMessage: string): str
 export function isUnauthorizedApiError(error: unknown): boolean {
   if (!axios.isAxiosError(error)) {
     return false;
-***REMOVED***
+  }
 
   const statusCode: number | undefined = error.response?.status;
 

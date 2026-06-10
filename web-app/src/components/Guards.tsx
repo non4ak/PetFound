@@ -19,11 +19,11 @@ export const ProtectedGuard = ({ children }: GuardProps) => {
                 </div>
             </div>
         );
-  ***REMOVED***
+    }
 
     if (!isAuthenticated) {
         return <Navigate to={ROUTES.LOGIN} replace />;
-  ***REMOVED***
+    }
 
     return <>{children}</>;
 };
@@ -40,11 +40,11 @@ export const GuestGuard = ({ children }: GuardProps) => {
                 </div>
             </div>
         );
-  ***REMOVED***
+    }
 
     if (isAuthenticated) {
         return <Navigate to={ROUTES.HOME} replace />;
-  ***REMOVED***
+    }
 
     return <>{children}</>;
 };

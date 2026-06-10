@@ -17,7 +17,7 @@ export default function FoundPetLocationPickerScreen(): React.JSX.Element {
       ? {
           latitude: details.lastSeenLatitude,
           longitude: details.lastSeenLongitude,
-      ***REMOVED***
+        }
       : null;
 
   const handleConfirm = (location: PickedAnnouncementLocation): void => {
@@ -27,9 +27,9 @@ export default function FoundPetLocationPickerScreen(): React.JSX.Element {
       country: location.country ?? details.country,
       lastSeenLatitude: location.latitude,
       lastSeenLongitude: location.longitude,
-  ***REMOVED***);
+    });
     router.back();
-***REMOVED***;
+  };
 
   return (
     <AnnouncementLocationMapPicker

@@ -58,7 +58,7 @@ export default function MyAnnouncementsScreen() {
             className="rounded-full px-5 py-2"
             style={{
               backgroundColor: activeTab === tab.key ? "#F2C94C" : "#FFFFFF",
-          ***REMOVED***}
+            }}
           >
             <Typography
               variant="body-small"
@@ -102,7 +102,7 @@ export default function MyAnnouncementsScreen() {
                 item={item}
                 onPress={() =>
                   router.push({ pathname: "/pet/[id]", params: { id: item.id, mine: "1" } })
-              ***REMOVED***
+                }
               />
             </View>
           )}

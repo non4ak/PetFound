@@ -15,24 +15,24 @@ export const SignUp = () => {
         onSuccess: (_response, variables) => {
             reset();
             toast.success(`Account created for ${variables.email}. Confirm the email before logging in.`);
-      ***REMOVED***,
+        },
         onError: (error) => {
             toast.error(getApiErrorMessage(error, "Registration failed"));
-      ***REMOVED***
-  ***REMOVED***);
+        }
+    });
 
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors },
-  ***REMOVED*** = useForm<SignUpSchema>({
+    } = useForm<SignUpSchema>({
         resolver: zodResolver(signUpSchema),
-  ***REMOVED***);
+    });
 
     const onSubmit = async (data: SignUpSchema) => {
         await registerUser(data);
-  ***REMOVED***;
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gray-50">

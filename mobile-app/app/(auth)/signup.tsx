@@ -48,15 +48,15 @@ export default function SignUpScreen() {
     formState: { errors },
     handleSubmit,
     setError,
-***REMOVED*** = useForm<SignUpFormValues>({
+  } = useForm<SignUpFormValues>({
     defaultValues: {
       confirmPassword: "",
       email: "",
       password: "",
       username: "",
-  ***REMOVED***,
+    },
     resolver: zodResolver(signUpSchema),
-***REMOVED***);
+  });
   const isAuthActionPending: boolean =
     registerMutation.isPending ||
     googleLoginMutation.isPending ||
@@ -69,28 +69,28 @@ export default function SignUpScreen() {
       if (Platform.OS === "android") {
         await GoogleSignin.hasPlayServices({
           showPlayServicesUpdateDialog: true,
-      ***REMOVED***);
-    ***REMOVED***
+        });
+      }
 
       const googleResponse: SignInResponse = await GoogleSignin.signIn();
 
       if (isCancelledResponse(googleResponse)) {
         return;
-    ***REMOVED***
+      }
 
       if (!isSuccessResponse(googleResponse)) {
         throw new Error("Google sign-in failed.");
-    ***REMOVED***
+      }
 
       const idToken: string | null = googleResponse.data.idToken;
 
       if (idToken === null || idToken.trim().length === 0) {
         throw new Error("Google sign-in did not return an ID token.");
-    ***REMOVED***
+      }
 
       const session = await googleLoginMutation.mutateAsync({
         idToken,
-    ***REMOVED***);
+      });
 
       clearOnboardingDraft();
       await auth.startOnboarding();
@@ -98,8 +98,8 @@ export default function SignUpScreen() {
 
       startTransition(() => {
         router.replace("/(onboarding)/profile");
-    ***REMOVED***);
-  ***REMOVED*** catch (error) {
+      });
+    } catch (error) {
       console.error("Google Sign-In failed.", {
         code: isErrorWithCode(error) ? error.code : null,
         hasWebClientId:
@@ -108,18 +108,18 @@ export default function SignUpScreen() {
         message: error instanceof Error ? error.message : null,
         name: error instanceof Error ? error.name : null,
         platform: Platform.OS,
-    ***REMOVED***);
+      });
 
       setError("root", {
         message: getApiErrorMessage(
           error,
           "Unable to sign in with Google right now.",
         ),
-    ***REMOVED***);
-  ***REMOVED*** finally {
+      });
+    } finally {
       setIsGoogleSignInPending(false);
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   const handleSignUp = async (values: SignUpFormValues): Promise<void> => {
     try {
@@ -127,26 +127,26 @@ export default function SignUpScreen() {
         email: values.email.trim(),
         password: values.password,
         userName: values.username.trim(),
-    ***REMOVED***);
+      });
       clearOnboardingDraft();
       await auth.startOnboarding();
       auth.prepareEmailConfirmation({
         email: values.email.trim(),
         password: values.password,
-    ***REMOVED***);
+      });
 
       startTransition(() => {
         router.replace("/(onboarding)/confirm-email");
-    ***REMOVED***);
-  ***REMOVED*** catch (error) {
+      });
+    } catch (error) {
       setError("root", {
         message: getApiErrorMessage(
           error,
           "Unable to create your account right now.",
         ),
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***;
+      });
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-alt-bg">
@@ -255,7 +255,7 @@ export default function SignUpScreen() {
                 registerMutation.isPending
                   ? "Creating Account..."
                   : "Create Account"
-            ***REMOVED***
+              }
               onPress={handleSubmit(handleSignUp)}
               size="lg"
               variant="primary"
@@ -278,14 +278,14 @@ export default function SignUpScreen() {
                 isGoogleSignInPending || googleLoginMutation.isPending
                   ? "Connecting..."
                   : "Continue with Google"
-            ***REMOVED***
+              }
               leadingIcon={
                 <Image
                   resizeMode="contain"
                   source={GOOGLE_LOGO_SOURCE}
                   style={{ height: 20, width: 20 }}
                 />
-            ***REMOVED***
+              }
               onPress={handleGoogleSignUp}
               size="md"
               variant="outline"

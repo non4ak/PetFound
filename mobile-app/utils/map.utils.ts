@@ -31,7 +31,7 @@ const PET_TYPE_FILTERS: Readonly<Record<string, PetTypeQueryValue>> = {
 export function getFilterChipClassName(variant: MapFilterChipVariant): string {
   if (variant === "accent") {
     return "bg-primary";
-***REMOVED***
+  }
 
   return "bg-white";
 }
@@ -39,7 +39,7 @@ export function getFilterChipClassName(variant: MapFilterChipVariant): string {
 export function getFilterChipTextColor(variant: MapFilterChipVariant): string {
   if (variant === "accent") {
     return "#0F172A";
-***REMOVED***
+  }
 
   return "#000000";
 }
@@ -56,14 +56,14 @@ export function getActiveMapFilterIds(
   Object.entries(STATUS_FILTERS).forEach(([filterId, petStatus]) => {
     if (query.petStatus === petStatus) {
       activeFilterIds.push(filterId);
-  ***REMOVED***
-***REMOVED***);
+    }
+  });
 
   Object.entries(PET_TYPE_FILTERS).forEach(([filterId, petType]) => {
     if (query.petType === petType) {
       activeFilterIds.push(filterId);
-  ***REMOVED***
-***REMOVED***);
+    }
+  });
 
   return activeFilterIds;
 }
@@ -79,8 +79,8 @@ export function getNextMapFilterQuery(
     return {
       ...query,
       petStatus: query.petStatus === petStatus ? undefined : petStatus,
-  ***REMOVED***;
-***REMOVED***
+    };
+  }
 
   const petType: PetTypeQueryValue | undefined = PET_TYPE_FILTERS[filterId];
 
@@ -88,8 +88,8 @@ export function getNextMapFilterQuery(
     return {
       ...query,
       petType: query.petType === petType ? undefined : petType,
-  ***REMOVED***;
-***REMOVED***
+    };
+  }
 
   return query;
 }
@@ -99,7 +99,7 @@ export function mapAnnouncementsToMarkers(
 ): PetMapMarkerData[] {
   if (announcements === undefined) {
     return [];
-***REMOVED***
+  }
 
   return announcements.reduce<PetMapMarkerData[]>(
     (markers: PetMapMarkerData[], announcement: Announcement) => {
@@ -110,7 +110,7 @@ export function mapAnnouncementsToMarkers(
 
       if (coordinate === null) {
         return markers;
-    ***REMOVED***
+      }
 
       markers.push({
         id: announcement.id,
@@ -124,10 +124,10 @@ export function mapAnnouncementsToMarkers(
           announcement.petStatus === AnnouncementPetStatus.Lost
             ? "lost"
             : "found",
-    ***REMOVED***);
+      });
 
       return markers;
-  ***REMOVED***,
+    },
     [],
   );
 }

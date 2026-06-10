@@ -36,9 +36,9 @@ export default function CreatePetScreen() {
       petSex: OnboardingPetSex.Male,
       petSize: OnboardingPetSize.Medium,
       petType: OnboardingPetType.Dog,
-  ***REMOVED***,
+    },
     resolver: zodResolver(onboardingPetSchema),
-***REMOVED***);
+  });
   const hasMicrochip: boolean = watch("hasMicrochip");
 
   const handleCreatePetPress = async (values: OnboardingPetFormValues): Promise<void> => {
@@ -58,9 +58,9 @@ export default function CreatePetScreen() {
       ...(values.petPhotoUrl.trim().length > 0
         ? { petPhotoUrl: values.petPhotoUrl }
         : {}),
-  ***REMOVED***);
+    });
     router.back();
-***REMOVED***;
+  };
 
   return (
     <AppScreenScaffold
@@ -73,7 +73,7 @@ export default function CreatePetScreen() {
           size="lg"
           variant="primary"
         />
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -83,7 +83,7 @@ export default function CreatePetScreen() {
             <Ionicons name="arrow-back" size={22} color="#1E1E1E" />
           </TouchableOpacity>
         </View>
-    ***REMOVED***
+      }
       contentClassName="py-0"
     >
       <View className="gap-2 mb-8 px-6">

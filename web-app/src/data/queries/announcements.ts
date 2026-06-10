@@ -6,7 +6,7 @@ export async function getAnnouncements(petType?: number, status?: number, isActi
         search: params.search,
         pageNumber: params.pageNumber,
         pageSize: params.pageSize,
-  ***REMOVED***;*/
+    };*/
 
     const response = await axiosClient.get<GetAnnouncementsRespond<PagedList<AnnouncementDto>>>("/admin/announcements", {params: {petType: petType, PetStatus: status, isActive: isActive, city: city, country: country, pageNumber: pageNumber, pageSize: pageSize}});
 
@@ -40,7 +40,7 @@ export async function editAnnouncement(id: number, petStatus: number, city: stri
         "lastSeenLatitude": latitude,
         "lastSeenLongitude": longitude,
         "petStatus": petStatus
-  ***REMOVED***;
+    };
     console.log("Request body for editing announcement:", requestBody); // Debug alert
     await axiosClient.put(`/admin/announcements/${id}`, requestBody);
 }

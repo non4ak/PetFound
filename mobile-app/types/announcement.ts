@@ -83,8 +83,8 @@ export interface AnnouncementResponse {
       chipNumber: string;
       description: string;
       petPhotoUrl: string;
-  ***REMOVED***
-***REMOVED***
+    }
+  }
 }
 
 export type AnnouncementQueryFilter = {
@@ -139,5 +139,5 @@ export type AnnouncementQueryFilterResponse = {
     pageSize: number;
     totalCount: number;
     items: Announcement[]
-***REMOVED***
+  }
 }

@@ -73,14 +73,14 @@ export default function ProfileScreen() {
   const handleLogoutPress = async (): Promise<void> => {
     try {
       await logoutMutation.mutateAsync();
-  ***REMOVED*** catch (error) {
+    } catch (error) {
       if (!isUnauthorizedApiError(error)) {
         throw error;
-    ***REMOVED***
-  ***REMOVED***
+      }
+    }
 
     await auth.logout();
-***REMOVED***;
+  };
 
   return (
     <AppScreenScaffold
@@ -97,7 +97,7 @@ export default function ProfileScreen() {
             </Typography>
           </TouchableOpacity>
         </View>
-    ***REMOVED***
+      }
       scrollContentClassName="pb-10"
     >
       <View className="rounded-lg bg-white py-12">
@@ -173,7 +173,7 @@ export default function ProfileScreen() {
             shadowOpacity: 0.12,
             shadowRadius: 8,
             elevation: 2,
-        ***REMOVED***}
+          }}
           onPress={() => router.push("/my-announcements")}
         >
           <View className="flex-row items-center gap-3">
@@ -203,7 +203,7 @@ export default function ProfileScreen() {
                 + Add
               </Typography>
             </TouchableOpacity>
-        ***REMOVED***
+          }
         >
           <View className="pt-3 gap-3">
             {pets.length === 0 ? (

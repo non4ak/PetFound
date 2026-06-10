@@ -32,10 +32,10 @@ export function AnnouncementPreviewScaffold({
           size="md"
           trailingIcon={
             <Ionicons name="arrow-forward" size={18} color="#1E1E1E" />
-        ***REMOVED***
+          }
           variant="primary"
         />
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -56,7 +56,7 @@ export function AnnouncementPreviewScaffold({
             </Typography>
           </TouchableOpacity>
         </View>
-    ***REMOVED***
+      }
     >
       <Typography variant="body-small" className="text-secondary-text">
         How your post will look in the feed

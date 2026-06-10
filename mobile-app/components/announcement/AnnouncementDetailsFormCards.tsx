@@ -28,7 +28,7 @@ interface AnnouncementDetailsFormCardsProps<
     dateLastSeen?: { message?: string };
     description?: { message?: string };
     timeApproximate?: { message?: string };
-***REMOVED***;
+  };
   isDescriptionOptional?: boolean;
   onChooseLocationPress: () => void;
 }

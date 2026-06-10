@@ -39,12 +39,12 @@ const STATUS_STYLES = {
     backgroundColor: "#D4EDDA",
     label: "FOUND",
     textColor: "#28A745",
-***REMOVED***,
+  },
   lost: {
     backgroundColor: "#FFDCE1",
     label: "LOST",
     textColor: "#D95068",
-***REMOVED***,
+  },
 };
 
 function getSocialMediaUrl(socialNetwork: string): string {
@@ -55,7 +55,7 @@ function getSocialMediaUrl(socialNetwork: string): string {
     trimmedSocialNetwork.startsWith("http://")
   ) {
     return trimmedSocialNetwork;
-***REMOVED***
+  }
 
   return `https://t.me/${trimmedSocialNetwork.replace(/^@/, "")}`;
 }
@@ -63,13 +63,13 @@ function getSocialMediaUrl(socialNetwork: string): string {
 async function openContactUrl(url: string, errorMessage: string): Promise<void> {
   try {
     await Linking.openURL(url);
-***REMOVED*** catch (error: unknown) {
+  } catch (error: unknown) {
     console.warn("Failed to open announcement contact.", {
       error,
       url,
-  ***REMOVED***);
+    });
     Alert.alert("Could not open contact", errorMessage);
-***REMOVED***
+  }
 }
 
 function flattenComments(
@@ -79,7 +79,7 @@ function flattenComments(
   function traverse(c: Comment, depth: number) {
     result.push({ comment: c, depth });
     c.replies.forEach((r) => traverse(r, depth + 1));
-***REMOVED***
+  }
   comments.forEach((c) => traverse(c, 0));
   return result;
 }
@@ -119,7 +119,7 @@ export default function PetDetailsScreen() {
 
   const handleBackPress = (): void => {
     router.back();
-***REMOVED***;
+  };
 
   const handleOpenMapPress = (): void => {
     const coordinate: MapTargetCoordinate | null = getMapTargetCoordinate(
@@ -133,13 +133,13 @@ export default function PetDetailsScreen() {
         "This announcement does not have map coordinates.",
       );
       return;
-  ***REMOVED***
+    }
 
     router.dismissTo({
       pathname: "/(tabs)/map",
       params: getMapTargetParams(coordinate),
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   const handleArchivePress = () => {
     Alert.alert(
@@ -154,22 +154,22 @@ export default function PetDetailsScreen() {
             try {
               await archiveAnnouncement(announcementId);
               router.back();
-          ***REMOVED*** catch {
+            } catch {
               Alert.alert("Error", "Failed to archive. Please try again.");
-          ***REMOVED***
-        ***REMOVED***,
-      ***REMOVED***,
+            }
+          },
+        },
       ],
     );
-***REMOVED***;
+  };
 
   const handleRestorePress = async () => {
     try {
       await restoreAnnouncement(announcementId);
-  ***REMOVED*** catch {
+    } catch {
       Alert.alert("Error", "Failed to restore. Please try again.");
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   const handlePickImage = () => {
     Alert.alert("Add photo", "Choose how you want to add a photo.", [
@@ -183,15 +183,15 @@ export default function PetDetailsScreen() {
               "Please allow camera access in your device settings.",
             );
             return;
-        ***REMOVED***
+          }
           const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ["images"],
             allowsEditing: false,
             quality: 0.8,
-        ***REMOVED***);
+          });
           if (!result.canceled) setSelectedImage(result.assets[0]);
-      ***REMOVED***,
-    ***REMOVED***,
+        },
+      },
       {
         text: "Choose from gallery",
         onPress: async () => {
@@ -203,18 +203,18 @@ export default function PetDetailsScreen() {
               "Please allow photo library access in your device settings.",
             );
             return;
-        ***REMOVED***
+          }
           const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ["images"],
             allowsEditing: false,
             quality: 0.8,
-        ***REMOVED***);
+          });
           if (!result.canceled) setSelectedImage(result.assets[0]);
-      ***REMOVED***,
-    ***REMOVED***,
+        },
+      },
       { text: "Cancel", style: "cancel" },
     ]);
-***REMOVED***;
+  };
 
   const handleSubmitComment = async () => {
     const trimmed = commentText.trim();
@@ -232,18 +232,18 @@ export default function PetDetailsScreen() {
           fileName,
           contentType,
           fileSizeInBytes: selectedImage.fileSize ?? 0,
-      ***REMOVED***);
-    ***REMOVED***
+        });
+      }
 
       await postComment({ commentMessage: trimmed, imageUrl });
       setCommentText("");
       setSelectedImage(null);
-  ***REMOVED*** catch {
+    } catch {
       Alert.alert("Error", "Failed to post comment. Please try again.");
-  ***REMOVED*** finally {
+    } finally {
       setIsUploading(false);
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   const isSending = isPosting || isUploading;
   const canSend = commentText.trim().length > 0 && !isSending;
@@ -267,7 +267,7 @@ export default function PetDetailsScreen() {
         </View>
       </SafeAreaView>
     );
-***REMOVED***
+  }
 
   const status =
     STATUS_STYLES[announcement?.petStatus === 0 ? "lost" : "found"];
@@ -352,8 +352,8 @@ export default function PetDetailsScreen() {
                 router.push({
                   pathname: "/my-announcements/[id]/edit",
                   params: { id: announcementId },
-              ***REMOVED***)
-            ***REMOVED***
+                })
+              }
               className="h-9 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-white px-3"
             >
               <Typography variant="body-small" className="text-heading-text">
@@ -384,7 +384,7 @@ export default function PetDetailsScreen() {
                 uri: petInfo?.petPhotoUrl?.startsWith("http")
                   ? petInfo.petPhotoUrl
                   : "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop",
-            ***REMOVED***}
+              }}
             />
 
             <View className="mt-4 flex-row items-center justify-between">
@@ -506,7 +506,7 @@ export default function PetDetailsScreen() {
                         `tel:${phoneNumber}`,
                         "The phone application could not be opened.",
                       )
-                  ***REMOVED***
+                    }
                   >
                     <Ionicons name="call-outline" size={20} color="#D89F35" />
                     <View className="flex-1">
@@ -534,7 +534,7 @@ export default function PetDetailsScreen() {
                         getSocialMediaUrl(socialNetwork),
                         "The social media link could not be opened.",
                       )
-                  ***REMOVED***
+                    }
                   >
                     <Ionicons
                       name="paper-plane-outline"

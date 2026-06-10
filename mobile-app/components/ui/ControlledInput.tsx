@@ -25,7 +25,7 @@ export function ControlledInput<T extends FieldValues>({
       render={({
         field: { onChange, onBlur, value },
         fieldState: { error },
-    ***REMOVED***) => (
+      }) => (
         <Input
           isOptional={isOptional}
           onBlur={onBlur}

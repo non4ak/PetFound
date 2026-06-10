@@ -17,7 +17,7 @@ export const Users = () => {
     const [modal, setModal] = useState<{
         userId: number;
         action: actionType;
-  ***REMOVED*** | null>(null);
+    } | null>(null);
 
     const loadUsers = async () => {
         try {
@@ -25,10 +25,10 @@ export const Users = () => {
             setUsers(data.items);
             setUsersCount(data.totalCount);
             setTotalPages(data.totalPages);
-      ***REMOVED*** catch {
+        } catch {
 
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     const handleConfirm = async () => {
         if (!modal) return;
@@ -37,31 +37,31 @@ export const Users = () => {
 
         if (action === "deactivate") {
             await deactivateUser(userId);
-      ***REMOVED***
+        }
 
         if (action === "activate") {
             await activateUser(userId);
-      ***REMOVED***
+        }
 
         if (action === "delete") {
             await deleteUser(userId);
-      ***REMOVED***
+        }
 
         await loadUsers();
         setModal(null);
-  ***REMOVED***
+    }
 
     const handleNextPage = async () => {
         if ((pageNumber+1) < totalPages) setPageNumber(pageNumber+1);
-  ***REMOVED***
+    }
 
     const handlePrevPage = async () => {
         if (pageNumber > 0) setPageNumber(pageNumber-1);
-  ***REMOVED***
+    }
 
     useEffect(() => {
         loadUsers();
-  ***REMOVED***, [search, pageSize, pageNumber]);
+    }, [search, pageSize, pageNumber]);
 
     return (
         <div className="bg-white shadow rounded-lg p-6">
@@ -98,7 +98,7 @@ export const Users = () => {
                             {user.isDeactivated
                                 ? <Button className="mt-1" size="sm" variant="secondary" fullWidth={true} onClick={() => setModal({ userId: user.id, action: "activate" })}>Activate</Button>
                                 : <Button className="mt-1" size="sm" variant="secondary" fullWidth={true} onClick={() => setModal({ userId: user.id, action: "deactivate" })}>Deactivate</Button>
-                          ***REMOVED***
+                            }
                             <Button className="mt-1.5" size="sm" variant="danger" fullWidth={true} onClick={() => setModal({ userId: user.id, action: "delete" })}>Delete</Button>
                         </div>
                         
@@ -119,7 +119,7 @@ export const Users = () => {
                 onCancel={() => setModal(null)}
                 onConfirm={() => handleConfirm()}
             />
-          ***REMOVED***
+            }
         </div>
     );
 };

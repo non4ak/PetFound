@@ -31,7 +31,7 @@ export function MapFilterChip({
 
   const handlePress = (): void => {
     onPress(chip.id);
-***REMOVED***;
+  };
 
   return (
     <TouchableOpacity

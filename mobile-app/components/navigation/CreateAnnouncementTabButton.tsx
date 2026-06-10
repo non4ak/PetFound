@@ -14,10 +14,10 @@ export function CreateAnnouncementTabButton({
   const handlePress = (): void => {
     if (Platform.OS === "ios") {
       void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  ***REMOVED***
+    }
 
     router.push("/create-announcement");
-***REMOVED***;
+  };
 
   return (
     <TouchableOpacity
@@ -37,7 +37,7 @@ export function CreateAnnouncementTabButton({
             shadowOpacity: 0.22,
             shadowRadius: 16,
             elevation: 10,
-        ***REMOVED***}
+          }}
         >
           <Ionicons name="add" size={28} color="#1E1E1E" />
         </View>
@@ -47,7 +47,7 @@ export function CreateAnnouncementTabButton({
             fontSize: 10,
             fontWeight: "500",
             marginTop: 4,
-        ***REMOVED***}
+          }}
         >
           Post
         </Text>

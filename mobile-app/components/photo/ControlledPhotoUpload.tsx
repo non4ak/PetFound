@@ -100,7 +100,7 @@ export function ControlledPhotoUpload<T extends FieldValues>({
             ) : null}
           </View>
         );
-    ***REMOVED***}
+      }}
     </ControlledMediaUpload>
   );
 }

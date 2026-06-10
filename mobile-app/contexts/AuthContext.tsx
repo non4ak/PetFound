@@ -51,62 +51,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         try {
           nextIsOnboardingActive = await readStoredOnboardingActive();
-      ***REMOVED*** catch {
+        } catch {
           await clearStoredOnboardingActive();
-      ***REMOVED***
+        }
 
         if (isMounted) {
           setIsOnboardingActive(nextIsOnboardingActive);
-      ***REMOVED***
-    ***REMOVED*** finally {
+        }
+      } finally {
         if (isMounted) {
           setIsInitializing(false);
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***;
+        }
+      }
+    };
 
     void initializeAuthSession();
 
     return () => {
       isMounted = false;
       unsubscribe();
-  ***REMOVED***;
-***REMOVED***, []);
+    };
+  }, []);
 
   useEffect(() => {
     setAuthRefreshHandler(refreshAuthSession);
 
     return () => {
       setAuthRefreshHandler(null);
-  ***REMOVED***;
-***REMOVED***, []);
+    };
+  }, []);
 
   const completeSignIn = async (nextSession: AuthSession): Promise<void> => {
     await persistAuthSession(nextSession);
     setPendingEmailConfirmation(null);
-***REMOVED***;
+  };
 
   const clearPendingEmailConfirmation = (): void => {
     setPendingEmailConfirmation(null);
-***REMOVED***;
+  };
 
   const finishOnboarding = async (): Promise<void> => {
     await clearStoredOnboardingActive();
     setIsOnboardingActive(false);
-***REMOVED***;
+  };
 
   const logout = async (): Promise<void> => {
     await clearAuthSession();
-***REMOVED***;
+  };
 
   const prepareEmailConfirmation = (confirmation: PendingEmailConfirmation): void => {
     setPendingEmailConfirmation(confirmation);
-***REMOVED***;
+  };
 
   const startOnboarding = async (): Promise<void> => {
     await writeStoredOnboardingActive(true);
     setIsOnboardingActive(true);
-***REMOVED***;
+  };
 
   const value: AuthContextValue = {
     completeSignIn,
@@ -120,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     prepareEmailConfirmation,
     startOnboarding,
     user: session?.user ?? null,
-***REMOVED***;
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -130,7 +130,7 @@ export function useAuth(): AuthContextValue {
 
   if (context === null) {
     throw new Error('useAuth must be used within an AuthProvider');
-***REMOVED***
+  }
 
   return context;
 }

@@ -17,18 +17,18 @@ const inputVariants = cva(
       variant: {
         default: "bg-white border border-light-gray",
         error: "bg-white border border-red-500",
-    ***REMOVED***,
+      },
       size: {
         sm: "py-3",
         md: "py-4",
         lg: "py-5",
-    ***REMOVED***,
-  ***REMOVED***,
+      },
+    },
     defaultVariants: {
       variant: "default",
       size: "md",
-  ***REMOVED***,
-***REMOVED***,
+    },
+  },
 );
 
 export interface InputProps

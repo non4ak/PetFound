@@ -45,12 +45,12 @@ function mapAddressToLocation(
 
   if (city.length === 0 || country.length === 0) {
     return null;
-***REMOVED***
+  }
 
   return {
     city,
     country,
-***REMOVED***;
+  };
 }
 
 async function resolveCurrentLocation(): Promise<ResolvedLocation | null> {
@@ -58,22 +58,22 @@ async function resolveCurrentLocation(): Promise<ResolvedLocation | null> {
 
   if (permission.status !== Location.PermissionStatus.GRANTED) {
     return null;
-***REMOVED***
+  }
 
   const location: Location.LocationObject =
     await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.Balanced,
-  ***REMOVED***);
+    });
 
   const addresses: Location.LocationGeocodedAddress[] =
     await Location.reverseGeocodeAsync({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
-  ***REMOVED***);
+    });
 
   if (addresses.length === 0) {
     return null;
-***REMOVED***
+  }
 
   return mapAddressToLocation(addresses[0]);
 }
@@ -89,10 +89,10 @@ export default function LocationOnboardingScreen() {
     getValues,
     handleSubmit,
     setValue,
-***REMOVED*** = useForm<OnboardingLocationFormValues>({
+  } = useForm<OnboardingLocationFormValues>({
     defaultValues: onboardingDraft.location,
     resolver: zodResolver(onboardingLocationSchema),
-***REMOVED***);
+  });
 
   const handleUseCurrentLocationPress = async (): Promise<void> => {
     try {
@@ -105,19 +105,19 @@ export default function LocationOnboardingScreen() {
           "Allow location access and make sure location services are enabled, or enter your city manually.",
         );
         return;
-    ***REMOVED***
+      }
 
       setValue("country", location.country, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true,
-    ***REMOVED***);
+      });
       setValue("city", location.city, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true,
-    ***REMOVED***);
-  ***REMOVED*** catch (error: unknown) {
+      });
+    } catch (error: unknown) {
       const message: string =
         error instanceof Error ? error.message : "Unknown location error.";
 
@@ -125,10 +125,10 @@ export default function LocationOnboardingScreen() {
         "Location error",
         `Could not determine your city. ${message}`,
       );
-  ***REMOVED*** finally {
+    } finally {
       setIsResolvingLocation(false);
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   const handleContinuePress = async (
     values: OnboardingLocationFormValues,
@@ -137,13 +137,13 @@ export default function LocationOnboardingScreen() {
 
     startTransition(() => {
       router.push("./pet");
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   const handleBackPress = (): void => {
     saveLocationStep(getValues());
     router.back();
-***REMOVED***;
+  };
 
   return (
     <OnboardingScaffold
@@ -168,14 +168,14 @@ export default function LocationOnboardingScreen() {
             isResolvingLocation
               ? "Detecting location..."
               : "Use my current location"
-        ***REMOVED***
+          }
           leadingIcon={
             isResolvingLocation ? (
               <ActivityIndicator color="#0F172A" size="small" />
             ) : (
               <Ionicons name="location-outline" size={20} color="#0F172A" />
             )
-        ***REMOVED***
+          }
           onPress={handleUseCurrentLocationPress}
           size="lg"
           variant="primary"

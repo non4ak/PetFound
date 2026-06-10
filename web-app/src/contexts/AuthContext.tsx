@@ -27,37 +27,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const clearSession = (): void => {
             setSessionOverride(false);
             setUser(null);
-      ***REMOVED***;
+        };
 
         setUnauthorizedHandler(clearSession);
 
         return () => {
             setUnauthorizedHandler(null);
-      ***REMOVED***;
-  ***REMOVED***, []);
+        };
+    }, []);
 
     const login = (nextUser: AuthUser) => {
         setSessionOverride(true);
         setUser(nextUser);
-  ***REMOVED***;
+    };
 
     const logout = async (): Promise<void> => {
         try {
             await logoutQuery();
-      ***REMOVED*** catch (error) {
+        } catch (error) {
             if (!axios.isAxiosError(error)) {
                 throw error;
-          ***REMOVED***
+            }
 
             const statusCode = (error as AxiosError).response?.status;
             if (statusCode !== 400 && statusCode !== 401) {
                 throw error;
-          ***REMOVED***
-      ***REMOVED***
+            }
+        }
 
         setSessionOverride(false);
         setUser(null);
-  ***REMOVED***;
+    };
 
     const value = {
         isAuthenticated,
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         logout,
         user,
-  ***REMOVED***;
+    };
 
     return (
         <AuthContext.Provider value={value}>
@@ -79,6 +79,6 @@ export function useAuth() {
     const context = useContext(AuthContext);
     if (!context) {
         throw new Error("useAuth must be used within an AuthProvider");
-  ***REMOVED***
+    }
     return context;
 }

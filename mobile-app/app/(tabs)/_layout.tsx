@@ -14,15 +14,15 @@ export default function TabLayout() {
 
   if (isInitializing) {
     return <FullscreenLoader />;
-***REMOVED***
+  }
 
   if (!isAuthenticated) {
     return <Redirect href="/(auth)/welcome" />;
-***REMOVED***
+  }
 
   if (isOnboardingActive) {
     return <Redirect href="/(onboarding)/profile" />;
-***REMOVED***
+  }
 
   return (
     <Tabs
@@ -36,10 +36,10 @@ export default function TabLayout() {
           fontSize: 10,
           fontWeight: "500",
           marginTop: 0,
-      ***REMOVED***,
+        },
         tabBarItemStyle: {
           paddingTop: 4,
-      ***REMOVED***,
+        },
         tabBarStyle: {
           backgroundColor: "#FFFFFF",
           borderTopWidth: 0,
@@ -51,8 +51,8 @@ export default function TabLayout() {
           shadowOffset: { width: 0, height: -4 },
           shadowOpacity: 0.08,
           shadowRadius: 18,
-      ***REMOVED***,
-    ***REMOVED***}
+        },
+      }}
     >
       <Tabs.Screen
         name="index"
@@ -65,7 +65,7 @@ export default function TabLayout() {
               color={color}
             />
           ),
-      ***REMOVED***}
+        }}
       />
       <Tabs.Screen
         name="map"
@@ -79,14 +79,14 @@ export default function TabLayout() {
               color={color}
             />
           ),
-      ***REMOVED***}
+        }}
       />
       <Tabs.Screen
         name="post"
         options={{
           title: "Post",
           tabBarButton: (props) => <CreateAnnouncementTabButton {...props} />,
-      ***REMOVED***}
+        }}
       />
       <Tabs.Screen
         name="alerts"
@@ -99,7 +99,7 @@ export default function TabLayout() {
               color={color}
             />
           ),
-      ***REMOVED***}
+        }}
       />
       <Tabs.Screen
         name="profile"
@@ -112,7 +112,7 @@ export default function TabLayout() {
               color={color}
             />
           ),
-      ***REMOVED***}
+        }}
       />
     </Tabs>
   );

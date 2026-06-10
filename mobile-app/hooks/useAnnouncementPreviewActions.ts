@@ -39,7 +39,7 @@ export function useAnnouncementPreviewActions({
 
   const onBackPress = React.useCallback((): void => {
     router.back();
-***REMOVED***, [router]);
+  }, [router]);
 
   const onOpenMapPress = React.useCallback((): void => {
     const coordinate: MapTargetCoordinate | null = getMapTargetCoordinate(
@@ -53,20 +53,20 @@ export function useAnnouncementPreviewActions({
         "Choose a location on the map before previewing it.",
       );
       return;
-  ***REMOVED***
+    }
 
     router.push({
       pathname: "/(tabs)/map",
       params: getMapTargetParams(coordinate),
-  ***REMOVED***);
-***REMOVED***, [details.lastSeenLatitude, details.lastSeenLongitude, router]);
+    });
+  }, [details.lastSeenLatitude, details.lastSeenLongitude, router]);
 
   const onPostPress = React.useCallback(async (): Promise<void> => {
     const request: CreateAnnouncementRequest | null = createRequest();
 
     if (request === null) {
       return;
-  ***REMOVED***
+    }
 
     setIsPosting(true);
 
@@ -75,20 +75,20 @@ export function useAnnouncementPreviewActions({
       await queryClient.invalidateQueries({ queryKey: ["announcements"] });
       resetDraft();
       router.replace("/(tabs)");
-  ***REMOVED*** catch (error: unknown) {
+    } catch (error: unknown) {
       Alert.alert(
         "Post failed",
         getApiErrorMessage(error, "Could not create announcement."),
       );
-  ***REMOVED*** finally {
+    } finally {
       setIsPosting(false);
-  ***REMOVED***
-***REMOVED***, [createRequest, queryClient, resetDraft, router]);
+    }
+  }, [createRequest, queryClient, resetDraft, router]);
 
   return {
     isPosting,
     onBackPress,
     onOpenMapPress,
     onPostPress,
-***REMOVED***;
+  };
 }

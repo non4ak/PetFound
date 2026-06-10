@@ -24,10 +24,10 @@ export default function ProfileOnboardingScreen() {
     formState: { errors },
     getValues,
     handleSubmit,
-***REMOVED*** = useForm<OnboardingProfileFormValues>({
+  } = useForm<OnboardingProfileFormValues>({
     defaultValues: onboardingDraft.profile,
     resolver: zodResolver(onboardingProfileSchema),
-***REMOVED***);
+  });
 
   const handleContinuePress = async (
     values: OnboardingProfileFormValues,
@@ -38,12 +38,12 @@ export default function ProfileOnboardingScreen() {
       socialNetwork: values.socialNetwork,
       userPhotoUrl: values.userPhotoUrl,
       userName: values.userName,
-  ***REMOVED***);
+    });
 
     startTransition(() => {
       router.push("./location");
-  ***REMOVED***);
-***REMOVED***;
+    });
+  };
 
   const handleBackPress = (): void => {
     const values: OnboardingProfileFormValues = getValues();
@@ -51,7 +51,7 @@ export default function ProfileOnboardingScreen() {
     saveProfileStep(values);
 
     router.back();
-***REMOVED***;
+  };
 
   return (
     <OnboardingScaffold

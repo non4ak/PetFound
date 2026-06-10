@@ -54,10 +54,10 @@ Query-параметри:
           "similarityPercentage": 89.4,
           "status": 0,
           "statusLabel": "Pending"
-      ***REMOVED***
-    ***REMOVED***
+        }
+      }
     ]
-***REMOVED***
+  }
 }
 ```
 
@@ -120,11 +120,11 @@ Query-параметри:
           "petPhotoUrl": "https://petfoundstorage.blob.core.windows.net/pet-photos/users/5/photos/2026/06/06/e80d159f806841e6ab1c34418bbb254f.jpg",
           "petName": "Unknown dog",
           "isActive": true
-      ***REMOVED***,
+        },
         "createdOn": "2026-06-06T07:05:32.638297+00:00"
-    ***REMOVED***
+      }
     ]
-***REMOVED***
+  }
 }
 ```
 

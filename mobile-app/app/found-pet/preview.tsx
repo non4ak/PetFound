@@ -28,14 +28,14 @@ export default function FoundPetPreviewScreen(): React.JSX.Element {
       createRequest,
       details,
       resetDraft,
-  ***REMOVED***);
+    });
 
   const badges: string[] = getAnnouncementPreviewBadges({
     breed: info.breed,
     petSex: info.petSex,
     petSize: info.petSize,
     petType: info.petType,
-***REMOVED***);
+  });
 
   const hasPhoto: boolean = photoUri !== null && photoUri.trim().length > 0;
 

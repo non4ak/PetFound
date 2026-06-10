@@ -48,7 +48,7 @@ function mapLocationToCoordinate(location: Location.LocationObject): LatLng {
   return {
     latitude: location.coords.latitude,
     longitude: location.coords.longitude,
-***REMOVED***;
+  };
 }
 
 export function useLostPetMapController(): LostPetMapController {
@@ -56,7 +56,7 @@ export function useLostPetMapController(): LostPetMapController {
   const { targetLatitude, targetLongitude } = useLocalSearchParams<{
     targetLatitude?: string;
     targetLongitude?: string;
-***REMOVED***>();
+  }>();
   const mapRef = useRef<MapView | null>(null);
   const searchBarRef = useRef<MapSearchBarRef | null>(null);
   const [searchQuery, setSearchQuery] = useState<AnnouncementQueryFilter>({});
@@ -71,7 +71,7 @@ export function useLostPetMapController(): LostPetMapController {
       getMapTargetCoordinateFromParams({
         targetLatitude,
         targetLongitude,
-    ***REMOVED***),
+      }),
     [targetLatitude, targetLongitude],
   );
 
@@ -87,7 +87,7 @@ export function useLostPetMapController(): LostPetMapController {
 
   const blurSearch = React.useCallback((): void => {
     searchBarRef.current?.blur();
-***REMOVED***, []);
+  }, []);
 
   const centerMapOnCoordinate = React.useCallback(
     (coordinate: LatLng, regionDelta: number): void => {
@@ -96,8 +96,8 @@ export function useLostPetMapController(): LostPetMapController {
         latitudeDelta: regionDelta,
         longitude: coordinate.longitude,
         longitudeDelta: regionDelta,
-    ***REMOVED***);
-  ***REMOVED***,
+      });
+    },
     [],
   );
 
@@ -108,17 +108,17 @@ export function useLostPetMapController(): LostPetMapController {
       if (permission.status !== Location.PermissionStatus.GRANTED) {
         setShowsUserLocation(false);
         return null;
-    ***REMOVED***
+      }
 
       setShowsUserLocation(true);
 
       const location: Location.LocationObject =
         await Location.getCurrentPositionAsync({
           accuracy: Location.Accuracy.Balanced,
-      ***REMOVED***);
+        });
 
       return mapLocationToCoordinate(location);
-  ***REMOVED***, []);
+    }, []);
 
   React.useEffect(() => {
     let isMounted: boolean = true;
@@ -128,25 +128,25 @@ export function useLostPetMapController(): LostPetMapController {
 
       if (!isMounted || coordinate === null) {
         return;
-    ***REMOVED***
+      }
 
       setUserLocationCoordinate(coordinate);
-  ***REMOVED***
+    }
 
     void loadUserLocation();
 
     return () => {
       isMounted = false;
-  ***REMOVED***;
-***REMOVED***, [getCurrentUserCoordinate]);
+    };
+  }, [getCurrentUserCoordinate]);
 
   React.useEffect(() => {
     if (!isMapReady || targetCoordinate === null) {
       return;
-  ***REMOVED***
+    }
 
     centerMapOnCoordinate(targetCoordinate, MAP_PET_LOCATION_REGION_DELTA);
-***REMOVED***, [centerMapOnCoordinate, isMapReady, targetCoordinate]);
+  }, [centerMapOnCoordinate, isMapReady, targetCoordinate]);
 
   React.useEffect(() => {
     if (
@@ -155,13 +155,13 @@ export function useLostPetMapController(): LostPetMapController {
       userLocationCoordinate === null
     ) {
       return;
-  ***REMOVED***
+    }
 
     centerMapOnCoordinate(
       userLocationCoordinate,
       MAP_USER_LOCATION_REGION_DELTA,
     );
-***REMOVED***, [
+  }, [
     centerMapOnCoordinate,
     isMapReady,
     targetCoordinate,
@@ -170,7 +170,7 @@ export function useLostPetMapController(): LostPetMapController {
 
   const onMapReady = React.useCallback((): void => {
     setIsMapReady(true);
-***REMOVED***, []);
+  }, []);
 
   const onMarkerPress = React.useCallback(
     (id: number): void => {
@@ -178,8 +178,8 @@ export function useLostPetMapController(): LostPetMapController {
       router.push({
         pathname: "/pet/[id]",
         params: { id },
-    ***REMOVED***);
-  ***REMOVED***,
+      });
+    },
     [blurSearch, router],
   );
 
@@ -187,16 +187,16 @@ export function useLostPetMapController(): LostPetMapController {
     (location: MapPlaceLocation | null): void => {
       if (location === null) {
         return;
-    ***REMOVED***
+      }
 
       centerMapOnCoordinate(
         {
           latitude: location.lat,
           longitude: location.lng,
-      ***REMOVED***,
+        },
         MAP_SEARCH_PLACE_REGION_DELTA,
       );
-  ***REMOVED***,
+    },
     [centerMapOnCoordinate],
   );
 
@@ -206,13 +206,13 @@ export function useLostPetMapController(): LostPetMapController {
       setSearchQuery((currentQuery: AnnouncementQueryFilter) =>
         getNextMapFilterQuery(currentQuery, filterId),
       );
-  ***REMOVED***,
+    },
     [blurSearch],
   );
 
   const onMapPress = React.useCallback((): void => {
     blurSearch();
-***REMOVED***, [blurSearch]);
+  }, [blurSearch]);
 
   const onUserLocationChange = React.useCallback(
     (event: UserLocationChangeEvent): void => {
@@ -220,13 +220,13 @@ export function useLostPetMapController(): LostPetMapController {
 
       if (coordinate === undefined) {
         return;
-    ***REMOVED***
+      }
 
       setUserLocationCoordinate({
         latitude: coordinate.latitude,
         longitude: coordinate.longitude,
-    ***REMOVED***);
-  ***REMOVED***,
+      });
+    },
     [],
   );
 
@@ -236,7 +236,7 @@ export function useLostPetMapController(): LostPetMapController {
 
       if (actionId !== MAP_MY_LOCATION_ACTION_ID) {
         return;
-    ***REMOVED***
+      }
 
       if (userLocationCoordinate !== null) {
         centerMapOnCoordinate(
@@ -244,7 +244,7 @@ export function useLostPetMapController(): LostPetMapController {
           MAP_USER_LOCATION_REGION_DELTA,
         );
         return;
-    ***REMOVED***
+      }
 
       const coordinate: LatLng | null = await getCurrentUserCoordinate();
 
@@ -254,11 +254,11 @@ export function useLostPetMapController(): LostPetMapController {
           "Allow location access to show your position on the map.",
         );
         return;
-    ***REMOVED***
+      }
 
       setUserLocationCoordinate(coordinate);
       centerMapOnCoordinate(coordinate, MAP_USER_LOCATION_REGION_DELTA);
-  ***REMOVED***,
+    },
     [
       blurSearch,
       centerMapOnCoordinate,
@@ -280,5 +280,5 @@ export function useLostPetMapController(): LostPetMapController {
     onUserLocationChange,
     searchBarRef,
     showsUserLocation,
-***REMOVED***;
+  };
 }

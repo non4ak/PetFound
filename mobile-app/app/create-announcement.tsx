@@ -26,7 +26,7 @@ function AnnouncementModeCard({
       <View
         className={`h-full rounded-[24px] bg-foreground-background p-5 items-center justify-center border-2 ${
           type === "lost" ? "border-red-500" : "border-green-500"
-      ***REMOVED***`}
+        }`}
       >
         <View className="h-12 w-12 items-center justify-center rounded-full bg-[#FFF3DA]">
           <Ionicons name={icon} size={22} color="#D89F35" />
@@ -77,7 +77,7 @@ export default function CreateAnnouncementScreen() {
             type="found"
             onPress={() => {
               router.push("/found-pet");
-          ***REMOVED***}
+            }}
           />
         </View>
       </View>

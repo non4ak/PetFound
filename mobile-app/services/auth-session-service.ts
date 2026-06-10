@@ -17,15 +17,15 @@ export async function bootstrapAuthSession(): Promise<AuthSession | null> {
 
   try {
     storedSession = await readStoredAuthSession();
-***REMOVED*** catch {
+  } catch {
     await clearAuthSession();
     return null;
-***REMOVED***
+  }
 
   if (storedSession === null) {
     clearCurrentAuthSession();
     return null;
-***REMOVED***
+  }
 
   setCurrentAuthSession(storedSession);
 
@@ -35,14 +35,14 @@ export async function bootstrapAuthSession(): Promise<AuthSession | null> {
     await persistAuthSession(refreshedSession);
 
     return refreshedSession;
-***REMOVED*** catch (error) {
+  } catch (error) {
     if (isUnauthorizedApiError(error)) {
       await clearAuthSession();
       return null;
-  ***REMOVED***
+    }
 
     return storedSession;
-***REMOVED***
+  }
 }
 
 export async function clearAuthSession(): Promise<void> {
@@ -64,7 +64,7 @@ export async function refreshAuthSession(): Promise<boolean> {
 
   if (currentSession === null) {
     return false;
-***REMOVED***
+  }
 
   try {
     const refreshedSession: AuthSession = await refreshSessionQuery(
@@ -74,12 +74,12 @@ export async function refreshAuthSession(): Promise<boolean> {
     await persistAuthSession(refreshedSession);
 
     return true;
-***REMOVED*** catch (error) {
+  } catch (error) {
     if (isUnauthorizedApiError(error)) {
       await clearAuthSession();
       return false;
-  ***REMOVED***
+    }
 
     throw error;
-***REMOVED***
+  }
 }

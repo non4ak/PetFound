@@ -13,7 +13,7 @@ export const AuthRouter: RouteObject = {
                     <Login />
                 </GuestGuard>
             ),
-      ***REMOVED***,
+        },
         {
             path: ROUTES.SIGNUP,
             element: (
@@ -21,6 +21,6 @@ export const AuthRouter: RouteObject = {
                     <SignUp />
                 </GuestGuard>
             ),
-      ***REMOVED***,
+        },
     ],
 };

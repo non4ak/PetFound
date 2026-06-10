@@ -9,13 +9,13 @@ export function useColorScheme() {
 
   useEffect(() => {
     setHasHydrated(true);
-***REMOVED***, []);
+  }, []);
 
   const colorScheme = useRNColorScheme();
 
   if (hasHydrated) {
     return colorScheme;
-***REMOVED***
+  }
 
   return 'light';
 }

@@ -12,7 +12,7 @@ export function getPetTypeLabel(petType: OnboardingPetType | null): string {
       return "Cat";
     default:
       return "Unknown";
-***REMOVED***
+  }
 }
 
 export function getPetSexLabel(sex: OnboardingPetSex | null): string | null {
@@ -23,7 +23,7 @@ export function getPetSexLabel(sex: OnboardingPetSex | null): string | null {
       return "Female";
     default:
       return null;
-***REMOVED***
+  }
 }
 
 export function getPetSizeLabel(size: OnboardingPetSize | null): string | null {
@@ -36,5 +36,5 @@ export function getPetSizeLabel(size: OnboardingPetSize | null): string | null {
       return "Large";
     default:
       return null;
-***REMOVED***
+  }
 }

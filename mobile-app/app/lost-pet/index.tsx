@@ -34,7 +34,7 @@ function RegisteredPetOption({
           isSelected
             ? "border-primary bg-[#FFF2D6]"
             : "border-[#BFC9D6] bg-[#EEF4FB]"
-      ***REMOVED***`}
+        }`}
       >
         <View className="h-10 w-10 items-center justify-center rounded-[8px] border border-primary bg-[#FFF5E3]">
           <Ionicons name="paw-outline" size={18} color="#D89F35" />
@@ -57,7 +57,7 @@ function RegisteredPetOption({
             variant="body-small"
             className={`mt-0.5 font-semibold ${
               pet.isChipped ? "text-primary" : "text-secondary-text"
-          ***REMOVED***`}
+            }`}
           >
             {pet.isChipped ? "Chipped" : "Not chipped"}
           </Typography>
@@ -87,12 +87,12 @@ export default function LostPetSelectPetScreen() {
             size="md"
             trailingIcon={
               <Ionicons name="arrow-forward" size={18} color="#1E1E1E" />
-          ***REMOVED***
+            }
             variant="outline"
           />
           <OnboardingProgress activeStep={1} totalSteps={3} />
         </View>
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -103,7 +103,7 @@ export default function LostPetSelectPetScreen() {
           </TouchableOpacity>
           <View className="w-10" />
         </View>
-    ***REMOVED***
+      }
       scrollContentClassName="pb-2"
     >
       <Stepper

@@ -46,13 +46,13 @@ export default function LoginScreen() {
     formState: { errors },
     handleSubmit,
     setError,
-***REMOVED*** = useForm<LoginFormValues>({
+  } = useForm<LoginFormValues>({
     defaultValues: {
       login: "",
       password: "",
-  ***REMOVED***,
+    },
     resolver: zodResolver(loginSchema),
-***REMOVED***);
+  });
   const isAuthActionPending: boolean =
     loginMutation.isPending ||
     googleLoginMutation.isPending ||
@@ -65,28 +65,28 @@ export default function LoginScreen() {
       if (Platform.OS === "android") {
         await GoogleSignin.hasPlayServices({
           showPlayServicesUpdateDialog: true,
-      ***REMOVED***);
-    ***REMOVED***
+        });
+      }
 
       const googleResponse: SignInResponse = await GoogleSignin.signIn();
 
       if (isCancelledResponse(googleResponse)) {
         return;
-    ***REMOVED***
+      }
 
       if (!isSuccessResponse(googleResponse)) {
         throw new Error("Google sign-in failed.");
-    ***REMOVED***
+      }
 
       const idToken: string | null = googleResponse.data.idToken;
 
       if (idToken === null || idToken.trim().length === 0) {
         throw new Error("Google sign-in did not return an ID token.");
-    ***REMOVED***
+      }
 
       const session = await googleLoginMutation.mutateAsync({
         idToken,
-    ***REMOVED***);
+      });
 
       await auth.completeSignIn(session);
 
@@ -94,8 +94,8 @@ export default function LoginScreen() {
         router.replace(
           auth.isOnboardingActive ? "/(onboarding)/profile" : "/(tabs)",
         );
-    ***REMOVED***);
-  ***REMOVED*** catch (error) {
+      });
+    } catch (error) {
       console.error("Google Sign-In failed.", {
         code: isErrorWithCode(error) ? error.code : null,
         hasWebClientId:
@@ -104,25 +104,25 @@ export default function LoginScreen() {
         message: error instanceof Error ? error.message : null,
         name: error instanceof Error ? error.name : null,
         platform: Platform.OS,
-    ***REMOVED***);
+      });
 
       setError("root", {
         message: getApiErrorMessage(
           error,
           "Unable to sign in with Google right now.",
         ),
-    ***REMOVED***);
-  ***REMOVED*** finally {
+      });
+    } finally {
       setIsGoogleSignInPending(false);
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   const handleLogin = async (values: LoginFormValues): Promise<void> => {
     try {
       const session = await loginMutation.mutateAsync({
         login: values.login.trim(),
         password: values.password,
-    ***REMOVED***);
+      });
 
       await auth.completeSignIn(session);
 
@@ -130,13 +130,13 @@ export default function LoginScreen() {
         router.replace(
           auth.isOnboardingActive ? "/(onboarding)/profile" : "/(tabs)",
         );
-    ***REMOVED***);
-  ***REMOVED*** catch (error) {
+      });
+    } catch (error) {
       setError("root", {
         message: getApiErrorMessage(error, "Unable to sign in right now."),
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***;
+      });
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-alt-bg">
@@ -234,14 +234,14 @@ export default function LoginScreen() {
                 isGoogleSignInPending || googleLoginMutation.isPending
                   ? "Connecting..."
                   : "Continue with Google"
-            ***REMOVED***
+              }
               leadingIcon={
                 <Image
                   resizeMode="contain"
                   source={GOOGLE_LOGO_SOURCE}
                   style={{ height: 20, width: 20 }}
                 />
-            ***REMOVED***
+              }
               onPress={completeGoogleLogin}
               size="md"
               variant="outline"

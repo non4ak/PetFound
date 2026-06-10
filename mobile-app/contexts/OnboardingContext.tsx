@@ -24,7 +24,7 @@ function createInitialOnboardingDraft(): OnboardingDraft {
     location: {
       city: '',
       country: '',
-  ***REMOVED***,
+    },
     pet: null,
     profile: {
       isPhonePublic: true,
@@ -32,9 +32,9 @@ function createInitialOnboardingDraft(): OnboardingDraft {
       socialNetwork: '',
       userPhotoUrl: '',
       userName: '',
-  ***REMOVED***,
+    },
     stayInLoop: null,
-***REMOVED***;
+  };
 }
 
 const OnboardingContext = createContext<OnboardingContextValue | null>(null);
@@ -44,49 +44,49 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
 
   const clearOnboardingDraft = (): void => {
     setOnboardingDraft(createInitialOnboardingDraft());
-***REMOVED***;
+  };
 
   const clearPetStep = (): void => {
     setOnboardingDraft((currentDraft: OnboardingDraft) => ({
       ...currentDraft,
       pet: null,
-  ***REMOVED***));
-***REMOVED***;
+    }));
+  };
 
   const clearStayInLoopStep = (): void => {
     setOnboardingDraft((currentDraft: OnboardingDraft) => ({
       ...currentDraft,
       stayInLoop: null,
-  ***REMOVED***));
-***REMOVED***;
+    }));
+  };
 
   const saveLocationStep = (location: OnboardingLocationStepData): void => {
     setOnboardingDraft((currentDraft: OnboardingDraft) => ({
       ...currentDraft,
       location,
-  ***REMOVED***));
-***REMOVED***;
+    }));
+  };
 
   const savePetStep = (pet: OnboardingPetStepData): void => {
     setOnboardingDraft((currentDraft: OnboardingDraft) => ({
       ...currentDraft,
       pet,
-  ***REMOVED***));
-***REMOVED***;
+    }));
+  };
 
   const saveProfileStep = (profile: OnboardingProfileStepData): void => {
     setOnboardingDraft((currentDraft: OnboardingDraft) => ({
       ...currentDraft,
       profile,
-  ***REMOVED***));
-***REMOVED***;
+    }));
+  };
 
   const saveStayInLoopStep = (stayInLoop: OnboardingStayInLoopStepData): void => {
     setOnboardingDraft((currentDraft: OnboardingDraft) => ({
       ...currentDraft,
       stayInLoop,
-  ***REMOVED***));
-***REMOVED***;
+    }));
+  };
 
   const value: OnboardingContextValue = useMemo(
     () => ({
@@ -98,7 +98,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
       savePetStep,
       saveProfileStep,
       saveStayInLoopStep,
-  ***REMOVED***),
+    }),
     [onboardingDraft],
   );
 
@@ -110,7 +110,7 @@ export function useOnboarding(): OnboardingContextValue {
 
   if (context === null) {
     throw new Error('useOnboarding must be used within an OnboardingProvider');
-***REMOVED***
+  }
 
   return context;
 }

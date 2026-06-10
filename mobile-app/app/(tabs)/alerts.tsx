@@ -19,13 +19,13 @@ export default function AlertsScreen() {
   useEffect(() => {
     if (view === "matches" || view === "alerts") {
       setViewMode(view);
-  ***REMOVED***
-***REMOVED***, [view]);
+    }
+  }, [view]);
 
   const handleChangeViewMode = (mode: ViewModeType): void => {
     setViewMode(mode);
     router.setParams({ view: mode });
-***REMOVED***;
+  };
 
   const content =
     viewMode === "matches" ? <MatchesSection /> : <AlertsSection />;
@@ -40,7 +40,7 @@ export default function AlertsScreen() {
             onPress={() => handleChangeViewMode("matches")}
             className={`flex-1 rounded-l-full p-3 ${
               viewMode === "matches" ? "bg-primary" : "bg-transparent"
-          ***REMOVED***`}
+            }`}
           >
             <Typography
               variant="title-small"
@@ -54,7 +54,7 @@ export default function AlertsScreen() {
             onPress={() => handleChangeViewMode("alerts")}
             className={`flex-1 rounded-r-full p-3 ${
               viewMode === "alerts" ? "bg-primary" : "bg-transparent"
-          ***REMOVED***`}
+            }`}
           >
             <Typography
               variant="title-small"

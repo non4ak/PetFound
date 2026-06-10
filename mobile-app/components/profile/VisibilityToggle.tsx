@@ -27,14 +27,14 @@ export function VisibilityToggle({
           ? {
               activeOpacity: 0.85,
               onPress,
-          ***REMOVED***
+            }
           : {})}
         className="h-[28px] w-[44px] rounded-[8px] border border-[#BDBDBD] bg-white px-[3px] py-[3px]"
       >
         <View
           className={`h-5 w-5 rounded-full ${
             isPublic ? "self-start bg-primary" : "self-end bg-[#CFCFCF]"
-        ***REMOVED***`}
+          }`}
         />
       </Container>
     </View>

@@ -32,7 +32,7 @@ function createRegionFromCoordinate(coordinate: LatLng): Region {
     latitudeDelta: 0.02,
     longitude: coordinate.longitude,
     longitudeDelta: 0.02,
-***REMOVED***;
+  };
 }
 
 function resolveCityName(address: Location.LocationGeocodedAddress): string | null {
@@ -65,7 +65,7 @@ async function reverseGeocodeCoordinate(
     country: address ? resolveCountryName(address) : null,
     latitude: coordinate.latitude,
     longitude: coordinate.longitude,
-***REMOVED***;
+  };
 }
 
 export function AnnouncementLocationMapPicker({
@@ -84,41 +84,41 @@ export function AnnouncementLocationMapPicker({
     async function loadCurrentLocationAsInitialRegion(): Promise<void> {
       if (initialCoordinate !== null) {
         return;
-    ***REMOVED***
+      }
 
       const permission = await Location.requestForegroundPermissionsAsync();
 
       if (permission.status !== Location.PermissionStatus.GRANTED) {
         return;
-    ***REMOVED***
+      }
 
       const location: Location.LocationObject =
         await Location.getCurrentPositionAsync({
           accuracy: Location.Accuracy.Balanced,
-      ***REMOVED***);
+        });
 
       if (!isMounted) {
         return;
-    ***REMOVED***
+      }
 
       setRegion(
         createRegionFromCoordinate({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
-      ***REMOVED***),
+        }),
       );
-  ***REMOVED***
+    }
 
     void loadCurrentLocationAsInitialRegion();
 
     return () => {
       isMounted = false;
-  ***REMOVED***;
-***REMOVED***, [initialCoordinate]);
+    };
+  }, [initialCoordinate]);
 
   const handleRegionChangeComplete = useCallback((nextRegion: Region): void => {
     setRegion(nextRegion);
-***REMOVED***, []);
+  }, []);
 
   const handleConfirmPress = useCallback(async (): Promise<void> => {
     try {
@@ -127,10 +127,10 @@ export function AnnouncementLocationMapPicker({
         await reverseGeocodeCoordinate({
           latitude: region.latitude,
           longitude: region.longitude,
-      ***REMOVED***);
+        });
 
       onConfirm(pickedLocation);
-  ***REMOVED*** catch (error: unknown) {
+    } catch (error: unknown) {
       const message: string =
         error instanceof Error ? error.message : "Unknown geocoding error.";
 
@@ -138,10 +138,10 @@ export function AnnouncementLocationMapPicker({
         "Location error",
         `Could not resolve this location. ${message}`,
       );
-  ***REMOVED*** finally {
+    } finally {
       setIsResolving(false);
-  ***REMOVED***
-***REMOVED***, [onConfirm, region.latitude, region.longitude]);
+    }
+  }, [onConfirm, region.latitude, region.longitude]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -190,7 +190,7 @@ export function AnnouncementLocationMapPicker({
             isResolving ? (
               <ActivityIndicator color="#0F172A" size="small" />
             ) : null
-        ***REMOVED***
+          }
           onPress={handleConfirmPress}
           size="md"
           variant="primary"
@@ -207,5 +207,5 @@ const styles = StyleSheet.create({
     marginTop: -42,
     position: "absolute",
     top: "50%",
-***REMOVED***,
+  },
 });

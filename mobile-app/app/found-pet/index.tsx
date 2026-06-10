@@ -22,11 +22,11 @@ export default function FoundPetPhotoScreen() {
   const { photoUri, setPhotoUri } = useFoundPetFlow();
   const { control, reset } = useForm<FoundPetPhotoFormValues>({
     defaultValues: { photoUri: photoUri ?? "" },
-***REMOVED***);
+  });
 
   useEffect(() => {
     reset({ photoUri: photoUri ?? "" });
-***REMOVED***, [photoUri, reset]);
+  }, [photoUri, reset]);
 
   return (
     <ControlledMediaUpload
@@ -57,12 +57,12 @@ export default function FoundPetPhotoScreen() {
                 size="md"
                 trailingIcon={
                   <Ionicons name="arrow-forward" size={18} color="#1E1E1E" />
-              ***REMOVED***
+                }
                 variant="outline"
               />
               <OnboardingProgress activeStep={1} totalSteps={4} />
             </View>
-        ***REMOVED***
+          }
           header={
             <View className="flex-row items-center justify-between">
               <TouchableOpacity
@@ -73,7 +73,7 @@ export default function FoundPetPhotoScreen() {
               </TouchableOpacity>
               <View className="w-10" />
             </View>
-        ***REMOVED***
+          }
           scrollContentClassName="pb-2"
         >
           <Stepper

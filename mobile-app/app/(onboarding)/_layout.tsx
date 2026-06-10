@@ -10,12 +10,12 @@ export default function OnboardingLayout() {
 
   if (isInitializing) {
     return <FullscreenLoader />;
-***REMOVED***
+  }
 
   if (isConfirmEmailScreen) {
     if (isAuthenticated) {
       return <Redirect href={isOnboardingActive ? '/(onboarding)/profile' : '/(tabs)'} />;
-  ***REMOVED***
+    }
 
     return (
       <Stack screenOptions={{ headerShown: false }}>
@@ -27,15 +27,15 @@ export default function OnboardingLayout() {
         <Stack.Screen name="all-set" />
       </Stack>
     );
-***REMOVED***
+  }
 
   if (!isAuthenticated) {
     return <Redirect href={isOnboardingActive ? '/(auth)/login' : '/(auth)/welcome'} />;
-***REMOVED***
+  }
 
   if (!isOnboardingActive) {
     return <Redirect href="/(tabs)" />;
-***REMOVED***
+  }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

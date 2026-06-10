@@ -20,24 +20,24 @@ export const Login = () => {
         onSuccess: (user) => {
             authLogin(user);
             navigate(ROUTES.HOME);
-      ***REMOVED***,
+        },
         onError: (error) => {
             const message = getApiErrorMessage(error, "Login failed");
             toast.error(message);
-      ***REMOVED***,
-  ***REMOVED***);
+        },
+    });
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-  ***REMOVED*** = useForm<SignInSchema>({
+    } = useForm<SignInSchema>({
         resolver: zodResolver(signInSchema),
-  ***REMOVED***);
+    });
 
     const onSubmit = async (data: SignInSchema) => {
         await login(data);
-  ***REMOVED***;
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gray-50">

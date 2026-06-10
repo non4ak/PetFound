@@ -15,7 +15,7 @@ export type Address = {
     address: {
         house_number?: string;
         road?: string;
-  ***REMOVED***
+    }
 }
 
 export interface GetAddressRespond<T> {

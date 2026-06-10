@@ -6,5 +6,5 @@ import type { OnboardingDraft } from '@/types/onboarding';
 export function useSubmitOnboardingMutation(): UseMutationResult<void, Error, OnboardingDraft> {
   return useMutation({
     mutationFn: submitOnboardingQuery,
-***REMOVED***);
+  });
 }

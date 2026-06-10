@@ -4,9 +4,9 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     mutations: {
       retry: false,
-  ***REMOVED***,
+    },
     queries: {
       retry: false,
-  ***REMOVED***,
-***REMOVED***,
+    },
+  },
 });

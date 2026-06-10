@@ -29,7 +29,7 @@ function petToRegisteredCard(pet: Pet): RegisteredPetCard {
     petSex: pet.petSex,
     petSize: pet.petSize,
     petType: pet.petType,
-***REMOVED***;
+  };
 }
 
 function createInitialDetails(): LostPetDetails {
@@ -43,7 +43,7 @@ function createInitialDetails(): LostPetDetails {
     showPhone: true,
     showTelegram: true,
     timeApproximate: '',
-***REMOVED***;
+  };
 }
 
 const LostPetFlowContext = createContext<LostPetFlowContextValue | null>(null);
@@ -58,13 +58,13 @@ export function LostPetFlowProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (selectedPetId === null && registeredPets.length > 0) {
       setSelectedPetId(registeredPets[0].id);
-  ***REMOVED***
-***REMOVED***, [registeredPets.length]);
+    }
+  }, [registeredPets.length]);
 
   const resetDraft = (): void => {
     setDetails(createInitialDetails());
     setSelectedPetId(registeredPets[0]?.id ?? null);
-***REMOVED***;
+  };
 
   const selectedPet = registeredPets.find((p) => p.id === selectedPetId) ?? null;
 
@@ -77,7 +77,7 @@ export function LostPetFlowProvider({ children }: { children: ReactNode }) {
     selectedPetId,
     selectPet: setSelectedPetId,
     updateDetails: setDetails,
-***REMOVED***;
+  };
 
   return (
     <LostPetFlowContext.Provider value={value}>
@@ -91,7 +91,7 @@ export function useLostPetFlow(): LostPetFlowContextValue {
 
   if (context === null) {
     throw new Error('useLostPetFlow must be used within a LostPetFlowProvider');
-***REMOVED***
+  }
 
   return context;
 }

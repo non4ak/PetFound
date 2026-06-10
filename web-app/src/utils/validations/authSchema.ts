@@ -20,16 +20,16 @@ export const signUpSchema = z.object({
         .min(6, "Password must be at least 6 characters long")
         .refine((value) => /[a-z]/.test(value), {
             message: "Password must contain at least one lowercase letter",
-      ***REMOVED***)
+        })
         .refine((value) => /[A-Z]/.test(value), {
             message: "Password must contain at least one uppercase letter",
-      ***REMOVED***)
+        })
         .refine((value) => /\d/.test(value), {
             message: "Password must contain at least one digit",
-      ***REMOVED***)
+        })
         .refine((value) => new Set(value).size >= 3, {
             message: "Password must contain at least 3 unique characters",
-      ***REMOVED***),
+        }),
     confirmPassword: z.string().min(6, "Please confirm your password"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",

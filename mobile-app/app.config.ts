@@ -15,21 +15,21 @@ export default ({ config }: ConfigContext): ExpoConfig =>
       image: "./assets/images/splash-logo.png",
       resizeMode: "contain",
       backgroundColor: "#FFF5E2",
-  ***REMOVED***,
+    },
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
     ios: {
       supportsTablet: false,
       config: {
         googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
-    ***REMOVED***,
-  ***REMOVED***,
+      },
+    },
     android: {
       adaptiveIcon: {
         backgroundColor: "#E6F4FE",
         foregroundImage: "./assets/images/mobile-logo.png",
         monochromeImage: "./assets/images/mobile-logo.png",
-    ***REMOVED***,
+      },
       edgeToEdgeEnabled: true,
       googleServicesFile: "./google-services.json",
       package: "com.petfound.app",
@@ -42,14 +42,14 @@ export default ({ config }: ConfigContext): ExpoConfig =>
       config: {
         googleMaps: {
           apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
-      ***REMOVED***,
-    ***REMOVED***,
-  ***REMOVED***,
+        },
+      },
+    },
     web: {
       bundler: "metro",
       output: "static",
       favicon: "./assets/images/logo.jpg",
-  ***REMOVED***,
+    },
     plugins: [
       "expo-router",
       "@react-native-firebase/app",
@@ -59,7 +59,7 @@ export default ({ config }: ConfigContext): ExpoConfig =>
         {
           locationWhenInUsePermission:
             "Allow Pet Found to show your location on the map.",
-      ***REMOVED***,
+        },
       ],
       [
         "expo-image-picker",
@@ -68,7 +68,7 @@ export default ({ config }: ConfigContext): ExpoConfig =>
             "Allow LostPet to take pet photos with your camera.",
           photosPermission:
             "Allow LostPet to choose pet photos from your gallery.",
-      ***REMOVED***,
+        },
       ],
       [
         "expo-splash-screen",
@@ -79,12 +79,12 @@ export default ({ config }: ConfigContext): ExpoConfig =>
           backgroundColor: "#FFF5E2",
           dark: {
             backgroundColor: "#FFF5E2",
-        ***REMOVED***,
-      ***REMOVED***,
+          },
+        },
       ],
     ],
     experiments: {
       typedRoutes: true,
       reactCompiler: true,
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });

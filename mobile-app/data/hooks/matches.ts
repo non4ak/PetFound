@@ -7,5 +7,5 @@ export function useGetMatches(query: MatchQuery) {
   return useQuery({
     queryKey: ["matches", query],
     queryFn: () => getMatches(query),
-***REMOVED***);
+  });
 }

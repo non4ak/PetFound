@@ -13,9 +13,9 @@ const router = createBrowserRouter([
             {
                 path: "*",
                 element: <Navigate to="/" replace />,
-          ***REMOVED***,
+            },
         ],
-  ***REMOVED***,
+    },
 ]);
 
 export default function Router() {

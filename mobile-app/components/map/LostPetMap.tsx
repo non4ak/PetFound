@@ -61,7 +61,7 @@ export function LostPetMap({
             onPress={onMarkerPress}
           />
         );
-    ***REMOVED***)}
+      })}
     </MapView>
   );
 }

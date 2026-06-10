@@ -17,13 +17,13 @@ export function AlertsSection() {
     isError,
     refetch,
     isRefetching,
-***REMOVED*** = useGetAlerts();
+  } = useGetAlerts();
 
   const renderItem: ListRenderItem<Notification> = useCallback(
     ({ item }: { item: Notification }) => {
       if (item.match === null) {
         return <AlertCard item={item} onPress={undefined} />;
-    ***REMOVED***
+      }
 
       const oppositeAnnouncementId: number =
         item.match.oppositeAnnouncementId;
@@ -33,10 +33,10 @@ export function AlertsSection() {
           item={item}
           onPress={(): void =>
             router.push(`/pet/${oppositeAnnouncementId}`)
-        ***REMOVED***
+          }
         />
       );
-  ***REMOVED***,
+    },
     [router],
   );
 

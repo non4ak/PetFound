@@ -22,11 +22,11 @@ export default function ConfirmEmailScreen() {
     clearOnboardingDraft();
     await auth.finishOnboarding();
     router.replace('/(auth)/signup');
-***REMOVED***;
+  };
 
   const handleBackPress = (): void => {
     void resetRegistrationFlow();
-***REMOVED***;
+  };
 
   const handlePrimaryActionPress = async (): Promise<void> => {
     const pendingEmailConfirmation = auth.pendingEmailConfirmation;
@@ -39,10 +39,10 @@ export default function ConfirmEmailScreen() {
 
       startTransition(() => {
         router.replace('/(auth)/login');
-    ***REMOVED***);
+      });
 
       return;
-  ***REMOVED***
+    }
 
     try {
       setErrorMessage('');
@@ -50,26 +50,26 @@ export default function ConfirmEmailScreen() {
       const session = await loginMutation.mutateAsync({
         login: pendingEmailConfirmation.email,
         password: pendingEmailConfirmation.password,
-    ***REMOVED***);
+      });
 
       await auth.completeSignIn(session);
       auth.clearPendingEmailConfirmation();
 
       startTransition(() => {
         router.replace('/(onboarding)/profile');
-    ***REMOVED***);
-  ***REMOVED*** catch (error: unknown) {
+      });
+    } catch (error: unknown) {
       setErrorMessage(getApiErrorMessage(error, 'Confirm your email first, then try again.'));
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   const handleResendEmailPress = (): void => {
     Alert.alert('Confirmation email sent', 'We sent another confirmation email.');
-***REMOVED***;
+  };
 
   const handleChangeEmailPress = (): void => {
     void resetRegistrationFlow();
-***REMOVED***;
+  };
 
   return (
     <OnboardingScaffold
@@ -77,7 +77,7 @@ export default function ConfirmEmailScreen() {
       onBackPress={handleBackPress}
       onPrimaryActionPress={() => {
         void handlePrimaryActionPress();
-    ***REMOVED***}
+      }}
       primaryActionDisabled={loginMutation.isPending}
       primaryActionErrorText={errorMessage}
       primaryActionLabel={loginMutation.isPending ? 'Checking...' : "I've confirmed my email"}

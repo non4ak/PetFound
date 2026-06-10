@@ -28,7 +28,7 @@ const FIREBASE_NOTIFICATION_COLOR =
 function addNotifeeMavenRepository(buildGradle) {
   if (buildGradle.includes(NOTIFEE_MAVEN_REPOSITORY)) {
     return buildGradle;
-***REMOVED***
+  }
 
   const allProjectsRepositoriesPattern =
     /(allprojects\s*\{\s*repositories\s*\{\s*google\(\)\s*mavenCentral\(\))/;
@@ -37,7 +37,7 @@ function addNotifeeMavenRepository(buildGradle) {
     throw new Error(
       "Could not add the Notifee Maven repository to android/build.gradle.",
     );
-***REMOVED***
+  }
 
   return buildGradle.replace(
     allProjectsRepositoriesPattern,
@@ -73,14 +73,14 @@ const withAndroidPushNotifications = (config) => {
       throw new Error(
         "Could not configure the Firebase notification color metadata.",
       );
-  ***REMOVED***
+    }
 
     colorMetadata.$["tools:replace"] = "android:resource";
     manifestConfig.modResults.manifest.$["xmlns:tools"] =
       "http://schemas.android.com/tools";
 
     return manifestConfig;
-***REMOVED***);
+  });
 
   nextConfig = withAndroidColors(nextConfig, (colorsConfig) => {
     colorsConfig.modResults = AndroidConfig.Colors.assignColorValue(
@@ -88,10 +88,10 @@ const withAndroidPushNotifications = (config) => {
       {
         name: NOTIFICATION_COLOR_NAME,
         value: NOTIFICATION_COLOR,
-    ***REMOVED***,
+      },
     );
     return colorsConfig;
-***REMOVED***);
+  });
 
   nextConfig = withDangerousMod(nextConfig, [
     "android",
@@ -116,7 +116,7 @@ const withAndroidPushNotifications = (config) => {
       await fs.mkdir(destinationDirectory, { recursive: true });
       await fs.copyFile(sourcePath, destinationPath);
       return iconConfig;
-  ***REMOVED***,
+    },
   ]);
 
   nextConfig = withProjectBuildGradle(nextConfig, (gradleConfig) => {
@@ -124,13 +124,13 @@ const withAndroidPushNotifications = (config) => {
       throw new Error(
         "Notifee Maven repository configuration requires a Groovy build.gradle file.",
       );
-  ***REMOVED***
+    }
 
     gradleConfig.modResults.contents = addNotifeeMavenRepository(
       gradleConfig.modResults.contents,
     );
     return gradleConfig;
-***REMOVED***);
+  });
 
   return nextConfig;
 };

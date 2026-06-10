@@ -56,8 +56,8 @@ export default function EditAnnouncementScreen() {
       nearLandmark: "",
       approximateTime: "",
       petDetails: "",
-  ***REMOVED***,
-***REMOVED***);
+    },
+  });
 
   useEffect(() => {
     if (announcement && petInfo) {
@@ -68,9 +68,9 @@ export default function EditAnnouncementScreen() {
         nearLandmark: announcement.nearLandmark ?? "",
         approximateTime: announcement.approximateTime ?? "",
         petDetails: announcement.petDetails ?? "",
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***, [announcement, petInfo, reset]);
+      });
+    }
+  }, [announcement, petInfo, reset]);
 
   const onSubmit = async (values: EditFormValues) => {
     if (!announcement || !petInfo) return;
@@ -88,8 +88,8 @@ export default function EditAnnouncementScreen() {
           chipNumber: petInfo.chipNumber,
           description: petInfo.description,
           petPhotoUrl: values.petPhotoUrl,
-      ***REMOVED***);
-    ***REMOVED***
+        });
+      }
 
       await updateAnnouncement({
         country: values.country,
@@ -101,13 +101,13 @@ export default function EditAnnouncementScreen() {
         isTelegramActive: announcement.isTelegramActive,
         petStatus: announcement.petStatus,
         lastDateWhenSeen: announcement.lastDateWhenSeen,
-    ***REMOVED***);
+      });
 
       router.back();
-  ***REMOVED*** catch {
+    } catch {
       Alert.alert("Error", "Failed to save changes. Please try again.");
-  ***REMOVED***
-***REMOVED***;
+    }
+  };
 
   return (
     <AppScreenScaffold
@@ -120,7 +120,7 @@ export default function EditAnnouncementScreen() {
           size="md"
           variant="primary"
         />
-    ***REMOVED***
+      }
       header={
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -137,7 +137,7 @@ export default function EditAnnouncementScreen() {
           </Typography>
           <View className="h-10 w-10" />
         </View>
-    ***REMOVED***
+      }
       scrollContentClassName="pb-2"
     >
       {isLoading ? (

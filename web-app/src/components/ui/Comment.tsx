@@ -32,12 +32,12 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
             const fetchedAddress = await getAddressByCoords(comment.latitude, comment.longitude);
             setAddress(fetchedAddress);
             console.log(`Fetched address for comment ${comment.id}: ${fetchedAddress.display_name}`); // Debug alert
-      ***REMOVED***
-  ***REMOVED***
+        }
+    }
 
     useEffect(() => {
         fetchAddress();
-  ***REMOVED***, []);
+    }, []);
 
     return (
         <div className={`bg-white rounded-2xl shadow-sm pl-4 pb-2 pt-2 pr-4 flex flex-col hover:shadow-lg transition-shadow ml-${depth*2} mt-2`} key={comment.id}>
@@ -146,7 +146,7 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                                         size="sm"
                                         onClick={() => {
                                             setAction("edit");
-                                      ***REMOVED***}
+                                        }}
                                     >
                                         Save
                                     </Button>
@@ -155,7 +155,7 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                                         size="sm"
                                         onClick={() => {
                                             setAction("cancel");
-                                      ***REMOVED***}
+                                        }}
                                     >
                                         Cancel
                                     </Button>
@@ -171,7 +171,7 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                                     Edit
                                 </Button>
                             )
-                      ***REMOVED***
+                        }
                         
                         
                         <Button
@@ -198,7 +198,7 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                         setEditMode(false);
                         editComment && editComment(comment.announcementId, comment.id, editedMessage, editedImageUrl, editedLatitude, editedLongitude, editedLocationDescription);
                         setAction(null);
-                  ***REMOVED***}
+                    }}
                     onCancel={() => setAction(null)}
                 />
             )}
@@ -209,7 +209,7 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                     onConfirm={() => {
                         setEditMode(false);
                         setAction(null);
-                  ***REMOVED***}
+                    }}
                     onCancel={() => setAction(null)}
                 />
             )}
@@ -220,7 +220,7 @@ export const Comment = ({ comment, depth = 0, author, showId = false, manageMode
                     onConfirm={() => {
                         deleteComment && deleteComment(comment.announcementId, comment.id)
                         setAction(null);
-                  ***REMOVED***}
+                    }}
                     onCancel={() => setAction(null)}
                 />
             )}

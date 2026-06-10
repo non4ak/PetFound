@@ -17,9 +17,9 @@ export function ExternalLink({ href, ...rest }: Props) {
           // Open the link in an in-app browser.
           await openBrowserAsync(href, {
             presentationStyle: WebBrowserPresentationStyle.AUTOMATIC,
-        ***REMOVED***);
-      ***REMOVED***
-    ***REMOVED***}
+          });
+        }
+      }}
     />
   );
 }
