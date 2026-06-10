@@ -33,3 +33,11 @@ export async function refreshSessionQuery() {
         skipAuthRefresh: true,
     });
 }
+
+export async function googleAuthQuery(idToken: string) {
+    const response = await axiosClient.post<LoginResponseBody>("/Auth/google", { idToken }, {
+        skipAuthRefresh: true,
+    });
+
+    return response.data.data;
+}

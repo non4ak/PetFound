@@ -14,3 +14,8 @@ export interface RegisterRequest {
     password: string;
     userName: string;
 }
+
+
+export interface GoogleAuthRequest {
+    idToken: string;
+}
