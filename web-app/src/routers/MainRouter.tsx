@@ -8,6 +8,7 @@ import { Users } from "@/pages/main/Users";
 import { Announcements } from "@/pages/main/Announcements";
 import { Comments } from "@/pages/main/Comments";
 import { Geotags } from "@/pages/main/Geotags";
+import { Statistics } from "@/pages/main/Statistics";
 
 export const MainRouter: RouteObject = {
     element: (
@@ -39,6 +40,10 @@ export const MainRouter: RouteObject = {
         {
             path: ROUTES.GEOTAGS,
             element: <Geotags />,
+        },
+        {
+            path: ROUTES.STATISTICS,
+            element: <Statistics />,
         }
     ],
 };
