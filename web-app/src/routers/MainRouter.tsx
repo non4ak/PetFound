@@ -7,6 +7,7 @@ import { ProtectedGuard } from "@/components/Guards";
 import { Users } from "@/pages/main/Users";
 import { Announcements } from "@/pages/main/Announcements";
 import { Comments } from "@/pages/main/Comments";
+import { Geotags } from "@/pages/main/Geotags";
 
 export const MainRouter: RouteObject = {
     element: (
@@ -34,6 +35,10 @@ export const MainRouter: RouteObject = {
         {
             path: ROUTES.COMMENTS,
             element: <Comments />,
+        },
+        {
+            path: ROUTES.GEOTAGS,
+            element: <Geotags />,
         }
     ],
 };

@@ -8,6 +8,7 @@ export const ROUTES = {
     USERS: "/users",
     ANNOUNCEMENTS: "/announcements",
     COMMENTS: "/comments",
+    GEOTAGS: "/geotags",
 }
 
 export type RouteKey = keyof typeof ROUTES;
