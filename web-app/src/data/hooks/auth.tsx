@@ -2,7 +2,7 @@ import { useMutation, useQuery, type UseMutationOptions } from "@tanstack/react-
 import type { AxiosError, AxiosResponse } from "axios";
 import type { SignInSchema, SignUpSchema } from "@/utils/validations/authSchema";
 import type { AuthUser } from "@/types/auth";
-import { loginQuery, logoutQuery, refreshSessionQuery, registerQuery } from "../queries/auth";
+import { loginQuery, logoutQuery, refreshSessionQuery, registerQuery, googleAuthQuery } from "../queries/auth";
 
 export const useAuthLogin = (options?: Partial<UseMutationOptions<AuthUser, AxiosError, SignInSchema>>) => {
     return useMutation({
@@ -31,5 +31,12 @@ export const useAuthRefresh = () => {
         queryKey: ["auth", "refresh"],
         refetchOnWindowFocus: false,
         retry: false,
+    });
+};
+
+export const useGoogleAuth = (options?: Partial<UseMutationOptions<AuthUser, AxiosError, string>>) => {
+    return useMutation({
+        mutationFn: googleAuthQuery,
+        ...options,
     });
 };

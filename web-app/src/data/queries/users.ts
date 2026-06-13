@@ -1,18 +1,20 @@
 import axiosClient from "@/api/axios-client";
-import type { GetUsers } from "@/types/users";
-import type { UserDto } from "@/types/users";
-import type { PagedList } from "@/types/users";
-import type { GetUsersRespond } from "@/types/users";
+import type { GetUsers, UserDto, FullUserDto, UpdateUserDto, PagedList, GetUsersRespond } from "@/types/users";
 
 export async function getAllUsers(params: GetUsers) {
-    /*const requestBody: GetUsers = {
-        search: params.search,
-        pageNumber: params.pageNumber,
-        pageSize: params.pageSize,
-    };*/
+    const response = await axiosClient.get<GetUsersRespond<PagedList<UserDto>>>("/admin/users", {
+        params: { search: params.search, pageNumber: params.pageNumber, pageSize: params.pageSize },
+    });
+    return response.data.data;
+}
 
-    const response = await axiosClient.get<GetUsersRespond<PagedList<UserDto>>>("/admin/users", {params: {search: params.search, pageNumber: params.pageNumber, pageSize: params.pageSize}});
+export async function getUserById(id: number) {
+    const response = await axiosClient.get<GetUsersRespond<FullUserDto>>(`/admin/users/${id}`);
+    return response.data.data;
+}
 
+export async function updateUser(id: number, dto: UpdateUserDto) {
+    const response = await axiosClient.put<GetUsersRespond<FullUserDto>>(`/admin/users/${id}`, dto);
     return response.data.data;
 }
 
