@@ -226,7 +226,6 @@ export const Geotags = () => {
             {/* Grid */}
             {geotags.length === 0 ? (
                 <div className="text-center py-16 text-gray-400">
-                    <p className="text-5xl mb-3">📍</p>
                     <p className="text-lg font-medium">No geotags found</p>
                     <p className="text-sm mt-1">Try changing your filters or create a new one.</p>
                 </div>
@@ -259,10 +258,10 @@ export const Geotags = () => {
                             {geotag.description && (
                                 <p className="text-gray-500 text-xs line-clamp-2">{geotag.description}</p>
                             )}
-                            <p className="text-gray-400 text-xs">📍 {geotag.address}</p>
+                            <p className="text-gray-400 text-xs">{geotag.address}</p>
                             {geotag.latitude !== null && geotag.longitude !== null ? (
                                 <p className="text-gray-400 text-xs">
-                                    🌐 {geotag.latitude.toFixed(5)}, {geotag.longitude.toFixed(5)}
+                                    {geotag.latitude.toFixed(5)}, {geotag.longitude.toFixed(5)}
                                 </p>
                             ) : (
                                 <p className="text-gray-400 text-xs italic">No coordinates</p>

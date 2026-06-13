@@ -92,7 +92,6 @@ export const Users = () => {
             {/* Grid */}
             {users.length === 0 ? (
                 <div className="text-center py-16 text-gray-400">
-                    <p className="text-5xl mb-3">👤</p>
                     <p className="text-lg font-medium">No users found</p>
                 </div>
             ) : (
@@ -125,14 +124,14 @@ export const Users = () => {
                                 {/* Location */}
                                 {(user.country || user.city) && (
                                     <p className="text-xs text-gray-400 truncate">
-                                        📍 {[user.city, user.country].filter(Boolean).join(", ")}
+                                        {[user.city, user.country].filter(Boolean).join(", ")}
                                     </p>
                                 )}
 
                                 {/* Status */}
                                 <div className="mt-auto pt-2">
                                     <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${isDeactivated ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"}`}>
-                                        {isDeactivated ? "🔴 Deactivated" : "🟢 Active"}
+                                        {isDeactivated ? "Deactivated" : "Active"}
                                     </span>
                                 </div>
 

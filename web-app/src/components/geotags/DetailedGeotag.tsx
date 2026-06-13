@@ -11,11 +11,11 @@ export const CATEGORY_COLORS: Record<number, string> = {
 };
 
 export const CATEGORY_LABELS: Record<number, string> = {
-    0: "General",
+    0: "Vet Clinic",
     1: "Shelter",
-    2: "Vet Clinic",
-    3: "Park",
-    4: "Danger Zone",
+    2: "Feeding point",
+    3: "Pet shop",
+    4: "Park",
     5: "Other",
 };
 
@@ -69,11 +69,11 @@ export const DetailedGeotag = ({ geotag, onClose, onEdit, onDelete }: DetailedGe
 
                 <div className="space-y-1.5 text-sm text-gray-600">
                     <p>
-                        📍 <span className="font-medium">{geotag.address}</span>
+                        <span className="font-medium">{geotag.address}</span>
                     </p>
                     {geotag.latitude !== null && geotag.longitude !== null ? (
                         <p>
-                            🌐 {geotag.latitude}, {geotag.longitude}
+                            {geotag.latitude}, {geotag.longitude}
                         </p>
                     ) : (
                         <p className="text-gray-400 italic">No coordinates</p>
